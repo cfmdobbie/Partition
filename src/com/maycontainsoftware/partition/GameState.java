@@ -63,9 +63,6 @@ public class GameState {
 		state.playerCoords = new byte[playerCoordinateMap.size()][];
 		for (int i = 0; i < state.playerCoords.length; i++) {
 			state.playerCoords[i] = playerCoordinateMap.get(i);
-			// System.out.println(i);
-			// System.out.println(playerCoordinateMap.get(i));
-			// System.out.println(state.playerCoords[i]);
 		}
 
 		// Start with player 0
@@ -132,61 +129,21 @@ public class GameState {
 					break;
 				}
 				// Check for disabled tile
-				if(!state.tileEnabled[c][r]) {
+				if (!state.tileEnabled[c][r]) {
 					break;
 				}
 				// Otherwise, only add if tile unoccupied
-				if(GameState.tileUnoccupied(state, c, r)) {
+				if (GameState.tileUnoccupied(state, c, r)) {
 					possibleMoves.add(new byte[] { c, r });
 				}
 			}
 		}
-
-		/*
-		// North
-		for (byte r = (byte) (startingRow - 1); r >= 0; r--) {
-			if (!state.tileEnabled[startingColumn][r]) {
-				break;
-			}
-			if (tileUnoccupied(state, startingColumn, r)) {
-				possibleMoves.add(new byte[] { startingColumn, r });
-			}
-		}
-		// East
-		for (byte c = (byte) (startingColumn + 1); c < numberOfColumns; c++) {
-			if (!state.tileEnabled[c][startingRow]) {
-				break;
-			}
-			if (tileUnoccupied(state, c, startingRow)) {
-				possibleMoves.add(new byte[] { c, startingRow });
-			}
-		}
-		// South
-		for (byte r = (byte) (startingRow + 1); r < numberOfRows; r++) {
-			if (!state.tileEnabled[startingColumn][r]) {
-				break;
-			}
-			if (tileUnoccupied(state, startingColumn, r)) {
-				possibleMoves.add(new byte[] { startingColumn, r });
-			}
-		}
-		// West
-		for (byte c = (byte) (startingColumn - 1); c >= 0; c--) {
-			if (!state.tileEnabled[c][startingRow]) {
-				break;
-			}
-			if (tileUnoccupied(state, c, startingRow)) {
-				possibleMoves.add(new byte[] { c, startingRow });
-			}
-		}
-		*/
 
 		return possibleMoves;
 	}
 
 	// getReachableTiles
 	// getUnreachableTiles
-	// getPossibleMoves
 	// applyMoveSpec?
 
 }
