@@ -7,6 +7,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * This class represents an aborted attempt to design a data model for the game. These comments were added shortly
+ * before the class was removed from the project, and serve only as a history in version control as to why this model
+ * was dropped.
+ * 
+ * The initial plan was for a very verbose, easy to read data model, with separate classes for the game, the board, each
+ * tile on the board, and for each player. The below is the state of the data model mid-development when it was decided
+ * that this was not an appropriate approach for the problem. The primary issues are that this kind of model is not
+ * suitable for implementing either an undo stack, or for any kind of goal-based AI algorithm. The first of these
+ * requires a game state that can be easily stored and restored, while the second requires traversing many different
+ * possible future states and caching or discarding trees of game states without affecting the current game.
+ * 
+ * @author Charlie
+ */
 public class Game {
 
 	// List of players in the game
@@ -148,18 +162,18 @@ public class Game {
 	public static class Tile {
 
 		private boolean enabled = true;
-		
+
 		private Player player;
-		
+
 		final int row;
-		
+
 		final int column;
 
 		public Tile n;
 		public Tile s;
 		public Tile e;
 		public Tile w;
-		
+
 		public Tile(final int column, final int row) {
 			this.column = column;
 			this.row = row;
