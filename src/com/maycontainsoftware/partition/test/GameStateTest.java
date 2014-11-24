@@ -20,8 +20,8 @@ public class GameStateTest {
 			final GameState state = GameState.newGameState(boardLayout);
 			
 			System.out.println("\t#players: " + GameState.getNumberOfPlayers(state));
-			System.out.println("\tpossibleMoves: " + GameState.getPossibleMoves(state));
-			System.out.println("\tpossibleMoves.size: " + GameState.getPossibleMoves(state).size());
+			System.out.println("\tpossibleMoves: " + GameState.getValidMoves(state));
+			System.out.println("\tpossibleMoves.size: " + GameState.getValidMoves(state).size());
 		}
 	}
 }
