@@ -16,7 +16,7 @@ public class GameState {
 	byte currentPlayerIndex;
 
 	// The current turn phase
-	byte turnPhase = PHASE_MOVE;
+	byte turnPhase;
 
 	// Defined turn phases
 	final static byte PHASE_MOVE = 0x1;
@@ -67,6 +67,9 @@ public class GameState {
 
 		// Start with player 0
 		state.currentPlayerIndex = 0;
+
+		// First action is always to move
+		state.turnPhase = PHASE_MOVE;
 
 		return state;
 	}
@@ -145,5 +148,4 @@ public class GameState {
 	// getReachableTiles
 	// getUnreachableTiles
 	// applyMoveSpec?
-
 }
