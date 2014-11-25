@@ -226,12 +226,66 @@ public class GameState {
 		return allTiles;
 	}
 
+	/**
+	 * Get the set of all reachable tile coordinates, based on the current player's coordinates.
+	 * 
+	 * @param state
+	 *            The game state.
+	 * @return The set of all reachable tile coordinates.
+	 */
 	public static Set<byte[]> getReachableTiles(final GameState state) {
-		@SuppressWarnings("unused")
-		final Set<byte[]> reachableTiles = new CoordinateSet();
+		return getReachableTiles(state, state.currentPlayerIndex);
+	}
 
-		throw new Error();
-		// TODO: Implement getReachableTiles()
+	/**
+	 * Get the set of all reachable tile coordinates, based on the specified player's coordinates.
+	 * 
+	 * @param state
+	 *            The game state.
+	 * @param playerIndex
+	 *            The specifed player's index.
+	 * @return The set of all reachable tile coordinates.
+	 */
+	public static Set<byte[]> getReachableTiles(final GameState state, int playerIndex) {
+
+		final Set<byte[]> reachableTiles = new CoordinateSet();
+		final byte[] startingCoordinate = state.playerCoords[playerIndex];
+
+		getReachableTiles(state, reachableTiles, startingCoordinate);
+
+		return reachableTiles;
+	}
+
+	/**
+	 * Internal method for use in finding reachable tiles. This method is heavily recursive.
+	 * 
+	 * @param state
+	 *            The game state.
+	 * @param reachableTiles
+	 *            The accumulated Set of all reachable tile coordinates.
+	 * @param coord
+	 *            The next coordinate to search from.
+	 */
+	private static void getReachableTiles(final GameState state, final Set<byte[]> reachableTiles, final byte[] coord) {
+
+		final byte c = coord[0];
+		final byte r = coord[1];
+
+		if (!isValidCoordinates(state, c, r)) {
+			return;
+		} else if (!state.tileEnabled[c][r]) {
+			return;
+		} else if (reachableTiles.contains(coord)) {
+			return;
+		} else {
+			reachableTiles.add(coord);
+			for (final byte[] delta : COORDINATE_DELTAS) {
+				final byte newC = (byte) (c + delta[0]);
+				final byte newR = (byte) (r + delta[1]);
+				final byte[] newCoord = new byte[] { newC, newR };
+				getReachableTiles(state, reachableTiles, newCoord);
+			}
+		}
 	}
 
 	/**

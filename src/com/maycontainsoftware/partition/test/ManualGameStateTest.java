@@ -27,6 +27,7 @@ public class ManualGameStateTest {
 			System.out.println("\t(99,0) is valid? " + GameState.isValidCoordinates(state, (byte)99, (byte)0));
 			System.out.println("\t(0,99) is valid? " + GameState.isValidCoordinates(state, (byte)0, (byte)99));
 			System.out.println("\t(1,1) is valid? " + GameState.isValidCoordinates(state, (byte)1, (byte)1));
+			System.out.println("\t#reachableTiles: " + GameState.getReachableTiles(state).size());
 		}
 	}
 }
