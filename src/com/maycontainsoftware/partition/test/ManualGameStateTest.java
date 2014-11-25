@@ -31,5 +31,15 @@ public class ManualGameStateTest {
 			System.out.println("\tValid to move to (0, 0)? " + GameState.isValidMove(state, new byte[] { 0, 0 }));
 			System.out.println("\tValid to move to (1, 1)? " + GameState.isValidMove(state, new byte[] { 1, 1 }));
 		}
+
+		{
+			System.out.println();
+			System.out.println("==== Test move ====");
+			GameState state = GameState.newGameState(boardLayouts[0]);
+			System.out.println("Valid moves: " + GameState.getValidMoves(state).size());
+			System.out.println("Move to (0, 0)");
+			state = GameState.apply(state, new byte[] { 0, 0 });
+			System.out.println("Valid moves: " + GameState.getValidMoves(state).size());
+		}
 	}
 }

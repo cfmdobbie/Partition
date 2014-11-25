@@ -319,6 +319,65 @@ public class GameState {
 	}
 
 	/**
+	 * Duplicate a state.
+	 * 
+	 * @param state
+	 *            The game state.
+	 * @return A duplicate of the specified state.
+	 */
+	public static GameState duplicate(final GameState state) {
+		final GameState duplicate = new GameState();
+		duplicate.currentPlayerIndex = state.currentPlayerIndex;
+		duplicate.playerCoords = Arrays.copyOf(state.playerCoords, state.playerCoords.length);
+		duplicate.tileEnabled = new boolean[state.tileEnabled.length][];
+		for (int i = 0; i < duplicate.tileEnabled.length; i++) {
+			duplicate.tileEnabled[i] = Arrays.copyOf(state.tileEnabled[i], state.tileEnabled[i].length);
+		}
+		duplicate.turnPhase = state.turnPhase;
+		return duplicate;
+	}
+
+	/**
+	 * Apply a move/shoot to a game state.
+	 * 
+	 * @param state
+	 *            The current game state.
+	 * @param coord
+	 *            The coordinate of the move/shoot, as a byte[2].
+	 * @return The new game state.
+	 */
+	public static GameState apply(final GameState state, final byte[] coord) {
+		final byte c = coord[0];
+		final byte r = coord[1];
+		if (!isValidCoordinates(state, c, r)) {
+			throw new Error();
+		} else if (!isValidMove(state, coord)) {
+			throw new Error();
+		} else {
+			final GameState newState = duplicate(state);
+
+			switch (newState.turnPhase) {
+			case PHASE_MOVE:
+				newState.playerCoords[newState.currentPlayerIndex][0] = c;
+				newState.playerCoords[newState.currentPlayerIndex][1] = r;
+				newState.turnPhase = PHASE_SHOOT;
+				break;
+			case PHASE_SHOOT:
+				newState.tileEnabled[c][r] = false;
+				newState.turnPhase = PHASE_MOVE;
+				// Next player
+				newState.currentPlayerIndex++;
+				newState.currentPlayerIndex %= getNumberOfPlayers(newState);
+				break;
+			default:
+				throw new Error();
+			}
+
+			return newState;
+		}
+	}
+
+	/**
 	 * A Set that contains arrays of bytes and respects array equality rather than array referential equality, which
 	 * means arrays containing the same elements (in the same order!) are considered identical regardless of whether the
 	 * array references are pointing to the same objects.
