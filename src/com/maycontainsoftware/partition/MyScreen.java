@@ -29,6 +29,7 @@ public class MyScreen extends ScreenAdapter {
 	// TEMP: Board configurations used for testing
 	public static final String BOARD_1 = "....\n.0#.\n.#1.\n....";
 	public static final String BOARD_2 = "#.....#\n..0.1..\n.7#.#2.\n.......\n.6#.#3.\n..5.4..\n#.....#";
+	public static final String BOARD_3 = "......\n......\n..0#..\n..#1..\n......\n......";
 
 	/**
 	 * Constructor
@@ -38,7 +39,7 @@ public class MyScreen extends ScreenAdapter {
 	 */
 	public MyScreen(final PartitionGame game) {
 		this.game = game;
-		this.state = GameState.newGameState(BOARD_2);
+		this.state = GameState.newGameState(BOARD_3);
 	}
 
 	@Override
