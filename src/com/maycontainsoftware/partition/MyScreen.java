@@ -12,6 +12,9 @@ public class MyScreen extends ScreenAdapter {
 	private final PartitionGame game;
 	private GameState state;
 
+	private static final Color[] PLAYER_COLORS = { Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA,
+			Color.CYAN, Color.PINK, Color.ORANGE, };
+
 	public MyScreen(final PartitionGame game) {
 		this.game = game;
 		this.state = GameState.newGameState("....\n.0#.\n.#1.\n....");
@@ -46,15 +49,19 @@ public class MyScreen extends ScreenAdapter {
 		for (int c = 0; c < columns; c++) {
 			for (int r = 0; r < rows; r++) {
 				if (this.state.tileEnabled[c][r]) {
-					game.shapeRenderer.rect(c * tileWidth, r * tileHeight, tileWidth, tileHeight);
+					final float x = c * tileWidth;
+					final float y = h - (r + 1) * tileHeight;
+					game.shapeRenderer.rect(x + tileWidth * 0.1f, y + tileHeight * 0.1f, tileWidth * 0.8f,
+							tileHeight * 0.8f);
 				}
 			}
 		}
-		game.shapeRenderer.setColor(Color.RED);
 		for (int p = 0; p < GameState.getNumberOfPlayers(state); p++) {
+			game.shapeRenderer.setColor(PLAYER_COLORS[p]);
 			final byte[] coords = GameState.getPlayerCoords(state, p);
-			game.shapeRenderer.rect(coords[0] * tileWidth + tileWidth * 0.1f, coords[1] * tileHeight + tileHeight
-					* 0.1f, tileWidth * 0.8f, tileHeight * 0.8f);
+			final float x = coords[0] * tileWidth;
+			final float y = h - (coords[1] + 1) * tileHeight;
+			game.shapeRenderer.rect(x + tileWidth * 0.2f, y + tileHeight * 0.2f, tileWidth * 0.6f, tileHeight * 0.6f);
 		}
 		game.shapeRenderer.end();
 	}
