@@ -400,6 +400,4 @@ public class GameState {
 			});
 		}
 	}
-
-	// applyMoveSpec?
 }
