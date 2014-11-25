@@ -15,9 +15,12 @@ public class MyScreen extends ScreenAdapter {
 	private static final Color[] PLAYER_COLORS = { Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA,
 			Color.CYAN, Color.PINK, Color.ORANGE, };
 
+	public static final String BOARD_1 = "....\n.0#.\n.#1.\n....";
+	public static final String BOARD_2 = "#.....#\n..0.1..\n.7#.#2.\n.......\n.6#.#3.\n..5.4..\n#.....#";
+
 	public MyScreen(final PartitionGame game) {
 		this.game = game;
-		this.state = GameState.newGameState("....\n.0#.\n.#1.\n....");
+		this.state = GameState.newGameState(BOARD_2);
 	}
 
 	@Override
