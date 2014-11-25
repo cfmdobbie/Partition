@@ -32,7 +32,7 @@ public class MyScreen extends ScreenAdapter {
 
 		// Temporary background
 		game.shapeRenderer.begin(ShapeType.Filled);
-		final float squareSize = w / 9;
+		final float squareSize = w / 13;
 		for (int x = 0; x < w / squareSize; x++) {
 			for (int y = 0; y < h / squareSize; y++) {
 				game.shapeRenderer.setColor((x % 2 == y % 2) ? Color.DARK_GRAY : Color.GRAY);
