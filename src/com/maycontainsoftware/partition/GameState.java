@@ -198,10 +198,12 @@ public class GameState {
 				if (!state.tileEnabled[c][r]) {
 					break;
 				}
-				// Otherwise, only add if tile unoccupied
-				if (GameState.tileUnoccupied(state, c, r)) {
-					possibleMoves.add(new byte[] { c, r });
+				// Check for occupied tile
+				if (!GameState.tileUnoccupied(state, c, r)) {
+					break;
 				}
+				// Otherwise, add and continue
+				possibleMoves.add(new byte[] { c, r });
 			}
 		}
 
