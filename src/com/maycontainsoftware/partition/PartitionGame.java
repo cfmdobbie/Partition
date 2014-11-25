@@ -3,57 +3,57 @@ package com.maycontainsoftware.partition;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class PartitionGame extends Game {
 
 	public static final String TAG = PartitionGame.class.getName();
 	public static final boolean DEBUG = true;
 
-	// private OrthographicCamera camera;
+	OrthographicCamera camera;
 	SpriteBatch batch;
-
-	// private Texture texture;
-	// private Sprite sprite;
+	ShapeRenderer shapeRenderer;
 
 	@Override
 	public void create() {
-		// float w = Gdx.graphics.getWidth();
-		// float h = Gdx.graphics.getHeight();
+		final float w = Gdx.graphics.getWidth();
+		final float h = Gdx.graphics.getHeight();
 
-		// camera = new OrthographicCamera(1, h / w);
+		camera = new OrthographicCamera(w, h);
 		batch = new SpriteBatch();
-
-		// texture = new Texture(Gdx.files.internal("data/libgdx.png"));
-		// texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-
-		// TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);
-
-		// sprite = new Sprite(region);
-		// sprite.setSize(0.9f, 0.9f * sprite.getHeight() / sprite.getWidth());
-		// sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
-		// sprite.setPosition(-sprite.getWidth() / 2, -sprite.getHeight() / 2);
+		shapeRenderer = new ShapeRenderer();
 
 		setScreen(new MyScreen(this));
 	}
 
 	@Override
+	public void resize(int width, int height) {
+		camera.setToOrtho(false, width, height);
+	}
+
+	@Override
 	public void dispose() {
 		batch.dispose();
-		// texture.dispose();
+		shapeRenderer.dispose();
 	}
 
 	@Override
 	public void render() {
-		// Clear screen
+
+		// Update camera
+		camera.update();
+
+		// Update renderer projections
+		batch.setProjectionMatrix(camera.combined);
+		shapeRenderer.setProjectionMatrix(camera.combined);
+
+		// Clear screenbuffer
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
+		// Render Screen
 		super.render();
-
-		// batch.setProjectionMatrix(camera.combined);
-		// batch.begin();
-		// sprite.draw(batch);
-		// batch.end();
 	}
 }
