@@ -21,7 +21,7 @@ public class PartitionGame extends Game {
 	public static final boolean DEBUG = true;
 
 	/** The OpenGL camera used by the app. There is only one camera and it is managed entirely by the Game instance. */
-	private OrthographicCamera camera;
+	OrthographicCamera camera;
 
 	/** The raster graphics renderer. There is only one SpriteBatch and it is held by the Game instance. */
 	SpriteBatch batch;

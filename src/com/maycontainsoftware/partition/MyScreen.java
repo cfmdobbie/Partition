@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector3;
 
 /**
  * A Screen instance.
@@ -47,6 +48,32 @@ public class MyScreen extends ScreenAdapter {
 		final float w = Gdx.graphics.getWidth();
 		final float h = Gdx.graphics.getHeight();
 
+		// Determine board size
+		final int columns = this.state.tileEnabled.length;
+		final int rows = this.state.tileEnabled[0].length;
+
+		// Determine tile size
+		final float tileWidth = w / columns;
+		final float tileHeight = h / rows;
+
+		// Process any touch input
+		if (Gdx.input.justTouched()) {
+			// Get touch location
+			final Vector3 pos = new Vector3();
+			pos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+			game.camera.unproject(pos);
+			// The Vector3 "pos" now contains the touch location
+
+			// Convert to a coordinate in board space
+			final byte r = (byte) ((-(pos.y - h)) / tileHeight);
+			final byte c = (byte) (pos.x / tileWidth);
+
+			if (PartitionGame.DEBUG) {
+				Gdx.app.log(TAG, "Touch event on (" + c + "," + r + ")");
+			}
+			state.tileEnabled[c][r] = !state.tileEnabled[c][r];
+		}
+
 		// Temporary background
 		game.shapeRenderer.begin(ShapeType.Filled);
 		final float squareSize = w / 13;
@@ -57,14 +84,6 @@ public class MyScreen extends ScreenAdapter {
 			}
 		}
 		game.shapeRenderer.end();
-
-		// Determine board size
-		final int columns = this.state.tileEnabled.length;
-		final int rows = this.state.tileEnabled[0].length;
-
-		// Determine tile size
-		final float tileWidth = w / columns;
-		final float tileHeight = h / rows;
 
 		// Start drawing
 		game.shapeRenderer.begin(ShapeType.Filled);
