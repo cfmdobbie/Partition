@@ -82,6 +82,13 @@ public class MyScreen extends ScreenAdapter {
 					Gdx.app.log(TAG, "Invalid move!");
 				}
 			}
+
+			// TEMP: Reset board if game cannot proceed
+			if (GameState.isGameOver(state)) {
+				state = GameState.newGameState(BOARD_4);
+			} else if (GameState.isStalemate(state)) {
+				state = GameState.newGameState(BOARD_4);
+			}
 		}
 
 		// Temporary background
