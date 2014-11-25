@@ -209,6 +209,23 @@ public class GameState {
 	}
 
 	/**
+	 * Whether or not a move is valid. Some optimisations could be made to this method, for example an initial
+	 * sanity-check that the current coordinate and the new coordinate are aligned. It might be faster to check
+	 * alignment, determine direction and then walk the board to check intermediate squares rather than determine all
+	 * valid moves then check whether the new coordinate is one of them.
+	 * 
+	 * @param state
+	 *            The game state.
+	 * @param newCoord
+	 *            The new coordinate.
+	 * @return True if the new coordinate is a valid move, false otherwise.
+	 */
+	public static boolean isValidMove(final GameState state, final byte[] newCoord) {
+		Set<byte[]> validMoves = getValidMoves(state);
+		return validMoves.contains(newCoord);
+	}
+
+	/**
 	 * A set of all tiles on the board
 	 * 
 	 * @param state
