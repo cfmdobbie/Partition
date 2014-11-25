@@ -12,8 +12,8 @@ public class MyScreen extends ScreenAdapter {
 	private final PartitionGame game;
 	private GameState state;
 
-	private static final Color[] PLAYER_COLORS = { Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA,
-			Color.CYAN, Color.PINK, Color.ORANGE, };
+	private static final Color[] PLAYER_COLORS = { Color.RED, Color.BLUE, Color.GREEN, Color.CYAN, Color.MAGENTA,
+			Color.ORANGE, Color.PINK, Color.YELLOW, };
 
 	public static final String BOARD_1 = "....\n.0#.\n.#1.\n....";
 	public static final String BOARD_2 = "#.....#\n..0.1..\n.7#.#2.\n.......\n.6#.#3.\n..5.4..\n#.....#";
