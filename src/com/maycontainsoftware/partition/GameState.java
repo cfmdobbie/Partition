@@ -135,6 +135,23 @@ public class GameState {
 	}
 
 	/**
+	 * Whether specified coordinated are valid on the board represented by the specified game state.
+	 * 
+	 * @param state
+	 *            The game state.
+	 * @param c
+	 *            The column coordinate.
+	 * @param r
+	 *            The row coordinate.
+	 * @return True if the coordinates are valid, false otherwise.
+	 */
+	public static boolean isValidCoordinates(final GameState state, final byte c, final byte r) {
+		final byte numberOfColumns = (byte) state.tileEnabled.length;
+		final byte numberOfRows = (byte) state.tileEnabled[0].length;
+		return c >= 0 && c < numberOfColumns && r >= 0 && r < numberOfRows;
+	}
+
+	/**
 	 * All possible single moves from the current state. Note that the player to move is extracted from the game state.
 	 * 
 	 * @param state
@@ -148,8 +165,6 @@ public class GameState {
 		final byte[] startingCoords = state.playerCoords[state.currentPlayerIndex];
 		final byte startingColumn = startingCoords[0];
 		final byte startingRow = startingCoords[1];
-		final byte numberOfColumns = (byte) state.tileEnabled.length;
-		final byte numberOfRows = (byte) state.tileEnabled[0].length;
 
 		// Set in which to store possible moves
 		final Set<byte[]> possibleMoves = new CoordinateSet();
@@ -174,7 +189,7 @@ public class GameState {
 				c += delta[0];
 				r += delta[1];
 				// Check for coordinate out of range
-				if (c < 0 || c >= numberOfColumns || r < 0 || r >= numberOfRows) {
+				if (!isValidCoordinates(state, c, r)) {
 					break;
 				}
 				// Check for disabled tile
