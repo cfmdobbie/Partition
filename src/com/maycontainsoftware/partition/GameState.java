@@ -36,6 +36,17 @@ public class GameState {
 	/** The player board-coordinates, as playerCoords[#players][2]. */
 	byte[][] playerCoords;
 
+	/** Deltas to apply to a coordinate to locate surrounding tiles. */
+	static final byte[][] COORDINATE_DELTAS = new byte[][] {
+	/* SW */{ -1, -1 },
+	/* W */{ -1, 0 },
+	/* NW */{ -1, 1 },
+	/* N */{ 0, 1 },
+	/* NE */{ 1, 1 },
+	/* E */{ 1, 0 },
+	/* SE */{ 1, -1 },
+	/* S */{ 0, -1 }, };
+
 	/**
 	 * Generate a new game state from a board layout specified as a String. In a board layout rows are separated by
 	 * '\n', all rows must be the same length, enabled tiles are represented by '.', disabled tiles by '#' and players
@@ -170,16 +181,7 @@ public class GameState {
 		final Set<byte[]> possibleMoves = new CoordinateSet();
 
 		// Apply coordinate deltas in turn to find reachable tiles
-		final byte[][] coordinateDeltas = new byte[][] {
-		/* SW */{ -1, -1 },
-		/* W */{ -1, 0 },
-		/* NW */{ -1, 1 },
-		/* N */{ 0, 1 },
-		/* NE */{ 1, 1 },
-		/* E */{ 1, 0 },
-		/* SE */{ 1, -1 },
-		/* S */{ 0, -1 }, };
-		for (final byte[] delta : coordinateDeltas) {
+		for (final byte[] delta : COORDINATE_DELTAS) {
 			// Initial coordinate
 			byte c = startingColumn;
 			byte r = startingRow;
