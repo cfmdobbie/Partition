@@ -121,7 +121,7 @@ public class GameState {
 	 *            The player index (zero-based).
 	 * @return The player coordinates as a two-element byte array.
 	 */
-	public static byte[] getPlayerCoords(final GameState state, final byte playerIndex) {
+	public static byte[] getPlayerCoords(final GameState state, final int playerIndex) {
 		return state.playerCoords[playerIndex];
 	}
 
@@ -377,6 +377,28 @@ public class GameState {
 
 			return newState;
 		}
+	}
+
+	/**
+	 * Whether or not the game is over. The game is declared to be over when every player is isolated from every other
+	 * player.
+	 * 
+	 * @param state
+	 *            The game state.
+	 * @return True if the game is over, false otherwise.
+	 */
+	public static boolean isGameOver(final GameState state) {
+		final int numberOfPlayers = getNumberOfPlayers(state);
+		for (int player = 0; player < numberOfPlayers - 1; player++) {
+			final Set<byte[]> reachableTiles = getReachableTiles(state, player);
+			for (int otherPlayer = player + 1; otherPlayer < numberOfPlayers; otherPlayer++) {
+				final byte[] otherCoord = getPlayerCoords(state, otherPlayer);
+				if (reachableTiles.contains(otherCoord)) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	/**
