@@ -2,7 +2,7 @@ package com.maycontainsoftware.partition.test;
 
 import com.maycontainsoftware.partition.GameState;
 
-public class GameStateTest {
+public class ManualGameStateTest {
 	public static void main(String[] args) {
 		
 		final String[] boardLayouts = {
