@@ -71,7 +71,15 @@ public class MyScreen extends ScreenAdapter {
 			if (PartitionGame.DEBUG) {
 				Gdx.app.log(TAG, "Touch event on (" + c + "," + r + ")");
 			}
-			state.tileEnabled[c][r] = !state.tileEnabled[c][r];
+			// state.tileEnabled[c][r] = !state.tileEnabled[c][r];
+
+			try {
+				state = GameState.apply(state, new byte[] { c, r });
+			} catch (Error e) {
+				if (PartitionGame.DEBUG) {
+					Gdx.app.log(TAG, "Invalid move!");
+				}
+			}
 		}
 
 		// Temporary background
