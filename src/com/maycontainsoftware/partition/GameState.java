@@ -8,27 +8,32 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Representation of game state with a very minimal memory-footprint. Rough calculations indicate that a two-player game
- * on a 10x10 board will occupy approximately 127 bytes.
+ * Representation of game state with a very minimal memory-footprint. Rough calculations indicate that a single state of
+ * a two-player game on a 10x10 board will occupy approximately 127 bytes. This becomes useful when needing to hold a
+ * history of moves, or needing to traverse possible future moves.
  * 
  * @author Charlie
  */
 public class GameState {
 
-	// Whether a particular tile is enabled
+	/** Whether a particular tile is enabled. */
 	boolean[][] tileEnabled;
 
-	// The current player index
+	/** The current player index. */
 	byte currentPlayerIndex;
 
-	// The current turn phase
+	/** The current turn phase. */
 	byte turnPhase;
 
 	// Defined turn phases
+
+	/** Constant to represent the move phase. */
 	final static byte PHASE_MOVE = 0x1;
+
+	/** Constant to represent the shoot phase. */
 	final static byte PHASE_SHOOT = 0x2;
 
-	// The player board-coordinates, as playerCoords[#players][2]
+	/** The player board-coordinates, as playerCoords[#players][2]. */
 	byte[][] playerCoords;
 
 	/**
