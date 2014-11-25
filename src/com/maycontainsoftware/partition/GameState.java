@@ -402,6 +402,20 @@ public class GameState {
 	}
 
 	/**
+	 * Whether or not game has become a stalemate. The game is declared to be a stalemate if at any point no move can be
+	 * played. This will need to be reconsidered with >2 players, as one isolated player running out of space should not
+	 * cause other players to stalemate. Game over condition takes priority over stalemate - if a player has no valid
+	 * moves but all players are isolated anyway, game is over and not considered a stalemate.
+	 * 
+	 * @param state
+	 *            The game state.
+	 * @return True if the game is a stalemate, false otherwise.
+	 */
+	public static boolean isStalemate(final GameState state) {
+		return !isGameOver(state) && getValidMoves(state).size() == 0;
+	}
+
+	/**
 	 * A Set that contains arrays of bytes and respects array equality rather than array referential equality, which
 	 * means arrays containing the same elements (in the same order!) are considered identical regardless of whether the
 	 * array references are pointing to the same objects.
