@@ -64,7 +64,7 @@ public class MyScreen extends ScreenAdapter {
 			final byte[] coords = GameState.getPlayerCoords(state, p);
 			final float x = coords[0] * tileWidth;
 			final float y = h - (coords[1] + 1) * tileHeight;
-			game.shapeRenderer.rect(x + tileWidth * 0.2f, y + tileHeight * 0.2f, tileWidth * 0.6f, tileHeight * 0.6f);
+			game.shapeRenderer.circle(x + tileWidth / 2, y + tileWidth / 2, tileWidth * 0.4f);
 		}
 		game.shapeRenderer.end();
 	}
