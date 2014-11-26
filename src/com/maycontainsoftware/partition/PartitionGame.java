@@ -49,6 +49,8 @@ public class PartitionGame extends Game {
 	public void resize(int width, int height) {
 		// Update camera wrt changed screen dimensions
 		camera.setToOrtho(false, width, height);
+
+		super.resize(width, height);
 	}
 
 	@Override
