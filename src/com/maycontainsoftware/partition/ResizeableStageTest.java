@@ -28,13 +28,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
  * @author Charlie
  * 
  */
-public class ResizableStageTest extends ScreenAdapter {
+public class ResizeableStageTest extends ScreenAdapter {
 
 	private Stage stage;
 	private final PartitionGame game;
 	private final List<Actor> actors = new ArrayList<Actor>();
 
-	public ResizableStageTest(PartitionGame game) {
+	public ResizeableStageTest(PartitionGame game) {
 		this.game = game;
 	}
 
