@@ -49,6 +49,11 @@ public class MyScreen extends ScreenAdapter {
 	private float tileWidth;
 	private float tileHeight;
 
+	// Temporary textures
+	final Texture tileTexture = new Texture(Gdx.files.internal("Tile.png"));
+	final Texture redPlayerTexture = new Texture(Gdx.files.internal("RedPlayer.png"));
+	final Texture bluePlayerTexture = new Texture(Gdx.files.internal("BluePlayer.png"));
+
 	/**
 	 * Constructor
 	 * 
@@ -84,10 +89,6 @@ public class MyScreen extends ScreenAdapter {
 
 		stage.act(delta);
 		stage.draw();
-
-		final Texture tileTexture = new Texture(Gdx.files.internal("Tile.png"));
-		final Texture redPlayerTexture = new Texture(Gdx.files.internal("RedPlayer.png"));
-		final Texture bluePlayerTexture = new Texture(Gdx.files.internal("BluePlayer.png"));
 
 		// Process any touch input
 		if (Gdx.input.justTouched()) {
