@@ -6,11 +6,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
@@ -59,6 +61,7 @@ public class ResizeableStageTest extends ScreenAdapter {
 
 		final Swatch cyan = new Swatch("cyan.png");
 		cyan.setSize(100, 50);
+		cyan.addAction(Actions.forever(Actions.rotateBy(360.0f, 2.0f)));
 		root.add(cyan);
 
 		root.row();
@@ -69,9 +72,8 @@ public class ResizeableStageTest extends ScreenAdapter {
 		root.row();
 
 		final Swatch yellow = new Swatch("yellow.png");
-		yellow.setSize(100, 100);
-		yellow.addAction(Actions.forever(Actions.rotateBy(360.0f, 2.0f)));
-		root.add(yellow).colspan(5).expand();
+		final SquareContainer square = new SquareContainer(yellow);
+		root.add(square).colspan(5).expand().fill();
 
 		root.row();
 
@@ -153,6 +155,28 @@ public class ResizeableStageTest extends ScreenAdapter {
 		@Override
 		public float getPrefWidth() {
 			return region.getRegionWidth();
+		}
+	}
+
+	private static class SquareContainer extends WidgetGroup {
+		private final Actor child;
+
+		public SquareContainer(final Actor child) {
+			this.child = child;
+			this.addActor(child);
+		}
+
+		@Override
+		protected void sizeChanged() {
+			// Allow superclass to perform layout invalidation
+			super.sizeChanged();
+			// Determine new size/position for child
+			final float size = Math.min(getWidth(), getHeight());
+			final float xoffset = (getWidth() - size) / 2;
+			final float yoffset = (getHeight() - size) / 2;
+			// Resize and reposition child
+			child.setSize(size, size);
+			child.setPosition(xoffset, yoffset);
 		}
 	}
 }
