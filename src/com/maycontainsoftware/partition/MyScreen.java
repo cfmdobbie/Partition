@@ -2,8 +2,7 @@ package com.maycontainsoftware.partition;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 
 /**
@@ -21,10 +20,6 @@ public class MyScreen extends ScreenAdapter {
 
 	/** Reference to the current game state. */
 	private GameState state;
-
-	/** Player colors, arranged from best to worst. */
-	private static final Color[] PLAYER_COLORS = { Color.RED, Color.BLUE, Color.GREEN, Color.CYAN, Color.MAGENTA,
-			Color.ORANGE, Color.PINK, Color.YELLOW, };
 
 	// TEMP: Board configurations used for testing
 	public static final String BOARD_1 = "....\n.0#.\n.#1.\n....";
@@ -62,6 +57,11 @@ public class MyScreen extends ScreenAdapter {
 	@Override
 	public void render(float delta) {
 
+		final Texture tileTexture = new Texture(Gdx.files.internal("Tile.png"));
+		final Texture redPlayerTexture = new Texture(Gdx.files.internal("RedPlayer.png"));
+		final Texture bluePlayerTexture = new Texture(Gdx.files.internal("BluePlayer.png"));
+		final Texture backgroundTexture = new Texture(Gdx.files.internal("Background.png"));
+
 		// Process any touch input
 		if (Gdx.input.justTouched()) {
 			// Get touch location
@@ -95,45 +95,36 @@ public class MyScreen extends ScreenAdapter {
 			}
 		}
 
-		// Temporary background
-		game.shapeRenderer.begin(ShapeType.Filled);
-		final float squareSize = screenWidth / 13;
-		for (int x = 0; x < screenWidth / squareSize; x++) {
-			for (int y = 0; y < screenHeight / squareSize; y++) {
-				game.shapeRenderer.setColor((x % 2 == y % 2) ? Color.DARK_GRAY : Color.GRAY);
-				game.shapeRenderer.rect(x * squareSize, y * squareSize, squareSize, squareSize);
-			}
-		}
-		game.shapeRenderer.end();
-
 		// Start drawing
-		game.shapeRenderer.begin(ShapeType.Filled);
+		game.batch.begin();
+
+		// Background
+		game.batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		// Draw tiles
-		game.shapeRenderer.setColor(Color.WHITE);
 		for (int c = 0; c < boardColumns; c++) {
 			for (int r = 0; r < boardRows; r++) {
 				if (this.state.tileEnabled[c][r]) {
 					final float x = c * tileWidth;
 					final float y = screenHeight - (r + 1) * tileHeight;
-					game.shapeRenderer.rect(x + tileWidth * 0.1f, y + tileHeight * 0.1f, tileWidth * 0.8f,
+					game.batch.draw(tileTexture, x + tileWidth * 0.1f, y + tileHeight * 0.1f, tileWidth * 0.8f,
 							tileHeight * 0.8f);
 				}
 			}
 		}
 
 		// Draw players
+		// FUTURE: This is hard-coded for two players at this time. Should improve this.
 		for (int p = 0; p < GameState.getNumberOfPlayers(state); p++) {
-			game.shapeRenderer.setColor(PLAYER_COLORS[p]);
 			final byte[] coords = GameState.getPlayerCoords(state, p);
 			final float x = coords[0] * tileWidth;
 			final float y = screenHeight - (coords[1] + 1) * tileHeight;
-			game.shapeRenderer
-					.ellipse(x + tileWidth * 0.2f, y + tileHeight * 0.2f, tileWidth * 0.6f, tileHeight * 0.6f);
+			game.batch.draw(p == 0 ? redPlayerTexture : bluePlayerTexture, x + tileWidth * 0.1f, y + tileHeight * 0.1f,
+					tileWidth * 0.8f, tileHeight * 0.8f);
 		}
 
 		// Stop drawing
-		game.shapeRenderer.end();
+		game.batch.end();
 	}
 
 	@Override

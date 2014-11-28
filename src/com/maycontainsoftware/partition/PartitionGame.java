@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
  * The main Game instance.
@@ -26,9 +25,6 @@ public class PartitionGame extends Game {
 	/** The raster graphics renderer. There is only one SpriteBatch and it is held by the Game instance. */
 	SpriteBatch batch;
 
-	/** The primitive renderer. There is only one ShapeRenderer and it is held by the Game instance. */
-	ShapeRenderer shapeRenderer;
-
 	@Override
 	public void create() {
 		final float w = Gdx.graphics.getWidth();
@@ -39,7 +35,6 @@ public class PartitionGame extends Game {
 
 		// Create rendering objects
 		batch = new SpriteBatch();
-		shapeRenderer = new ShapeRenderer();
 
 		// TEMP: For now, just start with MyScreen
 		setScreen(new MyScreen(this));
@@ -56,7 +51,6 @@ public class PartitionGame extends Game {
 	@Override
 	public void dispose() {
 		batch.dispose();
-		shapeRenderer.dispose();
 	}
 
 	@Override
@@ -67,7 +61,6 @@ public class PartitionGame extends Game {
 
 		// Update renderer projections
 		batch.setProjectionMatrix(camera.combined);
-		shapeRenderer.setProjectionMatrix(camera.combined);
 
 		// Clear screenbuffer
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
