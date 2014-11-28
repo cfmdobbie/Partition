@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 /**
  * A Screen instance.
@@ -17,6 +19,10 @@ public class MyScreen extends ScreenAdapter {
 
 	/** Reference to the Game instance. */
 	private final PartitionGame game;
+
+	private Stage stage;
+
+	private final Table root;
 
 	/** Reference to the current game state. */
 	private GameState state;
@@ -49,6 +55,10 @@ public class MyScreen extends ScreenAdapter {
 		this.game = game;
 		this.state = GameState.newGameState(BOARD_4);
 
+		// Create the root table
+		root = new Table();
+		root.setFillParent(true);
+
 		// Determine board size
 		boardColumns = this.state.tileEnabled.length;
 		boardRows = this.state.tileEnabled[0].length;
@@ -56,6 +66,9 @@ public class MyScreen extends ScreenAdapter {
 
 	@Override
 	public void render(float delta) {
+
+		stage.act(delta);
+		stage.draw();
 
 		final Texture tileTexture = new Texture(Gdx.files.internal("Tile.png"));
 		final Texture redPlayerTexture = new Texture(Gdx.files.internal("RedPlayer.png"));
@@ -133,7 +146,20 @@ public class MyScreen extends ScreenAdapter {
 			Gdx.app.log(TAG, "resize(" + width + ", " + height + ")");
 		}
 
-		// When the screen is resized, need to re-layout the UI
+		// Dispose of old Stage
+		if (stage != null) {
+			stage.dispose();
+			stage = null;
+		}
+
+		// Create new Stage
+		stage = new Stage(width, height, true, game.batch);
+
+		// Add root Table to the Stage
+		stage.addActor(root);
+
+		// Redirect input events to the Stage
+		Gdx.input.setInputProcessor(stage);
 
 		// Remember screen dimensions
 		screenWidth = width;
