@@ -3,9 +3,13 @@ package com.maycontainsoftware.partition;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 /**
  * A Screen instance.
@@ -59,9 +63,20 @@ public class MyScreen extends ScreenAdapter {
 		root = new Table();
 		root.setFillParent(true);
 
+		// Temporary background effect applied to root Table
+		final Texture backgroundTexture = new Texture(Gdx.files.internal("Background.png"));
+		root.setBackground(new TextureRegionDrawable(new TextureRegion(backgroundTexture)));
+
 		// Determine board size
 		boardColumns = this.state.tileEnabled.length;
 		boardRows = this.state.tileEnabled[0].length;
+		final float boardAspect = boardColumns / (float) boardRows;
+
+		// Board container
+		final Actor child = new Image(new Texture(Gdx.files.internal("yellow.png")));
+		final FixedAspectContainer boardContainer = new FixedAspectContainer(child, boardAspect);
+		root.row();
+		root.add(boardContainer).expand().fill();
 	}
 
 	@Override
@@ -73,7 +88,6 @@ public class MyScreen extends ScreenAdapter {
 		final Texture tileTexture = new Texture(Gdx.files.internal("Tile.png"));
 		final Texture redPlayerTexture = new Texture(Gdx.files.internal("RedPlayer.png"));
 		final Texture bluePlayerTexture = new Texture(Gdx.files.internal("BluePlayer.png"));
-		final Texture backgroundTexture = new Texture(Gdx.files.internal("Background.png"));
 
 		// Process any touch input
 		if (Gdx.input.justTouched()) {
@@ -110,9 +124,6 @@ public class MyScreen extends ScreenAdapter {
 
 		// Start drawing
 		game.batch.begin();
-
-		// Background
-		game.batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		// Draw tiles
 		for (int c = 0; c < boardColumns; c++) {
