@@ -70,8 +70,8 @@ public class ResizeableStageTest extends ScreenAdapter {
 		root.row();
 
 		final Swatch yellow = new Swatch("yellow.png");
-		final SquareContainer square = new SquareContainer(yellow);
-		root.add(square).colspan(5).expand().fill();
+		final FixedAspectContainer container = new FixedAspectContainer(yellow, 1.78f);
+		root.add(container).colspan(5).expand().fill();
 
 		root.row();
 
