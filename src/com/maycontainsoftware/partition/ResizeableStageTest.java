@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
@@ -131,7 +131,7 @@ public class ResizeableStageTest extends ScreenAdapter {
 		stage.draw();
 	}
 
-	private static class Swatch extends Actor {
+	private static class Swatch extends Widget {
 		private final TextureRegion region;
 
 		public Swatch(final String textureName) {
@@ -143,6 +143,16 @@ public class ResizeableStageTest extends ScreenAdapter {
 			// Note: need the extended version of the draw method to specify rotation
 			batch.draw(region, getX(), getY(), getWidth() / 2, getHeight() / 2, getWidth(), getHeight(), 1.0f, 1.0f,
 					getRotation());
+		}
+
+		@Override
+		public float getPrefHeight() {
+			return region.getRegionHeight();
+		}
+
+		@Override
+		public float getPrefWidth() {
+			return region.getRegionWidth();
 		}
 	}
 }
