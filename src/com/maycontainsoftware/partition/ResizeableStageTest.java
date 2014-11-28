@@ -43,28 +43,50 @@ public class ResizeableStageTest extends ScreenAdapter {
 
 		root.row();
 
-		final Swatch s1 = new Swatch("red.png");
-		s1.setSize(100, 100);
-		root.add(s1).expand();
+		final Swatch red = new Swatch("red.png");
+		red.setSize(50, 50);
+		root.add(red);
 
-		final Swatch s2 = new Swatch("green.png");
-		s2.setSize(100, 100);
-		s2.addAction(Actions.forever(Actions.rotateBy(360.0f, 2.0f)));
-		root.add(s2).expand();
+		final Swatch green = new Swatch("green.png");
+		green.setSize(50, 50);
+		root.add(green);
+
+		final Swatch blue = new Swatch("blue.png");
+		blue.setSize(50, 50);
+		root.add(blue);
+
+		root.add().expandX();
+
+		final Swatch cyan = new Swatch("cyan.png");
+		cyan.setSize(100, 50);
+		root.add(cyan);
 
 		root.row();
 
-		final Swatch s3 = new Swatch("blue.png");
-		s3.setSize(100, 100);
-		s3.addAction(Actions.forever(Actions.sequence(Actions.moveBy(100.0f, 0.0f, 1.0f),
-				Actions.moveBy(-100.0f, 0.0f, 1.0f))));
-		root.add(s3).expand();
+		final Swatch orange = new Swatch("orange.png");
+		root.add(orange).colspan(5).fillX().height(10.0f);
+
+		root.row();
+
+		final Swatch yellow = new Swatch("yellow.png");
+		yellow.setSize(100, 100);
+		yellow.addAction(Actions.forever(Actions.rotateBy(360.0f, 2.0f)));
+		root.add(yellow).colspan(5).expand();
+
+		root.row();
+
+		final Swatch violet = new Swatch("violet.png");
+		root.add(violet).colspan(5).fillX().height(10.0f);
+
+		root.row();
 
 		Drawable up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("cyan.png"))));
 		Drawable down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("violet.png"))));
 		Drawable checked = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("yellow.png"))));
-		final Button button1 = new Button(up, down, checked);
-		root.add(button1).expand();
+		final Button toggle = new Button(up, down, checked);
+		toggle.addAction(Actions.forever(Actions.sequence(Actions.delay(2.0f), Actions.moveBy(10.0f, 0.0f, 0.125f),
+				Actions.moveBy(-20.0f, 0.0f, 0.125f), Actions.moveBy(10.0f, 0.0f, 0.125f))));
+		root.add(toggle).colspan(5).expandX();
 	}
 
 	@Override
@@ -94,6 +116,10 @@ public class ResizeableStageTest extends ScreenAdapter {
 
 		// Add root Table to the Stage
 		stage.addActor(root);
+		// root.invalidate();
+		// root.layout();
+		// root.validate();
+		// root.invalidateHierarchy();
 
 		// Redirect input events to the Stage
 		Gdx.input.setInputProcessor(stage);
