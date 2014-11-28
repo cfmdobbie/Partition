@@ -1,8 +1,5 @@
 package com.maycontainsoftware.partition;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
@@ -32,36 +30,34 @@ public class ResizeableStageTest extends ScreenAdapter {
 
 	private Stage stage;
 	private final PartitionGame game;
-	private final List<Actor> actors = new ArrayList<Actor>();
+	private final Table root;
 
 	public ResizeableStageTest(PartitionGame game) {
 		this.game = game;
-	}
 
-	@Override
-	public void show() {
-		System.out.println("show");
+		// Create the root table
+		root = new Table();
+		root.setFillParent(true);
 
-		// Create Actors/Widgets
-		// Note that size/position is specified here, but should actually be set on resize
+		// Create all Actors and add them to the root Table
 
 		final Swatch s1 = new Swatch("red.png");
 		s1.setPosition(0, 0);
 		s1.setSize(100, 100);
-		actors.add(s1);
+		root.addActor(s1);
 
 		final Swatch s2 = new Swatch("green.png");
 		s2.setPosition(100, 100);
 		s2.setSize(100, 100);
 		s2.addAction(Actions.forever(Actions.rotateBy(360.0f, 2.0f)));
-		actors.add(s2);
+		root.addActor(s2);
 
 		final Swatch s3 = new Swatch("blue.png");
 		s3.setPosition(200, 200);
 		s3.setSize(100, 100);
 		s3.addAction(Actions.forever(Actions.sequence(Actions.moveBy(100.0f, 0.0f, 1.0f),
 				Actions.moveBy(-100.0f, 0.0f, 1.0f))));
-		actors.add(s3);
+		root.addActor(s3);
 
 		Drawable up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("cyan.png"))));
 		Drawable down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("violet.png"))));
@@ -69,7 +65,12 @@ public class ResizeableStageTest extends ScreenAdapter {
 		final Button button1 = new Button(up, down, checked);
 		button1.setPosition(300, 300);
 		button1.setSize(100, 100);
-		actors.add(button1);
+		root.addActor(button1);
+	}
+
+	@Override
+	public void show() {
+		System.out.println("show");
 	}
 
 	@Override
@@ -92,10 +93,8 @@ public class ResizeableStageTest extends ScreenAdapter {
 			}
 		}));
 
-		// Add all Actors to the Stage
-		for (final Actor actor : actors) {
-			stage.addActor(actor);
-		}
+		// Add root Table to the Stage
+		stage.addActor(root);
 
 		// Redirect input events to the Stage
 		Gdx.input.setInputProcessor(stage);
