@@ -24,8 +24,10 @@ public class MyScreen extends ScreenAdapter {
 	/** Reference to the Game instance. */
 	private final PartitionGame game;
 
+	/** Reference to the Stage. This reference is re-created on every invocation of resize(). */
 	private Stage stage;
 
+	/** The root table containing all UI elements. */
 	private final Table root;
 
 	/** Reference to the current game state. */
