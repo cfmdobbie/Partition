@@ -56,6 +56,10 @@ public class MyScreen extends ScreenAdapter {
 	final Texture redPlayerTexture = new Texture(Gdx.files.internal("RedPlayer.png"));
 	final Texture bluePlayerTexture = new Texture(Gdx.files.internal("BluePlayer.png"));
 
+	// Screen Layout
+	//
+	// Still largely to be decided. May contain elapsed time, AI thinking state, whose turn it is
+
 	/**
 	 * Constructor
 	 * 
