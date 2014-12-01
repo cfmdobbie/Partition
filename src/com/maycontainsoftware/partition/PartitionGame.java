@@ -40,7 +40,7 @@ public class PartitionGame extends Game {
 		// Create rendering objects
 		batch = new SpriteBatch();
 
-		// TEMP: For now, just start with MyScreen
+		// Start on pre-loading screen
 		setScreen(new PreloadingScreen(this));
 	}
 
