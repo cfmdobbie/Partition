@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 public class PreloadingScreen extends BaseScreen {
 
 	/** Developer logo texture, loaded synchronously by the constructor. */
-	private final Texture mcsLogo;
+	private final Texture developerLogo;
 
 	/**
 	 * Construct a PreloadingScreen object. This will be the first screen opened by the app.
@@ -21,20 +21,18 @@ public class PreloadingScreen extends BaseScreen {
 	public PreloadingScreen(final PartitionGame game) {
 		super(game);
 
-		// Queue MCS logo
-		game.manager.load("mcs_logo.png", Texture.class);
+		// Queue developer logo
+		game.manager.load("developer_logo_128.png", Texture.class);
 
 		// Force asset to load
 		game.manager.finishLoading();
 
-		// Get MCS logo from manager
-		mcsLogo = game.manager.get("mcs_logo.png", Texture.class);
+		// Get developer logo from manager
+		developerLogo = game.manager.get("developer_logo_128.png", Texture.class);
 
-		// Set up user interface
-		root.row().padTop(100.0f);
-		root.add(new Image(mcsLogo));
-		root.row().expandY();
-		root.add();
+		// Set up user interface - developer logo in centre of screen
+		root.row();
+		root.add(new Image(developerLogo));
 
 		// Enqueue any assets required for the proper loading screen
 		// TODO

@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 public class LoadingScreen extends BaseScreen {
 
 	/** The developer logo texture, already loaded synchronously by the preloading screen. */
-	private final Texture mcsLogo;
+	private final Texture developerLogo;
 
 	/** TEMPORARY: an additional asset, already loaded asynchronously by the preloading screen. */
 	private final Texture loadingTex;
@@ -28,16 +28,20 @@ public class LoadingScreen extends BaseScreen {
 		super(game);
 
 		// Extract required assets from the asset manager
-		mcsLogo = game.manager.get("mcs_logo.png", Texture.class);
+		developerLogo = game.manager.get("developer_logo_128.png", Texture.class);
 		loadingTex = game.manager.get("loading.png", Texture.class);
 
-		// TODO: Better layout required - want these assets to appear roughly in the middle of the screen.
-		root.row().padTop(100.0f);
-		root.add(new Image(mcsLogo));
-		root.row().padTop(10.0f);
-		root.add(new Image(loadingTex));
-		root.row().expandY();
+		// Extra 64px padding to offset other graphic
+		root.row().height(64.0f);
 		root.add();
+
+		// Developer logo (in centre of screen)
+		root.row().padTop(10.0f).padBottom(10.0f);
+		root.add(new Image(developerLogo));
+
+		// Loading graphic
+		root.row();
+		root.add(new Image(loadingTex));
 
 		// Enqueue all assets required for the app
 		enqueueAssets();
