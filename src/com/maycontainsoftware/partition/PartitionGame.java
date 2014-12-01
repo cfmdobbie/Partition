@@ -55,6 +55,7 @@ public class PartitionGame extends Game {
 	@Override
 	public void dispose() {
 		batch.dispose();
+		manager.dispose();
 	}
 
 	@Override
