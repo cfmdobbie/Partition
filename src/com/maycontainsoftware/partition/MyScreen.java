@@ -1,14 +1,11 @@
 package com.maycontainsoftware.partition;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 /**
@@ -16,19 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
  * 
  * @author Charlie
  */
-public class MyScreen extends ScreenAdapter {
+public class MyScreen extends BaseScreen {
 
 	/** Tag for logging purposes. */
 	public static final String TAG = MyScreen.class.getName();
-
-	/** Reference to the Game instance. */
-	private final PartitionGame game;
-
-	/** Reference to the Stage. This reference is re-created on every invocation of resize(). */
-	private Stage stage;
-
-	/** The root table containing all UI elements. */
-	private final Table root;
 
 	/** Reference to the current game state. */
 	private GameState state;
@@ -42,10 +30,6 @@ public class MyScreen extends ScreenAdapter {
 	// Board dimensions
 	private final int boardColumns;
 	private final int boardRows;
-
-	// Screen dimensions
-	private float screenWidth;
-	private float screenHeight;
 
 	// Tile size
 	private float tileWidth;
@@ -67,12 +51,9 @@ public class MyScreen extends ScreenAdapter {
 	 *            The Game instance.
 	 */
 	public MyScreen(final PartitionGame game) {
-		this.game = game;
-		this.state = GameState.newGameState(BOARD_4);
+		super(game);
 
-		// Create the root table
-		root = new Table();
-		root.setFillParent(true);
+		this.state = GameState.newGameState(BOARD_4);
 
 		// Temporary background effect applied to root Table
 		final Texture backgroundTexture = new Texture(Gdx.files.internal("Background.png"));
@@ -92,9 +73,7 @@ public class MyScreen extends ScreenAdapter {
 
 	@Override
 	public void render(float delta) {
-
-		stage.act(delta);
-		stage.draw();
+		super.render(delta);
 
 		// Process any touch input
 		if (Gdx.input.justTouched()) {
@@ -159,29 +138,12 @@ public class MyScreen extends ScreenAdapter {
 	}
 
 	@Override
-	public void resize(int width, int height) {
+	public void resize(final int width, final int height) {
 		if (PartitionGame.DEBUG) {
 			Gdx.app.log(TAG, "resize(" + width + ", " + height + ")");
 		}
 
-		// Dispose of old Stage
-		if (stage != null) {
-			stage.dispose();
-			stage = null;
-		}
-
-		// Create new Stage
-		stage = new Stage(width, height, true, game.batch);
-
-		// Add root Table to the Stage
-		stage.addActor(root);
-
-		// Redirect input events to the Stage
-		Gdx.input.setInputProcessor(stage);
-
-		// Remember screen dimensions
-		screenWidth = width;
-		screenHeight = height;
+		super.resize(width, height);
 
 		// Determine tile size
 		tileWidth = screenWidth / boardColumns;
