@@ -26,13 +26,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
  * @author Charlie
  * 
  */
-public class ResizeableStageTest extends ScreenAdapter {
+public class ResizableStageTest extends ScreenAdapter {
 
 	private Stage stage;
 	private final PartitionGame game;
 	private final Table root;
 
-	public ResizeableStageTest(PartitionGame game) {
+	public ResizableStageTest(PartitionGame game) {
 		this.game = game;
 
 		// Create the root table
