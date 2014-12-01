@@ -21,7 +21,7 @@ public class GenerateAtlases {
 		final File inputDir = new File(inputDirStr);
 
 		// Output directory
-		final String outputDirStr = "../PumpkinPatchPanic-android/assets";
+		final String outputDirStr = "../Partition-android/assets";
 
 		final Settings settings = new Settings();
 
