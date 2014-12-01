@@ -1,6 +1,6 @@
 package com.maycontainsoftware.partition;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -12,16 +12,17 @@ public class TopMenuScreen extends BaseScreen {
 	public TopMenuScreen(final PartitionGame game) {
 		super(game);
 
-		final Texture playUp = game.manager.get("play_up.png", Texture.class);
-		final Texture playDown = game.manager.get("play_down.png", Texture.class);
-		final Texture instructionsUp = game.manager.get("instructions_up.png", Texture.class);
-		final Texture instructionsDown = game.manager.get("instructions_down.png", Texture.class);
+		final TextureAtlas atlas = game.manager.get("atlas.atlas", TextureAtlas.class);
+
+		final TextureRegion playUp = atlas.findRegion("play_up");
+		final TextureRegion playDown = atlas.findRegion("play_down");
+		final TextureRegion instructionsUp = atlas.findRegion("instructions_up");
+		final TextureRegion instructionsDown = atlas.findRegion("instructions_down");
 
 		root.defaults().pad(10.0f);
 
 		root.row();
-		Button playButton = new Button(new TextureRegionDrawable(new TextureRegion(playUp)), new TextureRegionDrawable(
-				new TextureRegion(playDown)));
+		Button playButton = new Button(new TextureRegionDrawable(playUp), new TextureRegionDrawable(playDown));
 		root.add(playButton);
 		playButton.addListener(new ChangeListener() {
 			@Override
@@ -31,8 +32,8 @@ public class TopMenuScreen extends BaseScreen {
 		});
 
 		root.row();
-		Button instructionsButton = new Button(new TextureRegionDrawable(new TextureRegion(instructionsUp)),
-				new TextureRegionDrawable(new TextureRegion(instructionsDown)));
+		Button instructionsButton = new Button(new TextureRegionDrawable(instructionsUp), new TextureRegionDrawable(
+				instructionsDown));
 		root.add(instructionsButton);
 		instructionsButton.addListener(new ChangeListener() {
 			@Override
