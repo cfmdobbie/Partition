@@ -59,10 +59,11 @@ public class LoadingScreen extends BaseScreen {
 	/** Enqueue all Texture assets required by the app. */
 	private void enqueueTextures() {
 		// TODO: Enqueue Textures
-		game.manager.load("yellow.png", Texture.class);
-		game.manager.load("blue.png", Texture.class);
-		game.manager.load("cyan.png", Texture.class);
-		game.manager.load("green.png", Texture.class);
+		game.manager.load("play_up.png", Texture.class);
+		game.manager.load("play_down.png", Texture.class);
+		game.manager.load("instructions_up.png", Texture.class);
+		game.manager.load("instructions_down.png", Texture.class);
+
 		game.manager.load("orange.png", Texture.class);
 		game.manager.load("red.png", Texture.class);
 		game.manager.load("violet.png", Texture.class);
@@ -110,7 +111,7 @@ public class LoadingScreen extends BaseScreen {
 		if (game.manager.update()) {
 			// All assets loaded!
 			// TODO: Want to fade screen out once all asset loading is complete
-			game.setScreen(new MyScreen(game));
+			game.setScreen(new TopMenuScreen(game));
 		}
 	}
 }
