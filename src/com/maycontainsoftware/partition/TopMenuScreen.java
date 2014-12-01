@@ -27,7 +27,9 @@ public class TopMenuScreen extends BaseScreen {
 		playButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				// TODO: Play button action
+				// TODO: Need fade out, disposal of current screen
+				// TODO: Correct play button action
+				game.setScreen(new MyScreen(game));
 			}
 		});
 
@@ -38,7 +40,8 @@ public class TopMenuScreen extends BaseScreen {
 		instructionsButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				// TODO: Instructions button action
+				// TODO: Need fade out, disposal of current screen
+				game.setScreen(new InstructionsScreen(game));
 			}
 		});
 
