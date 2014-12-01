@@ -2,6 +2,7 @@ package com.maycontainsoftware.partition;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,6 +26,9 @@ public class PartitionGame extends Game {
 	/** The raster graphics renderer. There is only one SpriteBatch and it is held by the Game instance. */
 	SpriteBatch batch;
 
+	/** Asset manager. */
+	final AssetManager manager = new AssetManager();
+
 	@Override
 	public void create() {
 		final float w = Gdx.graphics.getWidth();
@@ -37,7 +41,7 @@ public class PartitionGame extends Game {
 		batch = new SpriteBatch();
 
 		// TEMP: For now, just start with MyScreen
-		setScreen(new MyScreen(this));
+		setScreen(new PreloadingScreen(this));
 	}
 
 	@Override
