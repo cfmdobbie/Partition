@@ -3,6 +3,7 @@ package com.maycontainsoftware.partition;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 /**
@@ -15,8 +16,8 @@ public class LoadingScreen extends BaseScreen {
 	/** The developer logo texture, already loaded synchronously by the preloading screen. */
 	private final Texture developerLogo;
 
-	/** TEMPORARY: an additional asset, already loaded asynchronously by the preloading screen. */
-	private final Texture loadingTex;
+	/** Atlas of assets required for this screen, already loaded asynchronously by the preloading screen. */
+	private final TextureAtlas loadingAtlas;
 
 	/**
 	 * Construct a new LoadingScreen. This will be the second screen loaded in the app, straight after the
@@ -28,8 +29,8 @@ public class LoadingScreen extends BaseScreen {
 		super(game);
 
 		// Extract required assets from the asset manager
-		developerLogo = game.manager.get("developer_logo_128.png", Texture.class);
-		loadingTex = game.manager.get("loading.png", Texture.class);
+		developerLogo = game.manager.get("developer_logo.png", Texture.class);
+		loadingAtlas = game.manager.get("loading.atlas", TextureAtlas.class);
 
 		// Extra 64px padding to offset other graphic
 		root.row().height(64.0f);
@@ -41,7 +42,7 @@ public class LoadingScreen extends BaseScreen {
 
 		// Loading graphic
 		root.row();
-		root.add(new Image(loadingTex));
+		root.add(new Image(loadingAtlas.findRegion("loading")));
 
 		// Enqueue all assets required for the app
 		enqueueAssets();
@@ -59,21 +60,8 @@ public class LoadingScreen extends BaseScreen {
 	/** Enqueue all Texture assets required by the app. */
 	private void enqueueTextures() {
 		// TODO: Enqueue Textures
-		game.manager.load("play_up.png", Texture.class);
-		game.manager.load("play_down.png", Texture.class);
-		game.manager.load("instructions_up.png", Texture.class);
-		game.manager.load("instructions_down.png", Texture.class);
-
-		game.manager.load("orange.png", Texture.class);
-		game.manager.load("red.png", Texture.class);
-		game.manager.load("violet.png", Texture.class);
 		game.manager.load("yellow.png", Texture.class);
 		game.manager.load("Background.png", Texture.class);
-		game.manager.load("BluePlayer.png", Texture.class);
-		game.manager.load("BlueTile.png", Texture.class);
-		game.manager.load("RedPlayer.png", Texture.class);
-		game.manager.load("RedTile.png", Texture.class);
-		game.manager.load("Tile.png", Texture.class);
 	}
 
 	/** Enqueue all Sound assets required by the app. */
@@ -96,6 +84,7 @@ public class LoadingScreen extends BaseScreen {
 	/** Enqueue all TextureAtlas assets required by the app. */
 	private void enqueueAtlases() {
 		// TODO: Enqueue TextureAtlases
+		game.manager.load("atlas.atlas", TextureAtlas.class);
 	}
 
 	/** Enqueue all Skin assets required by the app. */

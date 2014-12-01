@@ -1,6 +1,7 @@
 package com.maycontainsoftware.partition;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 /**
@@ -22,21 +23,20 @@ public class PreloadingScreen extends BaseScreen {
 		super(game);
 
 		// Queue developer logo
-		game.manager.load("developer_logo_128.png", Texture.class);
+		game.manager.load("developer_logo.png", Texture.class);
 
 		// Force asset to load
 		game.manager.finishLoading();
 
 		// Get developer logo from manager
-		developerLogo = game.manager.get("developer_logo_128.png", Texture.class);
+		developerLogo = game.manager.get("developer_logo.png", Texture.class);
 
 		// Set up user interface - developer logo in centre of screen
 		root.row();
 		root.add(new Image(developerLogo));
 
 		// Enqueue any assets required for the proper loading screen
-		// TODO
-		game.manager.load("loading.png", Texture.class);
+		game.manager.load("loading.atlas", TextureAtlas.class);
 	}
 
 	@Override
