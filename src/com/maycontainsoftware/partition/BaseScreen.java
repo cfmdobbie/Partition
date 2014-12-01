@@ -48,7 +48,9 @@ public class BaseScreen extends ScreenAdapter {
 		root = new Table();
 		root.setFillParent(true);
 
-		root.debug();
+		if (PartitionGame.DEBUG) {
+			root.debug();
+		}
 	}
 
 	@Override
