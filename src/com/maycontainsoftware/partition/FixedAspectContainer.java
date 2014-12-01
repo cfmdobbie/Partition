@@ -43,7 +43,7 @@ public class FixedAspectContainer extends WidgetGroup {
 		final float childWidth = (containerAspect < aspect) ? getWidth() : getWidth() * aspect / containerAspect;
 		final float xoffset = (getWidth() - childWidth) / 2;
 		final float yoffset = (getHeight() - childHeight) / 2;
-		
+
 		// Resize and reposition child
 		child.setSize(childWidth, childHeight);
 		child.setPosition(xoffset, yoffset);
