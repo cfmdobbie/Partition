@@ -41,8 +41,16 @@ public class TopMenuScreen extends BaseScreen {
 
 		// Main screen content
 
-		// Spacer before
+		// Spacer before logo
 		root.row().expand();
+		root.add();
+
+		// Logo
+		root.row();
+		root.add(new Image(atlas.findRegion("partition_logo")));
+
+		// Spacer between logo and buttons
+		root.row().height(40.0f);
 		root.add();
 
 		// Play button
