@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 
 public class TopMenuScreen extends BaseScreen {
 
@@ -19,6 +20,7 @@ public class TopMenuScreen extends BaseScreen {
 		final TextureRegion instructionsUp = atlas.findRegion("instructions_up");
 		final TextureRegion instructionsDown = atlas.findRegion("instructions_down");
 
+		root.setBackground(new TiledDrawable(atlas.findRegion("background")));
 		root.defaults().pad(10.0f);
 
 		root.row();
@@ -44,6 +46,5 @@ public class TopMenuScreen extends BaseScreen {
 				game.setScreen(new InstructionsScreen(game));
 			}
 		});
-
 	}
 }

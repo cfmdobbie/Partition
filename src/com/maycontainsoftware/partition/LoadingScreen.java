@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 
 /**
  * The loading screen. This screen displays a very simple progress bar while loading the game assets.
@@ -31,6 +32,8 @@ public class LoadingScreen extends BaseScreen {
 		// Extract required assets from the asset manager
 		developerLogo = game.manager.get("developer_logo.png", Texture.class);
 		loadingAtlas = game.manager.get("loading.atlas", TextureAtlas.class);
+
+		root.setBackground(new TiledDrawable(loadingAtlas.findRegion("background")));
 
 		// Extra 64px padding to offset other graphic
 		root.row().height(64.0f);
