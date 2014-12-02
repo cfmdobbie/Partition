@@ -69,7 +69,6 @@ public class LoadingScreen extends BaseScreen {
 	private void enqueueTextures() {
 		// TODO: Enqueue Textures
 		game.manager.load("yellow.png", Texture.class);
-		game.manager.load("Background.png", Texture.class);
 	}
 
 	/** Enqueue all Sound assets required by the app. */
