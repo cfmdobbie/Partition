@@ -107,7 +107,7 @@ public class LoadingScreen extends BaseScreen {
 		if (game.manager.update()) {
 			// All assets loaded!
 			// TODO: Want to fade screen out once all asset loading is complete
-			game.setScreen(new TopMenuScreen(game));
+			game.setScreen(new MainMenuScreen(game));
 		}
 	}
 

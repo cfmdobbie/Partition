@@ -34,7 +34,7 @@ public class SelectPlayersScreen extends BaseScreen {
 		backButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.setScreen(new TopMenuScreen(game));
+				game.setScreen(new MainMenuScreen(game));
 			}
 		});
 

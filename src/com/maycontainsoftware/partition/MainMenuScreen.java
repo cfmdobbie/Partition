@@ -10,9 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 
-public class TopMenuScreen extends BaseScreen {
+public class MainMenuScreen extends BaseScreen {
 
-	public TopMenuScreen(final PartitionGame game) {
+	public MainMenuScreen(final PartitionGame game) {
 		super(game);
 
 		final TextureAtlas atlas = game.manager.get("atlas.atlas", TextureAtlas.class);
