@@ -29,6 +29,9 @@ public class PartitionGame extends Game {
 	/** Asset manager. */
 	final AssetManager manager = new AssetManager();
 
+	/** Sound setting. For now, defaults to true and changes are not persisted. */
+	boolean sound = true;
+
 	@Override
 	public void create() {
 		final float w = Gdx.graphics.getWidth();

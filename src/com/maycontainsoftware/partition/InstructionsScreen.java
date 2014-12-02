@@ -2,12 +2,10 @@ package com.maycontainsoftware.partition;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 
 public class InstructionsScreen extends BaseScreen {
@@ -29,7 +27,7 @@ public class InstructionsScreen extends BaseScreen {
 		topBar.row();
 		topBar.add(); // TODO: back button
 		topBar.add().expandX();
-		topBar.add(new Button(new TextureRegionDrawable(atlas.findRegion("sound_on"))));
+		topBar.add(new SoundToggleButton(game, atlas));
 
 		// Divider
 		root.row().height(2.0f);

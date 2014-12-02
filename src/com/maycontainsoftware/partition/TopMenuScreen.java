@@ -33,7 +33,7 @@ public class TopMenuScreen extends BaseScreen {
 		// Widgets in top menu bar
 		topBar.row();
 		topBar.add().expandX();
-		topBar.add(new Button(new TextureRegionDrawable(atlas.findRegion("sound_on"))));
+		topBar.add(new SoundToggleButton(game, atlas));
 
 		// Divider
 		root.row().height(2.0f);
