@@ -1,14 +1,18 @@
 package com.maycontainsoftware.partition;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
@@ -120,6 +124,16 @@ public class GameScreen extends BaseScreen {
 		final FixedAspectContainer boardContainer = new FixedAspectContainer(child, boardAspect);
 		root.row();
 		root.add(boardContainer).expand().fill();
+
+		// Divider
+		root.row().height(2.0f);
+		root.add(new Image(atlas.findRegion("white1x1"))).fill();
+
+		// Status area
+		final BitmapFont font = new BitmapFont(Gdx.files.internal("segoeuiblack16.fnt"));
+		final LabelStyle style = new Label.LabelStyle(font, Color.WHITE);
+		root.row();
+		root.add(new Label("<TODO: status area>", style));
 	}
 
 	@Override
