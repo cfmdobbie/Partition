@@ -16,10 +16,10 @@ import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
  * 
  * @author Charlie
  */
-public class MyScreen extends BaseScreen {
+public class GameScreen extends BaseScreen {
 
 	/** Tag for logging purposes. */
-	public static final String TAG = MyScreen.class.getName();
+	public static final String TAG = GameScreen.class.getName();
 
 	/** Reference to the current game state. */
 	private GameState state;
@@ -58,7 +58,7 @@ public class MyScreen extends BaseScreen {
 	 * @param boardConfiguration
 	 *            The chosen board configuration.
 	 */
-	public MyScreen(final PartitionGame game, final PlayerConfiguration playerConfiguration,
+	public GameScreen(final PartitionGame game, final PlayerConfiguration playerConfiguration,
 			final BoardConfiguration boardConfiguration) {
 		super(game);
 

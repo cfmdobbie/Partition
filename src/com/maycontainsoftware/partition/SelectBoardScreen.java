@@ -78,7 +78,7 @@ public class SelectBoardScreen extends BaseScreen {
 		boardHubButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.setScreen(new MyScreen(game, playerConfiguration, BoardConfiguration.HUB));
+				game.setScreen(new GameScreen(game, playerConfiguration, BoardConfiguration.HUB));
 			}
 		});
 		// Board 2: OPEN
@@ -88,7 +88,7 @@ public class SelectBoardScreen extends BaseScreen {
 		boardOpenButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.setScreen(new MyScreen(game, playerConfiguration, BoardConfiguration.OPEN));
+				game.setScreen(new GameScreen(game, playerConfiguration, BoardConfiguration.OPEN));
 			}
 		});
 
@@ -100,7 +100,7 @@ public class SelectBoardScreen extends BaseScreen {
 		boardWallButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.setScreen(new MyScreen(game, playerConfiguration, BoardConfiguration.WALL));
+				game.setScreen(new GameScreen(game, playerConfiguration, BoardConfiguration.WALL));
 			}
 		});
 		// Board 4: HOLES
@@ -110,7 +110,7 @@ public class SelectBoardScreen extends BaseScreen {
 		boardHolesButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.setScreen(new MyScreen(game, playerConfiguration, BoardConfiguration.HOLES));
+				game.setScreen(new GameScreen(game, playerConfiguration, BoardConfiguration.HOLES));
 			}
 		});
 
