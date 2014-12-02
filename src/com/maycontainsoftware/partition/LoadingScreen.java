@@ -1,9 +1,12 @@
 package com.maycontainsoftware.partition;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 
@@ -33,10 +36,11 @@ public class LoadingScreen extends BaseScreen {
 		developerLogo = game.manager.get("developer_logo.png", Texture.class);
 		loadingAtlas = game.manager.get("loading.atlas", TextureAtlas.class);
 
+		// TODO: Really want tiled background to fade in over about 0.5 secs
 		root.setBackground(new TiledDrawable(loadingAtlas.findRegion("background")));
 
-		// Extra 64px padding to offset other graphic
-		root.row().height(64.0f);
+		// Extra padding to offset other graphic
+		root.row().height(20.0f);
 		root.add();
 
 		// Developer logo (in centre of screen)
@@ -45,7 +49,8 @@ public class LoadingScreen extends BaseScreen {
 
 		// Loading graphic
 		root.row();
-		root.add(new Image(loadingAtlas.findRegion("loading")));
+		root.add(new LoadingBar(game.manager, loadingAtlas.findRegion("loading_bar_bg"), loadingAtlas
+				.findRegion("loading_bar_fg")));
 
 		// Enqueue all assets required for the app
 		enqueueAssets();
@@ -104,6 +109,49 @@ public class LoadingScreen extends BaseScreen {
 			// All assets loaded!
 			// TODO: Want to fade screen out once all asset loading is complete
 			game.setScreen(new TopMenuScreen(game));
+		}
+	}
+
+	/**
+	 * The widget that displays the loading bar.
+	 * 
+	 * @author Charlie
+	 */
+	private static class LoadingBar extends Image {
+
+		final TextureRegion foreground;
+		final float offsetX;
+		final float offsetY;
+		final float minU;
+		final float widthU;
+		final AssetManager manager;
+
+		public LoadingBar(final AssetManager manager, final TextureRegion background, final TextureRegion foreground) {
+			super(background);
+
+			this.manager = manager;
+
+			// Copy the TextureRegion as we're going to mess with its U2 coord
+			this.foreground = new TextureRegion(foreground);
+			minU = foreground.getU();
+			widthU = foreground.getU2() - minU;
+
+			// Calculate offset of foreground wrt background
+			offsetX = (background.getRegionWidth() - foreground.getRegionWidth()) / 2.0f;
+			offsetY = (background.getRegionHeight() - foreground.getRegionHeight()) / 2.0f;
+		}
+
+		@Override
+		public void draw(final SpriteBatch batch, final float parentAlpha) {
+
+			// Draw the background
+			super.draw(batch, parentAlpha);
+
+			// Update the portion of the foreground bar to display
+			foreground.setU2(minU + widthU * manager.getProgress());
+
+			// Draw the foreground bar
+			batch.draw(foreground, getX() + offsetX, getY() + offsetY);
 		}
 	}
 }
