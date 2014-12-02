@@ -2,11 +2,12 @@ package com.maycontainsoftware.partition;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 
 /**
  * A Screen instance.
@@ -36,9 +37,9 @@ public class MyScreen extends BaseScreen {
 	private float tileHeight;
 
 	// Temporary textures
-	final Texture tileTexture = new Texture(Gdx.files.internal("Tile.png"));
-	final Texture redPlayerTexture = new Texture(Gdx.files.internal("RedPlayer.png"));
-	final Texture bluePlayerTexture = new Texture(Gdx.files.internal("BluePlayer.png"));
+	final TextureRegion tileTexture;
+	final TextureRegion redPlayerTexture;
+	final TextureRegion bluePlayerTexture;
 
 	// Screen Layout
 	//
@@ -53,11 +54,15 @@ public class MyScreen extends BaseScreen {
 	public MyScreen(final PartitionGame game) {
 		super(game);
 
-		this.state = GameState.newGameState(BOARD_4);
+		final TextureAtlas atlas = game.manager.get("atlas.atlas", TextureAtlas.class);
+		tileTexture = atlas.findRegion("Tile");
+		redPlayerTexture = atlas.findRegion("RedPlayer");
+		bluePlayerTexture = atlas.findRegion("BluePlayer");
+
+		this.state = GameState.newGameState(BOARD_3);
 
 		// Temporary background effect applied to root Table
-		final Texture backgroundTexture = new Texture(Gdx.files.internal("Background.png"));
-		root.setBackground(new TextureRegionDrawable(new TextureRegion(backgroundTexture)));
+		root.setBackground(new TiledDrawable(atlas.findRegion("background")));
 
 		// Determine board size
 		boardColumns = this.state.tileEnabled.length;
@@ -102,9 +107,9 @@ public class MyScreen extends BaseScreen {
 
 			// TEMP: Reset board if game cannot proceed
 			if (GameState.isGameOver(state)) {
-				state = GameState.newGameState(BOARD_4);
+				state = GameState.newGameState(BOARD_3);
 			} else if (GameState.isStalemate(state)) {
-				state = GameState.newGameState(BOARD_4);
+				state = GameState.newGameState(BOARD_3);
 			}
 		}
 
