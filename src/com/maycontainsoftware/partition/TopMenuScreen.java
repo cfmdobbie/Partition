@@ -61,8 +61,7 @@ public class TopMenuScreen extends BaseScreen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				// TODO: Need fade out, disposal of current screen
-				// TODO: Correct play button action
-				game.setScreen(new MyScreen(game));
+				game.setScreen(new SelectPlayersScreen(game));
 			}
 		});
 
@@ -79,7 +78,7 @@ public class TopMenuScreen extends BaseScreen {
 			}
 		});
 
-		// Spacer before
+		// Spacer after
 		root.row().expand();
 		root.add();
 	}
