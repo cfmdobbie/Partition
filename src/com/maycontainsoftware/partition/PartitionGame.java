@@ -32,6 +32,27 @@ public class PartitionGame extends Game {
 	/** Sound setting. For now, defaults to true and changes are not persisted. */
 	boolean sound = true;
 
+	/** Enumeration of player configurations. */
+	public static enum PlayerConfiguration {
+		TWO_PLAYER,
+		ONE_PLAYER_VS_COMPUTER,
+	}
+
+	/** Enumeration of implemented boards. */
+	public static enum BoardConfiguration {
+		HUB("......\n......\n..0#..\n..#1..\n......\n......"),
+		OPEN(".....\n.....\n..0..\n.....\n.....\n..1..\n.....\n....."),
+		WALL(".......\n.......\n.......\n...#...\n..0#1..\n...#...\n.......\n.......\n......."),
+		// TODO: HOLES is a bust, need a new board design!
+		HOLES("...1...\n.#.#.#.\n.......\n.#.#.#.\n.......\n.#.#.#.\n.......\n.#.#.#.\n...0...");
+
+		public final String boardSpec;
+
+		BoardConfiguration(final String boardSpec) {
+			this.boardSpec = boardSpec;
+		}
+	}
+
 	@Override
 	public void create() {
 		final float w = Gdx.graphics.getWidth();
