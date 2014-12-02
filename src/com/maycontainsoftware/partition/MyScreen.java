@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
+import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
+import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 
 /**
  * A Screen instance.
@@ -22,11 +24,12 @@ public class MyScreen extends BaseScreen {
 	/** Reference to the current game state. */
 	private GameState state;
 
-	// TEMP: Board configurations used for testing
-	public static final String BOARD_1 = "....\n.0#.\n.#1.\n....";
-	public static final String BOARD_2 = "#.....#\n..0.1..\n.7#.#2.\n.......\n.6#.#3.\n..5.4..\n#.....#";
-	public static final String BOARD_3 = "......\n......\n..0#..\n..#1..\n......\n......";
-	public static final String BOARD_4 = ".....\n.....\n..0..\n.....\n.....\n..1..\n.....\n.....";
+	/** The chosen player configuration. */
+	@SuppressWarnings("unused")
+	private final PlayerConfiguration playerConfiguration;
+
+	/** The chosen board configuration. */
+	private final BoardConfiguration boardConfiguration;
 
 	// Board dimensions
 	private final int boardColumns;
@@ -46,20 +49,28 @@ public class MyScreen extends BaseScreen {
 	// Still largely to be decided. May contain elapsed time, AI thinking state, whose turn it is
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 * 
 	 * @param game
 	 *            The Game instance.
+	 * @param playerConfiguration
+	 *            The chosen player configuration.
+	 * @param boardConfiguration
+	 *            The chosen board configuration.
 	 */
-	public MyScreen(final PartitionGame game) {
+	public MyScreen(final PartitionGame game, final PlayerConfiguration playerConfiguration,
+			final BoardConfiguration boardConfiguration) {
 		super(game);
+
+		this.playerConfiguration = playerConfiguration;
+		this.boardConfiguration = boardConfiguration;
 
 		final TextureAtlas atlas = game.manager.get("atlas.atlas", TextureAtlas.class);
 		tileTexture = atlas.findRegion("Tile");
 		redPlayerTexture = atlas.findRegion("RedPlayer");
 		bluePlayerTexture = atlas.findRegion("BluePlayer");
 
-		this.state = GameState.newGameState(BOARD_3);
+		this.state = GameState.newGameState(boardConfiguration.boardSpec);
 
 		// Temporary background effect applied to root Table
 		root.setBackground(new TiledDrawable(atlas.findRegion("background")));
@@ -107,9 +118,9 @@ public class MyScreen extends BaseScreen {
 
 			// TEMP: Reset board if game cannot proceed
 			if (GameState.isGameOver(state)) {
-				state = GameState.newGameState(BOARD_3);
+				state = GameState.newGameState(boardConfiguration.boardSpec);
 			} else if (GameState.isStalemate(state)) {
-				state = GameState.newGameState(BOARD_3);
+				state = GameState.newGameState(boardConfiguration.boardSpec);
 			}
 		}
 

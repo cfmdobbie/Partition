@@ -8,10 +8,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
+import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
+import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 
 public class SelectBoardScreen extends BaseScreen {
 
-	public SelectBoardScreen(final PartitionGame game) {
+	/**
+	 * Construct a new SelectBoardScreen object.
+	 * 
+	 * @param game
+	 * @param playerConfiguration
+	 */
+	public SelectBoardScreen(final PartitionGame game, final PlayerConfiguration playerConfiguration) {
 		super(game);
 
 		final TextureAtlas atlas = game.manager.get("atlas.atlas", TextureAtlas.class);
@@ -62,25 +70,49 @@ public class SelectBoardScreen extends BaseScreen {
 		root.row();
 		root.add(boardSelections);
 
-		// Board 1
-		final Button board1Button = new Button(new TextureRegionDrawable(atlas.findRegion("board1_up")),
-				new TextureRegionDrawable(atlas.findRegion("board1_down")));
 		boardSelections.row();
-		boardSelections.add(board1Button);
-		board1Button.addListener(new ChangeListener() {
+		// Board 1: HUB
+		final Button boardHubButton = new Button(new TextureRegionDrawable(atlas.findRegion("board_hub_up")),
+				new TextureRegionDrawable(atlas.findRegion("board_hub_down")));
+		boardSelections.add(boardHubButton);
+		boardHubButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.setScreen(new MyScreen(game));
+				game.setScreen(new MyScreen(game, playerConfiguration, BoardConfiguration.HUB));
 			}
 		});
-		// Coming soon
-		boardSelections.add(new Image(atlas.findRegion("board_coming_soon")));
+		// Board 2: OPEN
+		final Button boardOpenButton = new Button(new TextureRegionDrawable(atlas.findRegion("board_open_up")),
+				new TextureRegionDrawable(atlas.findRegion("board_open_down")));
+		boardSelections.add(boardOpenButton);
+		boardOpenButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				game.setScreen(new MyScreen(game, playerConfiguration, BoardConfiguration.OPEN));
+			}
+		});
 
 		boardSelections.row();
-		// Coming soon
-		boardSelections.add(new Image(atlas.findRegion("board_coming_soon")));
-		// Coming soon
-		boardSelections.add(new Image(atlas.findRegion("board_coming_soon")));
+		// Board 3: WALL
+		final Button boardWallButton = new Button(new TextureRegionDrawable(atlas.findRegion("board_wall_up")),
+				new TextureRegionDrawable(atlas.findRegion("board_wall_down")));
+		boardSelections.add(boardWallButton);
+		boardWallButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				game.setScreen(new MyScreen(game, playerConfiguration, BoardConfiguration.WALL));
+			}
+		});
+		// Board 4: HOLES
+		final Button boardHolesButton = new Button(new TextureRegionDrawable(atlas.findRegion("board_holes_up")),
+				new TextureRegionDrawable(atlas.findRegion("board_holes_down")));
+		boardSelections.add(boardHolesButton);
+		boardHolesButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				game.setScreen(new MyScreen(game, playerConfiguration, BoardConfiguration.HOLES));
+			}
+		});
 
 		// Spacer after
 		root.row().expand();

@@ -62,12 +62,13 @@ public class SelectPlayersScreen extends BaseScreen {
 
 		// Two players
 		root.row();
-		Button twoPlayersButton = new Button(new TextureRegionDrawable(twoPlayersUp), new TextureRegionDrawable(twoPlayersDown));
+		Button twoPlayersButton = new Button(new TextureRegionDrawable(twoPlayersUp), new TextureRegionDrawable(
+				twoPlayersDown));
 		root.add(twoPlayersButton);
 		twoPlayersButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.setScreen(new SelectBoardScreen(game));
+				game.setScreen(new SelectBoardScreen(game, PartitionGame.PlayerConfiguration.TWO_PLAYER));
 			}
 		});
 
