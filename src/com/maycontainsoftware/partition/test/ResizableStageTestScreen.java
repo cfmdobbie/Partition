@@ -1,4 +1,4 @@
-package com.maycontainsoftware.partition;
+package com.maycontainsoftware.partition.test;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.maycontainsoftware.partition.FixedAspectContainer;
+import com.maycontainsoftware.partition.PartitionGame;
 
 /**
  * Stages cannot be resized in libGDX 0.9.9. You can have a Stage that ignores aspect ratio and stretches to fit screen,
@@ -29,6 +31,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class ResizableStageTestScreen extends ScreenAdapter {
 
 	private Stage stage;
+	// Unused since removal of call to game.batch, now inaccessible
+	@SuppressWarnings("unused")
 	private final PartitionGame game;
 	private final Table root;
 
@@ -105,7 +109,7 @@ public class ResizableStageTestScreen extends ScreenAdapter {
 		}
 
 		// Create new Stage
-		stage = new Stage(width, height, true, game.batch);
+		stage = new Stage(width, height, true);
 		stage.addAction(Actions.sequence(Actions.delay(1.0f), new Action() {
 			@Override
 			public boolean act(float delta) {

@@ -1,10 +1,12 @@
-package com.maycontainsoftware.partition;
+package com.maycontainsoftware.partition.test;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.maycontainsoftware.partition.BaseScreen;
+import com.maycontainsoftware.partition.PartitionGame;
 
 public class FontSizeTestScreen extends BaseScreen {
 	public FontSizeTestScreen(final PartitionGame game) {
