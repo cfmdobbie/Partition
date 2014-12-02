@@ -16,6 +16,9 @@ public class BaseScreen extends ScreenAdapter {
 	/** Tag for logging purposes. */
 	public static final String TAG = BaseScreen.class.getName();
 
+	/** Debug flag for controlling whether to drag debug output for root tables in BaseScreen Stages. */
+	private static final boolean DEBUG_ROOT_TABLES = false;
+
 	/** Reference to the Game instance. */
 	protected final PartitionGame game;
 
@@ -48,7 +51,7 @@ public class BaseScreen extends ScreenAdapter {
 		root = new Table();
 		root.setFillParent(true);
 
-		if (PartitionGame.DEBUG) {
+		if (DEBUG_ROOT_TABLES) {
 			root.debug();
 		}
 	}
@@ -59,6 +62,10 @@ public class BaseScreen extends ScreenAdapter {
 			// Update and draw the Stage
 			stage.act(delta);
 			stage.draw();
+
+			if (PartitionGame.DEBUG) {
+				Table.drawDebug(stage);
+			}
 		}
 	}
 
