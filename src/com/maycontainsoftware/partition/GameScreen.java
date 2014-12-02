@@ -6,7 +6,11 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
@@ -62,23 +66,54 @@ public class GameScreen extends BaseScreen {
 			final BoardConfiguration boardConfiguration) {
 		super(game);
 
+		// Save player and board configuration
 		this.playerConfiguration = playerConfiguration;
 		this.boardConfiguration = boardConfiguration;
 
+		// Get reference to main TextureAtlas
 		final TextureAtlas atlas = game.manager.get("atlas.atlas", TextureAtlas.class);
+
+		// Store references to required Textures
 		tileTexture = atlas.findRegion("Tile");
 		redPlayerTexture = atlas.findRegion("RedPlayer");
 		bluePlayerTexture = atlas.findRegion("BluePlayer");
 
+		// Create new game state
 		this.state = GameState.newGameState(boardConfiguration.boardSpec);
-
-		// Temporary background effect applied to root Table
-		root.setBackground(new TiledDrawable(atlas.findRegion("background")));
 
 		// Determine board size
 		boardColumns = this.state.tileEnabled.length;
 		boardRows = this.state.tileEnabled[0].length;
 		final float boardAspect = boardColumns / (float) boardRows;
+
+		// Basic setup for root Table
+		root.setBackground(new TiledDrawable(atlas.findRegion("background")));
+		root.defaults().pad(5.0f);
+
+		// Top menu bar
+		root.row();
+		final Table topBar = new Table();
+		root.add(topBar).fill();
+
+		// Back button
+		final Button quitButton = new Button(new TextureRegionDrawable(atlas.findRegion("quit_off")),
+				new TextureRegionDrawable(atlas.findRegion("quit_on")));
+		quitButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				game.setScreen(new MainMenuScreen(game));
+			}
+		});
+
+		// Widgets in top menu bar
+		topBar.row();
+		topBar.add(quitButton);
+		topBar.add().expandX();
+		topBar.add(new SoundToggleButton(game, atlas));
+
+		// Divider
+		root.row().height(2.0f);
+		root.add(new Image(atlas.findRegion("white1x1"))).fill();
 
 		// Board container
 		final Actor child = new Image(new Texture(Gdx.files.internal("yellow.png")));
