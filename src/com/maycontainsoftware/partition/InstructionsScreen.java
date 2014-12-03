@@ -88,4 +88,15 @@ public class InstructionsScreen extends BaseScreen {
 		instructions.row();
 		instructions.add(new Image(atlas.findRegion("RedPlayer")));
 	}
+
+	@Override
+	protected boolean handleBack() {
+		return true;
+	}
+
+	@Override
+	protected void doBack() {
+		game.setScreen(new MainMenuScreen(game));
+		InstructionsScreen.this.dispose();
+	}
 }
