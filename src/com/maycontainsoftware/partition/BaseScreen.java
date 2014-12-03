@@ -2,6 +2,9 @@ package com.maycontainsoftware.partition;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
@@ -93,6 +96,31 @@ public class BaseScreen extends ScreenAdapter {
 		// Remember screen dimensions
 		screenWidth = width;
 		screenHeight = height;
+
+		// Check whether screen is to handle the back button (and the escape key)
+		if (handleBack()) {
+			// Catch back button
+			Gdx.input.setCatchBackKey(true);
+			stage.getRoot().addListener(new InputListener() {
+				@Override
+				public boolean keyDown(InputEvent event, int keycode) {
+					if (keycode == Keys.BACK || keycode == Keys.ESCAPE) {
+						Gdx.app.postRunnable(new Runnable() {
+							@Override
+							public void run() {
+								doBack();
+							}
+						});
+						return true;
+					} else {
+						return super.keyDown(event, keycode);
+					}
+				}
+			});
+		} else {
+			// Don't catch back button
+			Gdx.input.setCatchBackKey(false);
+		}
 	}
 
 	@Override
@@ -100,5 +128,12 @@ public class BaseScreen extends ScreenAdapter {
 		if (stage != null) {
 			stage.dispose();
 		}
+	}
+
+	protected boolean handleBack() {
+		return false;
+	}
+
+	protected void doBack() {
 	}
 }

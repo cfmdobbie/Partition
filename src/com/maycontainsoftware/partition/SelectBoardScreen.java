@@ -118,4 +118,15 @@ public class SelectBoardScreen extends BaseScreen {
 		root.row().expand();
 		root.add();
 	}
+
+	@Override
+	protected boolean handleBack() {
+		return true;
+	}
+
+	@Override
+	protected void doBack() {
+		game.setScreen(new SelectPlayersScreen(game));
+		SelectBoardScreen.this.dispose();
+	}
 }
