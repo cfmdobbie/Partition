@@ -43,7 +43,7 @@ public class PartitionGame extends Game {
 		HUB("......\n......\n..0#..\n..#1..\n......\n......"),
 		OPEN(".....\n.....\n..0..\n.....\n.....\n..1..\n.....\n....."),
 		WALL(".......\n.......\n.......\n...#...\n..0#1..\n...#...\n.......\n.......\n......."),
-		// TODO: HOLES is a bust, need a new board design!
+		// TODO: HOLES *may* be a bust, need to play-test to determine whether it's worth keeping
 		HOLES("...1...\n.#.#.#.\n.......\n.#.#.#.\n.......\n.#.#.#.\n.......\n.#.#.#.\n...0...");
 
 		public final String boardSpec;
