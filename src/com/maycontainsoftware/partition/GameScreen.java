@@ -4,15 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
@@ -119,9 +122,23 @@ public class GameScreen extends BaseScreen {
 		root.row().height(2.0f);
 		root.add(new Image(atlas.findRegion("white1x1"))).fill();
 
+		// IDEA 1: Use Table to lay out tiles on the board.
+		// This works well: minimal code required to get widgets laid out to represent board tiles; board automatically
+		// resizes as game resizes; no need for extra code in resize() method; tiles are actors so can trigger listeners
+		// and be the target of Actions. A big problem though is that any additional widgets cannot easily be anchored
+		// to the table - a widget representing the player would have to be re-positioned after a resize, movements
+		// cannot be done by Actions making them much less useful.
+
 		// Board container
-		final Actor child = new Image(new Texture(Gdx.files.internal("yellow.png")));
-		final FixedAspectContainer boardContainer = new FixedAspectContainer(child, boardAspect);
+		final Table board = new Table();
+		for (int r = 0; r < boardRows; r++) {
+			board.row();
+			for (int c = 0; c < boardColumns; c++) {
+				board.add(new FlashingSquare(atlas)).expand().fill();
+			}
+		}
+		board.row();
+		final FixedAspectContainer boardContainer = new FixedAspectContainer(board, boardAspect);
 		root.row();
 		root.add(boardContainer).expand().fill();
 
@@ -213,5 +230,20 @@ public class GameScreen extends BaseScreen {
 		// Determine tile size
 		tileWidth = screenWidth / boardColumns;
 		tileHeight = screenHeight / boardRows;
+	}
+
+	private static class FlashingSquare extends Widget {
+		final Texture yellow;
+
+		public FlashingSquare(final TextureAtlas atlas) {
+			yellow = new Texture(Gdx.files.internal("yellow.png"));
+		}
+
+		@Override
+		public void draw(SpriteBatch batch, float parentAlpha) {
+			if (MathUtils.randomBoolean()) {
+				batch.draw(yellow, getX(), getY(), getWidth(), getHeight());
+			}
+		}
 	}
 }
