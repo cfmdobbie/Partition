@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -122,23 +123,14 @@ public class GameScreen extends BaseScreen {
 		root.row().height(2.0f);
 		root.add(new Image(atlas.findRegion("white1x1"))).fill();
 
-		// IDEA 1: Use Table to lay out tiles on the board.
-		// This works well: minimal code required to get widgets laid out to represent board tiles; board automatically
-		// resizes as game resizes; no need for extra code in resize() method; tiles are actors so can trigger listeners
-		// and be the target of Actions. A big problem though is that any additional widgets cannot easily be anchored
-		// to the table - a widget representing the player would have to be re-positioned after a resize, movements
-		// cannot be done by Actions making them much less useful.
+		// IDEA 2: Manual drawing commands on a unit-sized grid.
+		// The idea here is to draw everything manually on a grid with a 1:1 relationship between model-space
+		// coordinates and board coordinates. This is much more work on the drawing side than using Widgets, but as all
+		// drawing is done to a consistent coordinate system, no changes are required on a resize. This comes at the
+		// additional cost of having to directly manipulate the transformation matrix. Also, targets of touch/click
+		// events have to be manually calculated (TBD).
 
-		// Board container
-		final Table board = new Table();
-		for (int r = 0; r < boardRows; r++) {
-			board.row();
-			for (int c = 0; c < boardColumns; c++) {
-				board.add(new FlashingSquare(atlas)).expand().fill();
-			}
-		}
-		board.row();
-		final FixedAspectContainer boardContainer = new FixedAspectContainer(board, boardAspect);
+		final FixedAspectContainer boardContainer = new FixedAspectContainer(new UnitScaleBoard(atlas), boardAspect);
 		root.row();
 		root.add(boardContainer).expand().fill();
 
@@ -232,18 +224,42 @@ public class GameScreen extends BaseScreen {
 		tileHeight = screenHeight / boardRows;
 	}
 
-	private static class FlashingSquare extends Widget {
+	private class UnitScaleBoard extends Widget {
 		final Texture yellow;
 
-		public FlashingSquare(final TextureAtlas atlas) {
+		public UnitScaleBoard(final TextureAtlas atlas) {
 			yellow = new Texture(Gdx.files.internal("yellow.png"));
 		}
 
 		@Override
 		public void draw(SpriteBatch batch, float parentAlpha) {
+
+			// Remember current transformation matrix
+			final Matrix4 transformMatrix = batch.getTransformMatrix();
+
+			// New transformation matrix, initially identical to the current matrix
+			final Matrix4 newTransform = new Matrix4(transformMatrix);
+			// Translate to widget's (x,y) coordinates, so (0,0) is in correct location
+			newTransform.translate(getX(), getY(), 0.0f);
+			// Scale up by the size of the widget, then down by the size of the board
+			newTransform
+					.scale(getWidth() / GameScreen.this.boardColumns, getHeight() / GameScreen.this.boardRows, 1.0f);
+			// Use this new transformation matrix
+			batch.setTransformMatrix(newTransform);
+
+			// TEMPORARY: Flash active game area
 			if (MathUtils.randomBoolean()) {
-				batch.draw(yellow, getX(), getY(), getWidth(), getHeight());
+				batch.draw(yellow, 0.0f, 0.0f, GameScreen.this.boardColumns, GameScreen.this.boardRows);
 			}
+
+			// TEMPORARY: Draw blocks outside of game area to mark corners
+			batch.draw(yellow, -1.0f, -1.0f, 1.0f, 1.0f);
+			batch.draw(yellow, GameScreen.this.boardColumns, GameScreen.this.boardRows, 1.0f, 1.0f);
+			batch.draw(yellow, GameScreen.this.boardColumns, -1.0f, 1.0f, 1.0f);
+			batch.draw(yellow, -1.0f, GameScreen.this.boardRows, 1.0f, 1.0f);
+
+			// Reset transformation matrix
+			batch.setTransformMatrix(transformMatrix);
 		}
 	}
 }
