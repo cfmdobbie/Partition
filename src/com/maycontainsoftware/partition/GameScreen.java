@@ -247,16 +247,22 @@ public class GameScreen extends BaseScreen {
 			// Use this new transformation matrix
 			batch.setTransformMatrix(newTransform);
 
-			// TEMPORARY: Flash active game area
-			if (MathUtils.randomBoolean()) {
-				batch.draw(yellow, 0.0f, 0.0f, GameScreen.this.boardColumns, GameScreen.this.boardRows);
+			// TEMPORARY: Hacked in drawing code
+			// Draw tiles
+			for (int c = 0; c < boardColumns; c++) {
+				for (int r = 0; r < boardRows; r++) {
+					if (GameScreen.this.state.tileEnabled[c][r]) {
+						game.batch.draw(tileTexture, c, GameScreen.this.boardRows - 1 - r, 1.0f, 1.0f);
+					}
+				}
 			}
-
-			// TEMPORARY: Draw blocks outside of game area to mark corners
-			batch.draw(yellow, -1.0f, -1.0f, 1.0f, 1.0f);
-			batch.draw(yellow, GameScreen.this.boardColumns, GameScreen.this.boardRows, 1.0f, 1.0f);
-			batch.draw(yellow, GameScreen.this.boardColumns, -1.0f, 1.0f, 1.0f);
-			batch.draw(yellow, -1.0f, GameScreen.this.boardRows, 1.0f, 1.0f);
+			// Draw players
+			// FUTURE: This is hard-coded for two players at this time. Should improve this.
+			for (int p = 0; p < GameState.getNumberOfPlayers(state); p++) {
+				final byte[] coords = GameState.getPlayerCoords(state, p);
+				game.batch.draw(p == 0 ? redPlayerTexture : bluePlayerTexture, coords[0], GameScreen.this.boardRows - 1
+						- coords[1], 1.0f, 1.0f);
+			}
 
 			// Reset transformation matrix
 			batch.setTransformMatrix(transformMatrix);
