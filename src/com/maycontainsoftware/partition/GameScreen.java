@@ -140,15 +140,6 @@ public class GameScreen extends BaseScreen {
 		root.add(new Label("<TODO: status area>", style));
 	}
 
-	@Override
-	public void resize(final int width, final int height) {
-		if (PartitionGame.DEBUG) {
-			Gdx.app.log(TAG, "resize(" + width + ", " + height + ")");
-		}
-
-		super.resize(width, height);
-	}
-
 	private class UnitScaleBoard extends Widget {
 		public UnitScaleBoard(final TextureAtlas atlas) {
 			addListener(new InputListener() {
