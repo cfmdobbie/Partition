@@ -46,10 +46,6 @@ public class GameScreen extends BaseScreen {
 	private final int boardColumns;
 	private final int boardRows;
 
-	// Tile size
-	private float tileWidth;
-	private float tileHeight;
-
 	// Temporary textures
 	final TextureRegion tileTexture;
 	final TextureRegion redPlayerTexture;
@@ -151,10 +147,6 @@ public class GameScreen extends BaseScreen {
 		}
 
 		super.resize(width, height);
-
-		// Determine tile size
-		tileWidth = screenWidth / boardColumns;
-		tileHeight = screenHeight / boardRows;
 	}
 
 	private class UnitScaleBoard extends Widget {
