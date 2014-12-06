@@ -34,6 +34,7 @@ public class SelectPlayersScreen extends BaseScreen {
 		backButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				game.playTone();
 				game.setScreen(new MainMenuScreen(game));
 			}
 		});
@@ -68,6 +69,7 @@ public class SelectPlayersScreen extends BaseScreen {
 		twoPlayersButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				game.playTone();
 				game.setScreen(new SelectBoardScreen(game, PartitionGame.PlayerConfiguration.TWO_PLAYER));
 			}
 		});

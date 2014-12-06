@@ -3,6 +3,7 @@ package com.maycontainsoftware.partition;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -97,5 +98,33 @@ public class PartitionGame extends Game {
 
 		// Render Screen
 		super.render();
+	}
+
+	void playError() {
+		if (sound) {
+			final Sound s = manager.get("error.wav", Sound.class);
+			s.play();
+		}
+	}
+
+	void playExplosion() {
+		if (sound) {
+			final Sound s = manager.get("explosion.wav", Sound.class);
+			s.play();
+		}
+	}
+
+	void playPing() {
+		if (sound) {
+			final Sound s = manager.get("ping.wav", Sound.class);
+			s.play();
+		}
+	}
+
+	void playTone() {
+		if (sound) {
+			final Sound s = manager.get("tone.wav", Sound.class);
+			s.play();
+		}
 	}
 }

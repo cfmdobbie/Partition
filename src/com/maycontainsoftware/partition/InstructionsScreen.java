@@ -36,6 +36,7 @@ public class InstructionsScreen extends BaseScreen {
 		backButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				game.playTone();
 				game.setScreen(new MainMenuScreen(game));
 			}
 		});

@@ -60,6 +60,7 @@ public class MainMenuScreen extends BaseScreen {
 		playButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				game.playTone();
 				// TODO: Need fade out, disposal of current screen
 				game.setScreen(new SelectPlayersScreen(game));
 			}
@@ -73,6 +74,7 @@ public class MainMenuScreen extends BaseScreen {
 		instructionsButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				game.playTone();
 				// TODO: Need fade out, disposal of current screen
 				game.setScreen(new InstructionsScreen(game));
 			}

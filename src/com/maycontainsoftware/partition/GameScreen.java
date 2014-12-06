@@ -104,6 +104,7 @@ public class GameScreen extends BaseScreen {
 		quitButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				game.playTone();
 				game.setScreen(new MainMenuScreen(game));
 			}
 		});
@@ -178,11 +179,22 @@ public class GameScreen extends BaseScreen {
 					}
 
 					try {
+						final byte phase = state.turnPhase;
 						state = GameState.apply(state, new byte[] { c, r });
+						switch (phase) {
+						case GameState.PHASE_MOVE:
+							game.playPing();
+							break;
+						case GameState.PHASE_SHOOT:
+							game.playExplosion();
+							break;
+
+						}
 					} catch (Error e) {
 						if (PartitionGame.DEBUG) {
 							Gdx.app.log(TAG, "Invalid move!");
 						}
+						game.playError();
 					}
 
 					// TEMP: Reset board if game cannot proceed
