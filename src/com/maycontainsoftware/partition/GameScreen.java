@@ -118,13 +118,8 @@ public class GameScreen extends BaseScreen {
 		root.row().height(2.0f);
 		root.add(new Image(atlas.findRegion("white1x1"))).fill();
 
-		// IDEA 2: Manual drawing commands on a unit-sized grid.
-		// The idea here is to draw everything manually on a grid with a 1:1 relationship between model-space
-		// coordinates and board coordinates. This is much more work on the drawing side than using Widgets, but as all
-		// drawing is done to a consistent coordinate system, no changes are required on a resize. This comes at the
-		// additional cost of having to directly manipulate the transformation matrix. Also, targets of touch/click
-		// events have to be manually calculated (TBD).
-
+		// FixedAspectContainer is a container which forces a specific aspect ratio on its sole child. UnitScaleBoard
+		// draws the board at unit scale, but applies transformations to scale drawing to the correct size.
 		final FixedAspectContainer boardContainer = new FixedAspectContainer(new UnitScaleBoard(atlas), boardAspect);
 		root.row();
 		root.add(boardContainer).expand().fill();
@@ -140,17 +135,34 @@ public class GameScreen extends BaseScreen {
 		root.add(new Label("<TODO: status area>", style));
 	}
 
+	/**
+	 * UnitScaleBoard draws the Partition board at unit scale, but uses OpenGL modelview matrix transformations to
+	 * transform this unit-scale render into a render at the correct size and location.
+	 * 
+	 * Note that this class is not static at this time!
+	 * 
+	 * @author Charlie
+	 */
 	private class UnitScaleBoard extends Widget {
+
+		/**
+		 * Construct a new UnitScaleBoard.
+		 * 
+		 * @param atlas
+		 */
 		public UnitScaleBoard(final TextureAtlas atlas) {
 			addListener(new InputListener() {
 				@Override
 				public boolean touchDown(InputEvent event, float px, float py, int pointer, int button) {
+
 					// Board size
 					final float w = getWidth();
 					final float h = getHeight();
+
 					// Board position is not relevant
 					// final float x = getX();
 					// final float y = getY();
+
 					if (PartitionGame.DEBUG) {
 						Gdx.app.log(TAG, "Board size: " + w + "x" + h);
 						// Gdx.app.log(TAG, "Board coordinates: (" + x + "," + y + ")");
@@ -201,7 +213,6 @@ public class GameScreen extends BaseScreen {
 			// Use this new transformation matrix
 			batch.setTransformMatrix(newTransform);
 
-			// TEMPORARY: Hacked in drawing code
 			// Draw tiles
 			for (int c = 0; c < boardColumns; c++) {
 				for (int r = 0; r < boardRows; r++) {
@@ -210,6 +221,7 @@ public class GameScreen extends BaseScreen {
 					}
 				}
 			}
+
 			// Draw players
 			// FUTURE: This is hard-coded for two players at this time. Should improve this.
 			for (int p = 0; p < GameState.getNumberOfPlayers(state); p++) {
