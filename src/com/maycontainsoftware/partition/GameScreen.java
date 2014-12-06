@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -144,43 +143,6 @@ public class GameScreen extends BaseScreen {
 		final LabelStyle style = new Label.LabelStyle(font, Color.WHITE);
 		root.row();
 		root.add(new Label("<TODO: status area>", style));
-	}
-
-	@Override
-	public void render(float delta) {
-		super.render(delta);
-
-		// Process any touch input
-		if (Gdx.input.justTouched()) {
-		}
-
-		// Start drawing
-		game.batch.begin();
-
-		// Draw tiles
-		for (int c = 0; c < boardColumns; c++) {
-			for (int r = 0; r < boardRows; r++) {
-				if (this.state.tileEnabled[c][r]) {
-					final float x = c * tileWidth;
-					final float y = screenHeight - (r + 1) * tileHeight;
-					game.batch.draw(tileTexture, x + tileWidth * 0.1f, y + tileHeight * 0.1f, tileWidth * 0.8f,
-							tileHeight * 0.8f);
-				}
-			}
-		}
-
-		// Draw players
-		// FUTURE: This is hard-coded for two players at this time. Should improve this.
-		for (int p = 0; p < GameState.getNumberOfPlayers(state); p++) {
-			final byte[] coords = GameState.getPlayerCoords(state, p);
-			final float x = coords[0] * tileWidth;
-			final float y = screenHeight - (coords[1] + 1) * tileHeight;
-			game.batch.draw(p == 0 ? redPlayerTexture : bluePlayerTexture, x + tileWidth * 0.1f, y + tileHeight * 0.1f,
-					tileWidth * 0.8f, tileHeight * 0.8f);
-		}
-
-		// Stop drawing
-		game.batch.end();
 	}
 
 	@Override
