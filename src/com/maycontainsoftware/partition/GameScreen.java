@@ -7,10 +7,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -229,6 +230,33 @@ public class GameScreen extends BaseScreen {
 
 		public UnitScaleBoard(final TextureAtlas atlas) {
 			yellow = new Texture(Gdx.files.internal("yellow.png"));
+
+			addListener(new InputListener() {
+				@Override
+				public boolean touchDown(InputEvent event, float px, float py, int pointer, int button) {
+					// Board size
+					final float w = getWidth();
+					final float h = getHeight();
+					// Board position is not relevant
+					// final float x = getX();
+					// final float y = getY();
+					if (PartitionGame.DEBUG) {
+						Gdx.app.log(TAG, "Board size: " + w + "x" + h);
+						// Gdx.app.log(TAG, "Board coordinates: (" + x + "," + y + ")");
+						Gdx.app.log(TAG, "Touch location: (" + px + "," + py + ")");
+					}
+
+					// Convert to a coordinate in board space
+					final byte r = (byte) ((-(py - h)) / (h / boardRows));
+					final byte c = (byte) (px / (w / boardColumns));
+
+					if (PartitionGame.DEBUG) {
+						Gdx.app.log(TAG, "Touch is on tile: (" + c + "," + r + ")");
+					}
+
+					return true;
+				}
+			});
 		}
 
 		@Override
