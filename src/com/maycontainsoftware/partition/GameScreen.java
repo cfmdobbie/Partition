@@ -2,7 +2,6 @@ package com.maycontainsoftware.partition;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -159,11 +158,7 @@ public class GameScreen extends BaseScreen {
 	}
 
 	private class UnitScaleBoard extends Widget {
-		final Texture yellow;
-
 		public UnitScaleBoard(final TextureAtlas atlas) {
-			yellow = new Texture(Gdx.files.internal("yellow.png"));
-
 			addListener(new InputListener() {
 				@Override
 				public boolean touchDown(InputEvent event, float px, float py, int pointer, int button) {
