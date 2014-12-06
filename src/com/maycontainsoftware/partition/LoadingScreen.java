@@ -74,8 +74,10 @@ public class LoadingScreen extends BaseScreen {
 	/** Enqueue all Sound assets required by the app. */
 	private void enqueueSounds() {
 		// TODO: Enqueue Sounds
-		game.manager.load("bloop.wav", Sound.class);
-		game.manager.load("bzzt.wav", Sound.class);
+		game.manager.load("error.wav", Sound.class);
+		game.manager.load("explosion.wav", Sound.class);
+		game.manager.load("ping.wav", Sound.class);
+		game.manager.load("tone.wav", Sound.class);
 	}
 
 	/** Enqueue all BitmapFont assets required by the app. */
