@@ -152,35 +152,6 @@ public class GameScreen extends BaseScreen {
 
 		// Process any touch input
 		if (Gdx.input.justTouched()) {
-			// Get touch location
-			final Vector3 pos = new Vector3();
-			pos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-			game.camera.unproject(pos);
-			// The Vector3 "pos" now contains the touch location
-
-			// Convert to a coordinate in board space
-			final byte r = (byte) ((-(pos.y - screenHeight)) / tileHeight);
-			final byte c = (byte) (pos.x / tileWidth);
-
-			if (PartitionGame.DEBUG) {
-				Gdx.app.log(TAG, "Touch event on (" + c + "," + r + ")");
-			}
-			// state.tileEnabled[c][r] = !state.tileEnabled[c][r];
-
-			try {
-				state = GameState.apply(state, new byte[] { c, r });
-			} catch (Error e) {
-				if (PartitionGame.DEBUG) {
-					Gdx.app.log(TAG, "Invalid move!");
-				}
-			}
-
-			// TEMP: Reset board if game cannot proceed
-			if (GameState.isGameOver(state)) {
-				state = GameState.newGameState(boardConfiguration.boardSpec);
-			} else if (GameState.isStalemate(state)) {
-				state = GameState.newGameState(boardConfiguration.boardSpec);
-			}
 		}
 
 		// Start drawing
@@ -252,6 +223,21 @@ public class GameScreen extends BaseScreen {
 
 					if (PartitionGame.DEBUG) {
 						Gdx.app.log(TAG, "Touch is on tile: (" + c + "," + r + ")");
+					}
+
+					try {
+						state = GameState.apply(state, new byte[] { c, r });
+					} catch (Error e) {
+						if (PartitionGame.DEBUG) {
+							Gdx.app.log(TAG, "Invalid move!");
+						}
+					}
+
+					// TEMP: Reset board if game cannot proceed
+					if (GameState.isGameOver(state)) {
+						state = GameState.newGameState(boardConfiguration.boardSpec);
+					} else if (GameState.isStalemate(state)) {
+						state = GameState.newGameState(boardConfiguration.boardSpec);
 					}
 
 					return true;
