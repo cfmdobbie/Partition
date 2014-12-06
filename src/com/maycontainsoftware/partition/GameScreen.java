@@ -51,6 +51,9 @@ public class GameScreen extends BaseScreen {
 	final TextureRegion redPlayerTexture;
 	final TextureRegion bluePlayerTexture;
 
+	/** The status message at the bottom of the screen. */
+	final Label statusMessage;
+
 	// Screen Layout
 	//
 	// Still largely to be decided. May contain elapsed time, AI thinking state, whose turn it is
@@ -133,7 +136,17 @@ public class GameScreen extends BaseScreen {
 		final BitmapFont font = new BitmapFont(Gdx.files.internal("segoeuiblack16.fnt"));
 		final LabelStyle style = new Label.LabelStyle(font, Color.WHITE);
 		root.row();
-		root.add(new Label("<TODO: status area>", style));
+		statusMessage = new Label("", style);
+		root.add(statusMessage);
+
+		updateStatusMessage();
+	}
+
+	/** Update the message displayed at the bottom of the screen with respect to the current game state. */
+	private void updateStatusMessage() {
+		final int playerNumber = state.currentPlayerIndex + 1;
+		statusMessage.setText("Player " + playerNumber + ": "
+				+ (state.turnPhase == GameState.PHASE_MOVE ? "Move" : "Shoot"));
 	}
 
 	/**
@@ -203,6 +216,9 @@ public class GameScreen extends BaseScreen {
 					} else if (GameState.isStalemate(state)) {
 						state = GameState.newGameState(boardConfiguration.boardSpec);
 					}
+
+					// Update status message
+					updateStatusMessage();
 
 					return true;
 				}
