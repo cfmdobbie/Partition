@@ -130,10 +130,20 @@ public class BaseScreen extends ScreenAdapter {
 		}
 	}
 
+	/**
+	 * Whether or not the screen wants to handle the "back" button on a mobile device, or the "escape" key on a
+	 * computer. Subclasses will override this method to return true if they wish to handle these functions.
+	 * 
+	 * @return False
+	 */
 	protected boolean handleBack() {
 		return false;
 	}
 
+	/**
+	 * The action to take when the "back" button or the "escape" key is pressed. This method is executed on the main
+	 * loop, outside of any rendering.
+	 */
 	protected void doBack() {
 	}
 }

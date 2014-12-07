@@ -15,8 +15,20 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 
+/**
+ * A screen full of useful information! This screen contains both details on how to play the game, plus any credits that
+ * are required for the assets the game uses.
+ * 
+ * @author Charlie
+ */
 public class InstructionsScreen extends BaseScreen {
 
+	/**
+	 * Construct a new InstructionsScreen object.
+	 * 
+	 * @param game
+	 *            The PartitionGame instance.
+	 */
 	public InstructionsScreen(final PartitionGame game) {
 		super(game);
 

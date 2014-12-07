@@ -100,6 +100,7 @@ public class PartitionGame extends Game {
 		super.render();
 	}
 
+	/** Play the "error" sound effect, if sounds are enabled. */
 	void playError() {
 		if (sound) {
 			final Sound s = manager.get("error.wav", Sound.class);
@@ -107,6 +108,7 @@ public class PartitionGame extends Game {
 		}
 	}
 
+	/** Play the "explosion" sound effect, if sounds are enabled. */
 	void playExplosion() {
 		if (sound) {
 			final Sound s = manager.get("explosion.wav", Sound.class);
@@ -114,6 +116,7 @@ public class PartitionGame extends Game {
 		}
 	}
 
+	/** Play the "ping" sound effect, if sounds are enabled. */
 	void playPing() {
 		if (sound) {
 			final Sound s = manager.get("ping.wav", Sound.class);
@@ -121,6 +124,7 @@ public class PartitionGame extends Game {
 		}
 	}
 
+	/** Play the "tone" sound effect, if sounds are enabled. */
 	void playTone() {
 		if (sound) {
 			final Sound s = manager.get("tone.wav", Sound.class);

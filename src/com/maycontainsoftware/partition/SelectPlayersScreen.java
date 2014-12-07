@@ -10,8 +10,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 
+/**
+ * Screen to select player configuration.
+ * 
+ * @author Charlie
+ */
 public class SelectPlayersScreen extends BaseScreen {
 
+	/**
+	 * Construct a new SelectPlayersScreen.
+	 * 
+	 * @param game
+	 *            The PartitionGame instance.
+	 */
 	public SelectPlayersScreen(final PartitionGame game) {
 		super(game);
 

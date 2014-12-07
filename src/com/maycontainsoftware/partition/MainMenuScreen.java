@@ -10,8 +10,20 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 
+/**
+ * The main menu screen. This is the first interactive screen that the player encounters; it appears directly after the
+ * loading screens.
+ * 
+ * @author Charlie
+ */
 public class MainMenuScreen extends BaseScreen {
 
+	/**
+	 * Construct a new MainMenuScree.
+	 * 
+	 * @param game
+	 *            The PartitionGame instance.
+	 */
 	public MainMenuScreen(final PartitionGame game) {
 		super(game);
 

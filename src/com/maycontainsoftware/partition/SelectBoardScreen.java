@@ -11,13 +11,20 @@ import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 
+/**
+ * Screen to select a board.
+ * 
+ * @author Charlie
+ */
 public class SelectBoardScreen extends BaseScreen {
 
 	/**
 	 * Construct a new SelectBoardScreen object.
 	 * 
 	 * @param game
+	 *            The PartitionGame instance.
 	 * @param playerConfiguration
+	 *            The PlayerConfiguration that has already been selected.
 	 */
 	public SelectBoardScreen(final PartitionGame game, final PlayerConfiguration playerConfiguration) {
 		super(game);

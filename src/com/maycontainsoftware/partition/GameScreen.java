@@ -23,7 +23,7 @@ import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 
 /**
- * A Screen instance.
+ * The Screen instance on which the game is actually played.
  * 
  * @author Charlie
  */
@@ -43,7 +43,10 @@ public class GameScreen extends BaseScreen {
 	private final BoardConfiguration boardConfiguration;
 
 	// Board dimensions
+	/** Number of columns on the current board. */
 	private final int boardColumns;
+
+	/** Number of rows on the board. */
 	private final int boardRows;
 
 	// Temporary textures
