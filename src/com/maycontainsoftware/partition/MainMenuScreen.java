@@ -95,5 +95,24 @@ public class MainMenuScreen extends BaseScreen {
 		// Spacer after
 		root.row().expand();
 		root.add();
+
+		// TODO: Screen transition
+
+		// Can add an Actor to the root table not via add() but via addActor(), so it does not participate in layout.
+		// Added actor could be setFillParent() to automatically fill the Screen over resizes. If added last, the actor
+		// will overlay all other widgets. Can use setTouchable(disabled) to make it transparent to touches, or leave it
+		// opaque to touches during transition and use setVisible(false) once transition complete to allow touches
+		// through to other screen widgets. 300ms is probably a good speed for the transition.
+
+		// As for what the transition is, a simple black screen fade to alpha=0 would suffice, but a more interesting
+		// effect based in some way upon game mechanics would be better. Maybe this depends on the final decision on how
+		// the tiles animate as they are destroyed? So maybe some kind of generic object is required, whose exact render
+		// can be decided later.
+
+		// Image i = new Image(atlas.findRegion("BlueTile"));
+		// i.setTouchable(Touchable.disabled);
+		// i.setVisible(false);
+		// i.setFillParent(true);
+		// root.addActor(i);
 	}
 }
