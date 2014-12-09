@@ -114,5 +114,8 @@ public class MainMenuScreen extends BaseScreen {
 		// i.setVisible(false);
 		// i.setFillParent(true);
 		// root.addActor(i);
+
+		// For now:
+		// Opaque panel to represent transition. Use Actions to fade alpha to 0 and setEnabled(false).
 	}
 }
