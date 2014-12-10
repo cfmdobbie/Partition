@@ -22,9 +22,12 @@ abstract class ScreenTransition {
 	/**
 	 * Perform the out-transition animation.
 	 * 
-	 * @param game The Game instance.
-	 * @param oldScreen The Screen instance we are transitioning from.
-	 * @param newScreen The Screen instance we are transitioning to.
+	 * @param game
+	 *            The Game instance.
+	 * @param oldScreen
+	 *            The Screen instance we are transitioning from.
+	 * @param newScreen
+	 *            The Screen instance we are transitioning to.
 	 */
 	abstract void doTransitionOut(final Game game, final Screen oldScreen, final Screen newScreen);
 
@@ -39,7 +42,8 @@ abstract class ScreenTransition {
 		final Widget solid;
 
 		/**
-		 * Construct a new SolidColorFadeScreenTransition.
+		 * Construct a new SolidColorFadeScreenTransition. This will add the required UI widgets to the root Table
+		 * immediately, so this transition should be constructed after all other UI elements.
 		 * 
 		 * @param root
 		 *            The root Table.
@@ -61,7 +65,7 @@ abstract class ScreenTransition {
 
 		@Override
 		void doTransitionIn() {
-			
+
 			// Fade out then stop blocking input
 			solid.addAction(Actions.sequence(Actions.fadeOut(0.25f), new Action() {
 				@Override
