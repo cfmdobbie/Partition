@@ -53,7 +53,7 @@ abstract class ScreenTransition {
 		public SolidColorFadeScreenTransition(final Table root, final TextureRegion textureRegion) {
 
 			// Need a single widget that is a full-screen solid-color panel
-			solid = new Image();
+			solid = new Image(textureRegion);
 			solid.setFillParent(true);
 
 			// Add the widget to the root table
