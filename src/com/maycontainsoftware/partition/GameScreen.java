@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
+import com.maycontainsoftware.partition.ScreenTransition.SolidColorFadeScreenTransition;
 
 /**
  * The Screen instance on which the game is actually played.
@@ -53,6 +54,9 @@ public class GameScreen extends BaseScreen {
 	final TextureRegion tileTexture;
 	final TextureRegion redPlayerTexture;
 	final TextureRegion bluePlayerTexture;
+
+	/** The screen transition. */
+	private final ScreenTransition screenTransition;
 
 	/** The status message at the bottom of the screen. */
 	final Label statusMessage;
@@ -107,7 +111,7 @@ public class GameScreen extends BaseScreen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.playTone();
-				game.setScreen(new MainMenuScreen(game));
+				screenTransition.doTransitionOut(game, GameScreen.this, new MainMenuScreen(game));
 			}
 		});
 
@@ -139,6 +143,12 @@ public class GameScreen extends BaseScreen {
 		root.add(statusMessage);
 
 		updateStatusMessage();
+
+		// Set up simple screen transition - fade in/out from/to black
+		screenTransition = new SolidColorFadeScreenTransition(root, atlas.findRegion("black"));
+
+		// And fade the screen in
+		screenTransition.doTransitionIn();
 	}
 
 	/** Update the message displayed at the bottom of the screen with respect to the current game state. */

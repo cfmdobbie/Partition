@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
+import com.maycontainsoftware.partition.ScreenTransition.SolidColorFadeScreenTransition;
 
 /**
  * Screen to select player configuration.
@@ -16,6 +17,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
  * @author Charlie
  */
 public class SelectPlayersScreen extends BaseScreen {
+
+	/** The screen transition. */
+	private final ScreenTransition screenTransition;
 
 	/**
 	 * Construct a new SelectPlayersScreen.
@@ -46,7 +50,7 @@ public class SelectPlayersScreen extends BaseScreen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.playTone();
-				game.setScreen(new MainMenuScreen(game));
+				screenTransition.doTransitionOut(game, SelectPlayersScreen.this, new MainMenuScreen(game));
 			}
 		});
 
@@ -81,7 +85,8 @@ public class SelectPlayersScreen extends BaseScreen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.playTone();
-				game.setScreen(new SelectBoardScreen(game, PartitionGame.PlayerConfiguration.TWO_PLAYER));
+				screenTransition.doTransitionOut(game, SelectPlayersScreen.this, new SelectBoardScreen(game,
+						PartitionGame.PlayerConfiguration.TWO_PLAYER));
 			}
 		});
 
@@ -92,6 +97,12 @@ public class SelectPlayersScreen extends BaseScreen {
 		// Spacer after
 		root.row().expand();
 		root.add();
+
+		// Set up simple screen transition - fade in/out from/to black
+		screenTransition = new SolidColorFadeScreenTransition(root, atlas.findRegion("black"));
+
+		// And fade the screen in
+		screenTransition.doTransitionIn();
 	}
 
 	@Override

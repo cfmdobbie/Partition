@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
+import com.maycontainsoftware.partition.ScreenTransition.SolidColorFadeScreenTransition;
 
 /**
  * Screen to select a board.
@@ -17,6 +18,9 @@ import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
  * @author Charlie
  */
 public class SelectBoardScreen extends BaseScreen {
+
+	/** The screen transition. */
+	private final ScreenTransition screenTransition;
 
 	/**
 	 * Construct a new SelectBoardScreen object.
@@ -46,7 +50,7 @@ public class SelectBoardScreen extends BaseScreen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.playTone();
-				game.setScreen(new SelectPlayersScreen(game));
+				screenTransition.doTransitionOut(game, SelectBoardScreen.this, new SelectPlayersScreen(game));
 			}
 		});
 
@@ -87,7 +91,8 @@ public class SelectBoardScreen extends BaseScreen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.playTone();
-				game.setScreen(new GameScreen(game, playerConfiguration, BoardConfiguration.HUB));
+				screenTransition.doTransitionOut(game, SelectBoardScreen.this, new GameScreen(game,
+						playerConfiguration, BoardConfiguration.HUB));
 			}
 		});
 		// Board 2: OPEN
@@ -98,7 +103,8 @@ public class SelectBoardScreen extends BaseScreen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.playTone();
-				game.setScreen(new GameScreen(game, playerConfiguration, BoardConfiguration.OPEN));
+				screenTransition.doTransitionOut(game, SelectBoardScreen.this, new GameScreen(game,
+						playerConfiguration, BoardConfiguration.OPEN));
 			}
 		});
 
@@ -111,7 +117,8 @@ public class SelectBoardScreen extends BaseScreen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.playTone();
-				game.setScreen(new GameScreen(game, playerConfiguration, BoardConfiguration.WALL));
+				screenTransition.doTransitionOut(game, SelectBoardScreen.this, new GameScreen(game,
+						playerConfiguration, BoardConfiguration.WALL));
 			}
 		});
 		// Board 4: HOLES
@@ -122,13 +129,20 @@ public class SelectBoardScreen extends BaseScreen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.playTone();
-				game.setScreen(new GameScreen(game, playerConfiguration, BoardConfiguration.HOLES));
+				screenTransition.doTransitionOut(game, SelectBoardScreen.this, new GameScreen(game,
+						playerConfiguration, BoardConfiguration.HOLES));
 			}
 		});
 
 		// Spacer after
 		root.row().expand();
 		root.add();
+
+		// Set up simple screen transition - fade in/out from/to black
+		screenTransition = new SolidColorFadeScreenTransition(root, atlas.findRegion("black"));
+
+		// And fade the screen in
+		screenTransition.doTransitionIn();
 	}
 
 	@Override

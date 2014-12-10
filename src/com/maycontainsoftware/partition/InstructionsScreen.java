@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
+import com.maycontainsoftware.partition.ScreenTransition.SolidColorFadeScreenTransition;
 
 /**
  * A screen full of useful information! This screen contains both details on how to play the game, plus any credits that
@@ -22,6 +23,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
  * @author Charlie
  */
 public class InstructionsScreen extends BaseScreen {
+
+	/** The screen transition. */
+	private final ScreenTransition screenTransition;
 
 	/**
 	 * Construct a new InstructionsScreen object.
@@ -49,7 +53,7 @@ public class InstructionsScreen extends BaseScreen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.playTone();
-				game.setScreen(new MainMenuScreen(game));
+				screenTransition.doTransitionOut(game, InstructionsScreen.this, new MainMenuScreen(game));
 			}
 		});
 
@@ -100,6 +104,12 @@ public class InstructionsScreen extends BaseScreen {
 		instructions.add(new Image(atlas.findRegion("Tile")));
 		instructions.row();
 		instructions.add(new Image(atlas.findRegion("RedPlayer")));
+
+		// Set up simple screen transition - fade in/out from/to black
+		screenTransition = new SolidColorFadeScreenTransition(root, atlas.findRegion("black"));
+
+		// And fade the screen in
+		screenTransition.doTransitionIn();
 	}
 
 	@Override
