@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
+import com.maycontainsoftware.partition.ScreenTransition.SolidColorFadeScreenTransition;
 
 /**
  * The main menu screen. This is the first interactive screen that the player encounters; it appears directly after the
@@ -17,6 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
  * @author Charlie
  */
 public class MainMenuScreen extends BaseScreen {
+
+	/** The screen transition. */
+	private final ScreenTransition screenTransition;
 
 	/**
 	 * Construct a new MainMenuScree.
@@ -73,8 +77,7 @@ public class MainMenuScreen extends BaseScreen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.playTone();
-				// TODO: Need fade out, disposal of current screen
-				game.setScreen(new SelectPlayersScreen(game));
+				screenTransition.doTransitionOut(game, MainMenuScreen.this, new SelectPlayersScreen(game));
 			}
 		});
 
@@ -87,8 +90,7 @@ public class MainMenuScreen extends BaseScreen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.playTone();
-				// TODO: Need fade out, disposal of current screen
-				game.setScreen(new InstructionsScreen(game));
+				screenTransition.doTransitionOut(game, MainMenuScreen.this, new InstructionsScreen(game));
 			}
 		});
 
@@ -96,26 +98,10 @@ public class MainMenuScreen extends BaseScreen {
 		root.row().expand();
 		root.add();
 
-		// TODO: Screen transition
+		// Set up simple screen transition - fade in/out from/to black
+		screenTransition = new SolidColorFadeScreenTransition(root, atlas.findRegion("black"));
 
-		// Can add an Actor to the root table not via add() but via addActor(), so it does not participate in layout.
-		// Added actor could be setFillParent() to automatically fill the Screen over resizes. If added last, the actor
-		// will overlay all other widgets. Can use setTouchable(disabled) to make it transparent to touches, or leave it
-		// opaque to touches during transition and use setVisible(false) once transition complete to allow touches
-		// through to other screen widgets. 300ms is probably a good speed for the transition.
-
-		// As for what the transition is, a simple black screen fade to alpha=0 would suffice, but a more interesting
-		// effect based in some way upon game mechanics would be better. Maybe this depends on the final decision on how
-		// the tiles animate as they are destroyed? So maybe some kind of generic object is required, whose exact render
-		// can be decided later.
-
-		// Image i = new Image(atlas.findRegion("BlueTile"));
-		// i.setTouchable(Touchable.disabled);
-		// i.setVisible(false);
-		// i.setFillParent(true);
-		// root.addActor(i);
-
-		// For now:
-		// Opaque panel to represent transition. Use Actions to fade alpha to 0 and setEnabled(false).
+		// And fade the screen in
+		screenTransition.doTransitionIn();
 	}
 }
