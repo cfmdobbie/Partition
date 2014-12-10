@@ -57,10 +57,6 @@ public class GameScreen extends BaseScreen {
 	/** The status message at the bottom of the screen. */
 	final Label statusMessage;
 
-	// Screen Layout
-	//
-	// Still largely to be decided. May contain elapsed time, AI thinking state, whose turn it is
-
 	/**
 	 * Constructor.
 	 * 
