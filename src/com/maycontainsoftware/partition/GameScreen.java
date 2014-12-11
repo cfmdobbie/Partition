@@ -83,7 +83,7 @@ public class GameScreen extends BaseScreen {
 		final TextureAtlas atlas = game.manager.get("atlas.atlas", TextureAtlas.class);
 
 		// Store references to required Textures
-		tileTexture = atlas.findRegion("Tile");
+		tileTexture = atlas.findRegion("tile");
 		redPlayerTexture = atlas.findRegion("RedPlayer");
 		bluePlayerTexture = atlas.findRegion("BluePlayer");
 
