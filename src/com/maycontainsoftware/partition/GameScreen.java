@@ -136,7 +136,7 @@ public class GameScreen extends BaseScreen {
 		root.add(new Image(atlas.findRegion("white1x1"))).fill();
 
 		// Status area
-		final BitmapFont font = new BitmapFont(Gdx.files.internal("segoeuiblack16.fnt"));
+		final BitmapFont font = new BitmapFont(Gdx.files.internal("segoeuiblack24.fnt"));
 		final LabelStyle style = new Label.LabelStyle(font, Color.WHITE);
 		root.row();
 		statusMessage = new Label("", style);
