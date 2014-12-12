@@ -69,7 +69,7 @@ public class MainMenuScreen extends BaseScreen {
 		root.add(new Image(atlas.findRegion("partition_logo")));
 
 		// Spacer between logo and buttons
-		root.row().height(40.0f);
+		root.row().height(10.0f);
 		root.add();
 
 		// Play button
