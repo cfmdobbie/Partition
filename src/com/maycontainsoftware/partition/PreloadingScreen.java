@@ -33,9 +33,15 @@ public class PreloadingScreen extends BaseScreen {
 		// Get developer logo from manager
 		developerLogo = game.manager.get("developer_logo.png", Texture.class);
 
-		// Set up user interface - developer logo in centre of screen
-		root.row();
+		// Set up user interface
+
+		// Developer logo
+		root.row().padBottom(10.0f);
 		root.add(new Image(developerLogo));
+
+		// Empty space to offset loading bar on next screen
+		root.row().height(38.0f);
+		root.add();
 
 		// Enqueue any assets required for the proper loading screen
 		game.manager.load("loading.atlas", TextureAtlas.class);

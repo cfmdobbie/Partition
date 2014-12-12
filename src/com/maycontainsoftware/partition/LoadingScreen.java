@@ -41,15 +41,11 @@ public class LoadingScreen extends BaseScreen {
 		// TODO: Really want tiled background to fade in over about 0.5 secs
 		root.setBackground(new TiledDrawable(loadingAtlas.findRegion("background")));
 
-		// Extra padding to offset other graphic
-		root.row().height(20.0f);
-		root.add();
-
-		// Developer logo (in centre of screen)
-		root.row().padTop(10.0f).padBottom(10.0f);
+		// Developer logo
+		root.row().padBottom(10.0f);
 		root.add(new Image(developerLogo));
 
-		// Loading graphic
+		// Loading bar graphic
 		root.row();
 		root.add(new LoadingBar(game.manager, loadingAtlas.findRegion("loading_bar_bg"), loadingAtlas
 				.findRegion("loading_bar_fg")));
