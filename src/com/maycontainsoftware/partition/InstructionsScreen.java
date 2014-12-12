@@ -101,7 +101,7 @@ public class InstructionsScreen extends BaseScreen {
 		}
 
 		instructions.row();
-		instructions.add(new Image(atlas.findRegion("Tile")));
+		instructions.add(new Image(atlas.findRegion("tile")));
 		instructions.row();
 		instructions.add(new Image(atlas.findRegion("RedPlayer")));
 
