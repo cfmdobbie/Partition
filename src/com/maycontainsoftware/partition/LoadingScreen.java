@@ -32,6 +32,8 @@ public class LoadingScreen extends BaseScreen {
 	public LoadingScreen(final PartitionGame game) {
 		super(game);
 
+		// TODO: Load different assets dependent on current horizontal screen resolution.
+
 		// Extract required assets from the asset manager
 		developerLogo = game.manager.get("developer_logo.png", Texture.class);
 		loadingAtlas = game.manager.get("loading.atlas", TextureAtlas.class);
