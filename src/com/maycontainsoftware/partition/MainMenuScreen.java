@@ -3,7 +3,9 @@ package com.maycontainsoftware.partition;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -37,6 +39,7 @@ public class MainMenuScreen extends BaseScreen {
 		final TextureRegion playDown = atlas.findRegion("play_down");
 		final TextureRegion instructionsUp = atlas.findRegion("instructions_up");
 		final TextureRegion instructionsDown = atlas.findRegion("instructions_down");
+		final TextureRegion tile = atlas.findRegion("menu_tile");
 
 		root.setBackground(new TiledDrawable(atlas.findRegion("background")));
 		root.defaults().pad(5.0f);
@@ -80,6 +83,16 @@ public class MainMenuScreen extends BaseScreen {
 				screenTransition.doTransitionOut(game, MainMenuScreen.this, new SelectPlayersScreen(game));
 			}
 		});
+
+		// Horizontal row of tiles
+		root.row();
+		Group tileRow = new HorizontalGroup();
+		tileRow.addActor(new Image(tile));
+		tileRow.addActor(new Image(tile));
+		tileRow.addActor(new Image(tile));
+		tileRow.addActor(new Image(tile));
+		tileRow.addActor(new Image(tile));
+		root.add(tileRow);
 
 		// Instructions button
 		root.row();
