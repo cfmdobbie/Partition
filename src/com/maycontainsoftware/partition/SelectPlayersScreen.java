@@ -92,7 +92,7 @@ public class SelectPlayersScreen extends BaseScreen {
 
 		// One player versus computer
 		root.row();
-		root.add(new Image(atlas.findRegion("coming_soon_120x60")));
+		root.add(new Image(atlas.findRegion("1p_up")));
 
 		// Spacer after
 		root.row().expand();
