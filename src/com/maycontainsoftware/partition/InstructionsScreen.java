@@ -47,8 +47,8 @@ public class InstructionsScreen extends BaseScreen {
 		root.add(topBar).fill();
 
 		// Back button
-		final Button backButton = new Button(new TextureRegionDrawable(atlas.findRegion("back_off")),
-				new TextureRegionDrawable(atlas.findRegion("back_on")));
+		final Button backButton = new Button(new TextureRegionDrawable(atlas.findRegion("back_up")),
+				new TextureRegionDrawable(atlas.findRegion("back_down")));
 		backButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {

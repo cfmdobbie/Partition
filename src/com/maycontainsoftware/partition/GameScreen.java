@@ -105,8 +105,8 @@ public class GameScreen extends BaseScreen {
 		root.add(topBar).fill();
 
 		// Back button
-		final Button quitButton = new Button(new TextureRegionDrawable(atlas.findRegion("quit_off")),
-				new TextureRegionDrawable(atlas.findRegion("quit_on")));
+		final Button quitButton = new Button(new TextureRegionDrawable(atlas.findRegion("quit_up")),
+				new TextureRegionDrawable(atlas.findRegion("quit_down")));
 		quitButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
