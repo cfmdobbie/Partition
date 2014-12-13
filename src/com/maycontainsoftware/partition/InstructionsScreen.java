@@ -1,9 +1,14 @@
 package com.maycontainsoftware.partition;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -12,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.maycontainsoftware.partition.ScreenTransition.SolidColorFadeScreenTransition;
@@ -103,7 +109,9 @@ public class InstructionsScreen extends BaseScreen {
 		instructions.row();
 		instructions.add(new Image(atlas.findRegion("tile")));
 		instructions.row();
-		instructions.add(new Image(atlas.findRegion("RedPlayer")));
+		final Animation animation = new Animation(0.2f, atlas.findRegion("player_red0"),
+				atlas.findRegion("player_red30"), atlas.findRegion("player_red60"));
+		instructions.add(new AnimatedImage(animation));
 
 		// Set up simple screen transition - fade in/out from/to black
 		screenTransition = new SolidColorFadeScreenTransition(root, atlas.findRegion("black"));
@@ -121,5 +129,48 @@ public class InstructionsScreen extends BaseScreen {
 	protected void doBack() {
 		game.setScreen(new MainMenuScreen(game));
 		InstructionsScreen.this.dispose();
+	}
+
+	/**
+	 * Simple animated image class.
+	 * 
+	 * @author Charlie
+	 */
+	static class AnimatedImage extends Image {
+
+		private final Animation animation;
+		private float time = 0.0f;
+		private Drawable currentDrawable;
+		private Map<TextureRegion, Drawable> drawables = new HashMap<TextureRegion, Drawable>();
+
+		public AnimatedImage(final Animation animation) {
+			this.animation = animation;
+		}
+
+		@Override
+		public void act(float delta) {
+			// Update any actions
+			super.act(delta);
+
+			// Update animation time
+			time += delta;
+
+			// Determine texture region to display
+			final TextureRegion region = animation.getKeyFrame(time, true);
+
+			// Add it to the map if it doesn't already exist
+			if (!drawables.containsKey(region)) {
+				drawables.put(region, new TextureRegionDrawable(region));
+			}
+
+			// Get the drawable for the texture region from the map
+			final Drawable nextDrawable = drawables.get(region);
+
+			// If the drawable has just changed, update the image
+			if (nextDrawable != currentDrawable) {
+				currentDrawable = nextDrawable;
+				setDrawable(currentDrawable);
+			}
+		}
 	}
 }
