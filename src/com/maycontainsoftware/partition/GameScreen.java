@@ -84,8 +84,8 @@ public class GameScreen extends BaseScreen {
 
 		// Store references to required Textures
 		tileTexture = atlas.findRegion("tile");
-		redPlayerTexture = atlas.findRegion("RedPlayer");
-		bluePlayerTexture = atlas.findRegion("BluePlayer");
+		redPlayerTexture = atlas.findRegion("player_red0");
+		bluePlayerTexture = atlas.findRegion("player_blue0");
 
 		// Create new game state
 		this.state = GameState.newGameState(boardConfiguration.boardSpec);
