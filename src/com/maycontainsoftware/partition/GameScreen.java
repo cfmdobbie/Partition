@@ -52,6 +52,7 @@ public class GameScreen extends BaseScreen {
 
 	// Temporary textures
 	final TextureRegion tileTexture;
+	final TextureRegion highlightTexture;
 	final TextureRegion redPlayerTexture;
 	final TextureRegion bluePlayerTexture;
 
@@ -84,6 +85,7 @@ public class GameScreen extends BaseScreen {
 
 		// Store references to required Textures
 		tileTexture = atlas.findRegion("tile");
+		highlightTexture = atlas.findRegion("tile_highlight");
 		redPlayerTexture = atlas.findRegion("player_red0");
 		bluePlayerTexture = atlas.findRegion("player_blue0");
 
@@ -259,6 +261,15 @@ public class GameScreen extends BaseScreen {
 				for (int r = 0; r < boardRows; r++) {
 					if (GameScreen.this.state.tileEnabled[c][r]) {
 						game.batch.draw(tileTexture, c, GameScreen.this.boardRows - 1 - r, 1.0f, 1.0f);
+					}
+				}
+			}
+
+			// Draw highlights
+			for (int c = 0; c < boardColumns; c++) {
+				for (int r = 0; r < boardRows; r++) {
+					if (GameScreen.this.state.tileEnabled[c][r]) {
+						game.batch.draw(highlightTexture, c, GameScreen.this.boardRows - 1 - r, 1.0f, 1.0f);
 					}
 				}
 			}
