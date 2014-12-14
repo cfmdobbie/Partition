@@ -177,7 +177,12 @@ public class GameScreen extends BaseScreen {
 		public UnitScaleBoard(final TextureAtlas atlas) {
 			addListener(new InputListener() {
 				@Override
-				public boolean touchDown(InputEvent event, float px, float py, int pointer, int button) {
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					return true;
+				}
+
+				@Override
+				public void touchUp(InputEvent event, float px, float py, int pointer, int button) {
 
 					// Board size
 					final float w = getWidth();
@@ -229,8 +234,6 @@ public class GameScreen extends BaseScreen {
 
 					// Update status message
 					updateStatusMessage();
-
-					return true;
 				}
 			});
 		}
