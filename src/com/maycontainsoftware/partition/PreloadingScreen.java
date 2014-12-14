@@ -40,7 +40,7 @@ public class PreloadingScreen extends BaseScreen {
 		root.add(new Image(developerLogo));
 
 		// Empty space to offset loading bar on next screen
-		root.row().height(38.0f);
+		root.row().height(22.0f);
 		root.add();
 
 		// Enqueue any assets required for the proper loading screen
