@@ -39,7 +39,7 @@ public class LoadingScreen extends BaseScreen {
 		loadingAtlas = game.manager.get("loading.atlas", TextureAtlas.class);
 
 		// TODO: Really want tiled background to fade in over about 0.5 secs
-		root.setBackground(new TiledDrawable(loadingAtlas.findRegion("background")));
+		//root.setBackground(new TiledDrawable(loadingAtlas.findRegion("background")));
 
 		// Developer logo
 		root.row().padBottom(10.0f);
