@@ -33,29 +33,6 @@ public class GameScreen extends BaseScreen {
 	/** Tag for logging purposes. */
 	public static final String TAG = GameScreen.class.getName();
 
-	/** Reference to the current game state. */
-	private GameState state;
-
-	/** The chosen player configuration. */
-	@SuppressWarnings("unused")
-	private final PlayerConfiguration playerConfiguration;
-
-	/** The chosen board configuration. */
-	private final BoardConfiguration boardConfiguration;
-
-	// Board dimensions
-	/** Number of columns on the current board. */
-	private final int boardColumns;
-
-	/** Number of rows on the board. */
-	private final int boardRows;
-
-	// Temporary textures
-	final TextureRegion tileTexture;
-	final TextureRegion highlightTexture;
-	final TextureRegion redPlayerTexture;
-	final TextureRegion bluePlayerTexture;
-
 	/** The screen transition. */
 	private final ScreenTransition screenTransition;
 
@@ -76,26 +53,8 @@ public class GameScreen extends BaseScreen {
 			final BoardConfiguration boardConfiguration) {
 		super(game);
 
-		// Save player and board configuration
-		this.playerConfiguration = playerConfiguration;
-		this.boardConfiguration = boardConfiguration;
-
 		// Get reference to main TextureAtlas
 		final TextureAtlas atlas = game.manager.get("atlas.atlas", TextureAtlas.class);
-
-		// Store references to required Textures
-		tileTexture = atlas.findRegion("tile");
-		highlightTexture = atlas.findRegion("tile_highlight");
-		redPlayerTexture = atlas.findRegion("player_red0");
-		bluePlayerTexture = atlas.findRegion("player_blue0");
-
-		// Create new game state
-		this.state = GameState.newGameState(boardConfiguration.boardSpec);
-
-		// Determine board size
-		boardColumns = this.state.tileEnabled.length;
-		boardRows = this.state.tileEnabled[0].length;
-		final float boardAspect = boardColumns / (float) boardRows;
 
 		// Basic setup for root Table
 		root.setBackground(new TiledDrawable(atlas.findRegion("background")));
@@ -130,7 +89,9 @@ public class GameScreen extends BaseScreen {
 
 		// FixedAspectContainer is a container which forces a specific aspect ratio on its sole child. GameBoard draws
 		// the board at unit scale, but applies transformations to scale drawing to the correct size.
-		final FixedAspectContainer boardContainer = new FixedAspectContainer(new GameBoard(atlas), boardAspect);
+		final GameBoard gameBoard = new GameBoard(game, atlas, playerConfiguration, boardConfiguration);
+		float boardAspect = gameBoard.getDesiredAspect();
+		final FixedAspectContainer boardContainer = new FixedAspectContainer(gameBoard, boardAspect);
 		root.row();
 		root.add(boardContainer).expand().fill();
 
@@ -156,9 +117,10 @@ public class GameScreen extends BaseScreen {
 
 	/** Update the message displayed at the bottom of the screen with respect to the current game state. */
 	private void updateStatusMessage() {
-		final int playerNumber = state.currentPlayerIndex + 1;
-		statusMessage.setText("Player " + playerNumber + ": "
-				+ (state.turnPhase == GameState.PHASE_MOVE ? "Move" : "Shoot"));
+		// XXX: TEMPORARY disabling of status message update. Might be removing this entirely.
+		// final int playerNumber = state.currentPlayerIndex + 1;
+		// statusMessage.setText("Player " + playerNumber + ": "
+		// + (state.turnPhase == GameState.PHASE_MOVE ? "Move" : "Shoot"));
 	}
 
 	/**
@@ -170,14 +132,62 @@ public class GameScreen extends BaseScreen {
 	 * 
 	 * @author Charlie
 	 */
-	private class GameBoard extends Widget {
+	private static class GameBoard extends Widget {
+
+		/** Reference to the Game instance. */
+		protected final PartitionGame game;
+
+		/** Reference to the current game state. */
+		private GameState state;
+
+		// Temporary textures
+		final TextureRegion tileTexture;
+		final TextureRegion highlightTexture;
+		final TextureRegion redPlayerTexture;
+		final TextureRegion bluePlayerTexture;
+
+		// Board dimensions
+		/** Number of columns on the current board. */
+		private final int boardColumns;
+
+		/** Number of rows on the board. */
+		private final int boardRows;
+
+		/** The chosen player configuration. */
+		@SuppressWarnings("unused")
+		private final PlayerConfiguration playerConfiguration;
+
+		/** The chosen board configuration. */
+		private final BoardConfiguration boardConfiguration;
 
 		/**
 		 * Construct a new GameBoard.
 		 * 
 		 * @param atlas
 		 */
-		public GameBoard(final TextureAtlas atlas) {
+		public GameBoard(final PartitionGame game, final TextureAtlas atlas,
+				final PlayerConfiguration playerConfiguration, final BoardConfiguration boardConfiguration) {
+
+			// Save reference to the game instance
+			this.game = game;
+
+			// Save player and board configuration
+			this.playerConfiguration = playerConfiguration;
+			this.boardConfiguration = boardConfiguration;
+
+			// Store references to required Textures
+			tileTexture = atlas.findRegion("tile");
+			highlightTexture = atlas.findRegion("tile_highlight");
+			redPlayerTexture = atlas.findRegion("player_red0");
+			bluePlayerTexture = atlas.findRegion("player_blue0");
+
+			// Create new game state
+			this.state = GameState.newGameState(boardConfiguration.boardSpec);
+
+			// Determine board size
+			boardColumns = this.state.tileEnabled.length;
+			boardRows = this.state.tileEnabled[0].length;
+
 			addListener(new InputListener() {
 				@Override
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -190,6 +200,10 @@ public class GameScreen extends BaseScreen {
 					doTouchUp(tileCoord);
 				}
 			});
+		}
+
+		private float getDesiredAspect() {
+			return boardColumns / (float) boardRows;
 		}
 
 		public byte[] actorCoordToTileCoord(final float px, final float py) {
@@ -241,7 +255,7 @@ public class GameScreen extends BaseScreen {
 			}
 
 			// Update status message
-			updateStatusMessage();
+			// updateStatusMessage();
 		}
 
 		@Override
@@ -255,16 +269,15 @@ public class GameScreen extends BaseScreen {
 			// Translate to widget's (x,y) coordinates, so (0,0) is in correct location
 			newTransform.translate(getX(), getY(), 0.0f);
 			// Scale up by the size of the widget, then down by the size of the board
-			newTransform
-					.scale(getWidth() / GameScreen.this.boardColumns, getHeight() / GameScreen.this.boardRows, 1.0f);
+			newTransform.scale(getWidth() / boardColumns, getHeight() / boardRows, 1.0f);
 			// Use this new transformation matrix
 			batch.setTransformMatrix(newTransform);
 
 			// Draw tiles
 			for (int c = 0; c < boardColumns; c++) {
 				for (int r = 0; r < boardRows; r++) {
-					if (GameScreen.this.state.tileEnabled[c][r]) {
-						game.batch.draw(tileTexture, c, GameScreen.this.boardRows - 1 - r, 1.0f, 1.0f);
+					if (state.tileEnabled[c][r]) {
+						game.batch.draw(tileTexture, c, boardRows - 1 - r, 1.0f, 1.0f);
 					}
 				}
 			}
@@ -272,8 +285,8 @@ public class GameScreen extends BaseScreen {
 			// Draw highlights
 			for (int c = 0; c < boardColumns; c++) {
 				for (int r = 0; r < boardRows; r++) {
-					if (GameScreen.this.state.tileEnabled[c][r]) {
-						game.batch.draw(highlightTexture, c, GameScreen.this.boardRows - 1 - r, 1.0f, 1.0f);
+					if (state.tileEnabled[c][r]) {
+						game.batch.draw(highlightTexture, c, boardRows - 1 - r, 1.0f, 1.0f);
 					}
 				}
 			}
@@ -282,8 +295,8 @@ public class GameScreen extends BaseScreen {
 			// FUTURE: This is hard-coded for two players at this time. Should improve this.
 			for (int p = 0; p < GameState.getNumberOfPlayers(state); p++) {
 				final byte[] coords = GameState.getPlayerCoords(state, p);
-				game.batch.draw(p == 0 ? redPlayerTexture : bluePlayerTexture, coords[0], GameScreen.this.boardRows - 1
-						- coords[1], 1.0f, 1.0f);
+				game.batch.draw(p == 0 ? redPlayerTexture : bluePlayerTexture, coords[0], boardRows - 1 - coords[1],
+						1.0f, 1.0f);
 			}
 
 			// Reset transformation matrix
