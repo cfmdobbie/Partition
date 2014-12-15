@@ -187,31 +187,11 @@ public class GameScreen extends BaseScreen {
 				@Override
 				public void touchUp(InputEvent event, float px, float py, int pointer, int button) {
 
-					// Board size
-					final float w = getWidth();
-					final float h = getHeight();
-
-					// Board position is not relevant
-					// final float x = getX();
-					// final float y = getY();
-
-					if (PartitionGame.DEBUG) {
-						Gdx.app.log(TAG, "Board size: " + w + "x" + h);
-						// Gdx.app.log(TAG, "Board coordinates: (" + x + "," + y + ")");
-						Gdx.app.log(TAG, "Touch location: (" + px + "," + py + ")");
-					}
-
-					// Convert to a coordinate in board space
-					final byte r = (byte) ((-(py - h)) / (h / boardRows));
-					final byte c = (byte) (px / (w / boardColumns));
-
-					if (PartitionGame.DEBUG) {
-						Gdx.app.log(TAG, "Touch is on tile: (" + c + "," + r + ")");
-					}
+					final byte[] tileCoord = actorCoordToTileCoord(px, py);
 
 					try {
 						final byte phase = state.turnPhase;
-						state = GameState.apply(state, new byte[] { c, r });
+						state = GameState.apply(state, tileCoord);
 						switch (phase) {
 						case GameState.PHASE_MOVE:
 							game.playPing();
@@ -219,7 +199,6 @@ public class GameScreen extends BaseScreen {
 						case GameState.PHASE_SHOOT:
 							game.playExplosion();
 							break;
-
 						}
 					} catch (Error e) {
 						if (PartitionGame.DEBUG) {
@@ -239,6 +218,28 @@ public class GameScreen extends BaseScreen {
 					updateStatusMessage();
 				}
 			});
+		}
+
+		public byte[] actorCoordToTileCoord(final float px, final float py) {
+
+			// Determine board size
+			final float w = getWidth();
+			final float h = getHeight();
+
+			if (PartitionGame.DEBUG) {
+				Gdx.app.log(TAG, "Board size: " + w + "x" + h);
+				Gdx.app.log(TAG, "Touch location: (" + px + "," + py + ")");
+			}
+
+			// Convert to a coordinate in board space
+			final byte c = (byte) (px / (w / boardColumns));
+			final byte r = (byte) ((-(py - h)) / (h / boardRows));
+
+			if (PartitionGame.DEBUG) {
+				Gdx.app.log(TAG, "Touch is on tile: (" + c + "," + r + ")");
+			}
+
+			return new byte[] { c, r };
 		}
 
 		@Override
