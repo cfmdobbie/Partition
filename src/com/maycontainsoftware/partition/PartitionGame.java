@@ -45,7 +45,8 @@ public class PartitionGame extends Game {
 		OPEN(".....\n.....\n..0..\n.....\n.....\n..1..\n.....\n....."),
 		WALL(".......\n.......\n.......\n...#...\n..0#1..\n...#...\n.......\n.......\n......."),
 		// TODO: HOLES *may* be a bust, need to play-test to determine whether it's worth keeping
-		HOLES("...1...\n.#.#.#.\n.......\n.#.#.#.\n.......\n.#.#.#.\n.......\n.#.#.#.\n...0...");
+		HOLES("...1...\n.#.#.#.\n.......\n.#.#.#.\n.......\n.#.#.#.\n.......\n.#.#.#.\n...0..."),
+		MAIN_MENU_DEMO("..0..");
 
 		public final String boardSpec;
 
