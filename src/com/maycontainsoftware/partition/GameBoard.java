@@ -48,10 +48,12 @@ class GameBoard extends Widget {
 	/** The chosen board configuration. */
 	private final BoardConfiguration boardConfiguration;
 
-	/**
-	 * Construct a new GameBoard.
+	/** Construct a new GameBoard.
 	 * 
-	 * @param atlas
+	 * @param game The PartitionGame instance.
+	 * @param atlas The TextureAtlas containing all graphics required to draw the board.
+	 * @param playerConfiguration The chosen player configuration.
+	 * @param boardConfiguration The chosen board configuration.
 	 */
 	public GameBoard(final PartitionGame game, final TextureAtlas atlas,
 			final PlayerConfiguration playerConfiguration, final BoardConfiguration boardConfiguration) {
