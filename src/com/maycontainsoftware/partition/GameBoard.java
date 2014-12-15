@@ -20,7 +20,7 @@ import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
  * 
  * @author Charlie
  */
-class GameBoard extends Widget {
+public class GameBoard extends Widget {
 
 	/** Reference to the Game instance. */
 	protected final PartitionGame game;
@@ -29,10 +29,9 @@ class GameBoard extends Widget {
 	private GameState state;
 
 	// Temporary textures
-	final TextureRegion tileTexture;
-	final TextureRegion highlightTexture;
-	final TextureRegion redPlayerTexture;
-	final TextureRegion bluePlayerTexture;
+	private final TextureRegion tileTexture;
+	private final TextureRegion redPlayerTexture;
+	private final TextureRegion bluePlayerTexture;
 
 	// Board dimensions
 	/** Number of columns on the current board. */
@@ -67,7 +66,6 @@ class GameBoard extends Widget {
 
 		// Store references to required Textures
 		tileTexture = atlas.findRegion("tile");
-		highlightTexture = atlas.findRegion("tile_highlight");
 		redPlayerTexture = atlas.findRegion("player_red0");
 		bluePlayerTexture = atlas.findRegion("player_blue0");
 
@@ -92,7 +90,7 @@ class GameBoard extends Widget {
 		});
 	}
 
-	float getDesiredAspect() {
+	public float getDesiredAspect() {
 		return boardColumns / (float) boardRows;
 	}
 
@@ -168,15 +166,6 @@ class GameBoard extends Widget {
 			for (int r = 0; r < boardRows; r++) {
 				if (state.tileEnabled[c][r]) {
 					game.batch.draw(tileTexture, c, boardRows - 1 - r, 1.0f, 1.0f);
-				}
-			}
-		}
-
-		// Draw highlights
-		for (int c = 0; c < boardColumns; c++) {
-			for (int r = 0; r < boardRows; r++) {
-				if (state.tileEnabled[c][r]) {
-					game.batch.draw(highlightTexture, c, boardRows - 1 - r, 1.0f, 1.0f);
 				}
 			}
 		}
