@@ -383,12 +383,23 @@ public class GameState {
 	 * Whether or not the game is over. The game is declared to be over when every player is isolated from every other
 	 * player.
 	 * 
+	 * A special case exists for one-player games - with one player there is no other player to be isolated from, so the
+	 * game can never be declared over. (Note that the stalemate condition still exists when that one player has no
+	 * moved left.)
+	 * 
 	 * @param state
 	 *            The game state.
 	 * @return True if the game is over, false otherwise.
 	 */
 	public static boolean isGameOver(final GameState state) {
+
 		final int numberOfPlayers = getNumberOfPlayers(state);
+
+		if (numberOfPlayers == 1) {
+			// One-player games are never "over"
+			return false;
+		}
+
 		for (int player = 0; player < numberOfPlayers - 1; player++) {
 			final Set<byte[]> reachableTiles = getReachableTiles(state, player);
 			for (int otherPlayer = player + 1; otherPlayer < numberOfPlayers; otherPlayer++) {
