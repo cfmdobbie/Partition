@@ -47,6 +47,18 @@ public class GameBoard extends Widget {
 	/** The chosen board configuration. */
 	private final BoardConfiguration boardConfiguration;
 
+	private static enum TurnState {
+		PENDING_MOVE,
+		MOVING,
+		PENDING_SHOOT,
+		SHOOTING,
+		WIN_CHECK,
+		SWITCHING_PLAYERS,
+		STALEMATE_CHECK,
+	}
+
+	private TurnState turnState;
+
 	/**
 	 * Construct a new GameBoard.
 	 * 
@@ -64,6 +76,9 @@ public class GameBoard extends Widget {
 
 		// Save reference to the game instance
 		this.game = game;
+
+		// Start in PENDING_MOVE state
+		this.turnState = TurnState.PENDING_MOVE;
 
 		// Save player and board configuration
 		this.playerConfiguration = playerConfiguration;
@@ -95,60 +110,91 @@ public class GameBoard extends Widget {
 		});
 	}
 
-	public float getDesiredAspect() {
-		return boardColumns / (float) boardRows;
-	}
+	@Override
+	public void act(float delta) {
+		// Allow superclass to process any Actions
+		super.act(delta);
 
-	public byte[] actorCoordToTileCoord(final float px, final float py) {
-
-		// Determine board size
-		final float w = getWidth();
-		final float h = getHeight();
-
-		if (PartitionGame.DEBUG) {
-			Gdx.app.log(GameScreen.TAG, "Board size: " + w + "x" + h);
-			Gdx.app.log(GameScreen.TAG, "Touch location: (" + px + "," + py + ")");
+		switch (turnState) {
+		case MOVING:
+			turnState = TurnState.PENDING_SHOOT;
+			break;
+		case PENDING_MOVE:
+			// No activity
+			break;
+		case PENDING_SHOOT:
+			// No activity
+			break;
+		case SHOOTING:
+			turnState = TurnState.WIN_CHECK;
+			break;
+		case STALEMATE_CHECK:
+			if (GameState.isStalemate(state)) {
+				// XXX
+				state = GameState.newGameState(boardConfiguration.boardSpec);
+				turnState = TurnState.PENDING_MOVE;
+			} else {
+				turnState = TurnState.PENDING_MOVE;
+			}
+			break;
+		case SWITCHING_PLAYERS:
+			turnState = TurnState.STALEMATE_CHECK;
+			break;
+		case WIN_CHECK:
+			if (GameState.isGameOver(state)) {
+				// XXX
+				state = GameState.newGameState(boardConfiguration.boardSpec);
+				turnState = TurnState.PENDING_MOVE;
+			} else {
+				turnState = TurnState.SWITCHING_PLAYERS;
+			}
+			break;
 		}
-
-		// Convert to a coordinate in board space
-		final byte c = (byte) (px / (w / boardColumns));
-		final byte r = (byte) ((-(py - h)) / (h / boardRows));
-
-		if (PartitionGame.DEBUG) {
-			Gdx.app.log(GameScreen.TAG, "Touch is on tile: (" + c + "," + r + ")");
-		}
-
-		return new byte[] { c, r };
 	}
 
 	private void doTouchUp(final byte[] tileCoord) {
-		try {
-			final byte phase = state.turnPhase;
-			state = GameState.apply(state, tileCoord);
-			switch (phase) {
-			case GameState.PHASE_MOVE:
+
+		switch (turnState) {
+		case MOVING:
+			// Ignore
+			break;
+		case PENDING_MOVE:
+			try {
+				state = GameState.apply(state, tileCoord);
 				game.playPing();
-				break;
-			case GameState.PHASE_SHOOT:
+				turnState = TurnState.MOVING;
+			} catch (Error e) {
+				if (PartitionGame.DEBUG) {
+					Gdx.app.log(GameScreen.TAG, "Invalid move!");
+				}
+				game.playError();
+			}
+			break;
+		case PENDING_SHOOT:
+			try {
+				state = GameState.apply(state, tileCoord);
 				game.playExplosion();
-				break;
+				turnState = TurnState.SHOOTING;
+			} catch (Error e) {
+				if (PartitionGame.DEBUG) {
+					Gdx.app.log(GameScreen.TAG, "Invalid move!");
+				}
+				game.playError();
 			}
-		} catch (Error e) {
-			if (PartitionGame.DEBUG) {
-				Gdx.app.log(GameScreen.TAG, "Invalid move!");
-			}
-			game.playError();
+			break;
+		case SHOOTING:
+			// Ignore
+			break;
+		case STALEMATE_CHECK:
+			// Ignore
+			break;
+		case SWITCHING_PLAYERS:
+			// Ignore
+			break;
+		case WIN_CHECK:
+			// Ignore
+			break;
 		}
-
-		// TEMP: Reset board if game cannot proceed
-		if (GameState.isGameOver(state)) {
-			state = GameState.newGameState(boardConfiguration.boardSpec);
-		} else if (GameState.isStalemate(state)) {
-			state = GameState.newGameState(boardConfiguration.boardSpec);
-		}
-
-		// Update status message
-		// updateStatusMessage();
 	}
 
 	@Override
@@ -185,5 +231,31 @@ public class GameBoard extends Widget {
 
 		// Reset transformation matrix
 		batch.setTransformMatrix(transformMatrix);
+	}
+
+	public float getDesiredAspect() {
+		return boardColumns / (float) boardRows;
+	}
+
+	public byte[] actorCoordToTileCoord(final float px, final float py) {
+
+		// Determine board size
+		final float w = getWidth();
+		final float h = getHeight();
+
+		if (PartitionGame.DEBUG) {
+			Gdx.app.log(GameScreen.TAG, "Board size: " + w + "x" + h);
+			Gdx.app.log(GameScreen.TAG, "Touch location: (" + px + "," + py + ")");
+		}
+
+		// Convert to a coordinate in board space
+		final byte c = (byte) (px / (w / boardColumns));
+		final byte r = (byte) ((-(py - h)) / (h / boardRows));
+
+		if (PartitionGame.DEBUG) {
+			Gdx.app.log(GameScreen.TAG, "Touch is on tile: (" + c + "," + r + ")");
+		}
+
+		return new byte[] { c, r };
 	}
 }
