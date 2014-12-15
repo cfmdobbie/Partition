@@ -12,9 +12,9 @@ import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 
 /**
- * GameBoard draws the Partition board at unit scale, but uses OpenGL modelview matrix transformations to transform
- * this unit-scale render into a render at the correct size and location. This avoids issues with resizing - the
- * board is always drawn at unit scale, so no board elements need to be updated upon resize.
+ * GameBoard draws the Partition board at unit scale, but uses OpenGL modelview matrix transformations to transform this
+ * unit-scale render into a render at the correct size and location. This avoids issues with resizing - the board is
+ * always drawn at unit scale, so no board elements need to be updated upon resize.
  * 
  * Note that this class is not static at this time!
  * 
@@ -47,15 +47,20 @@ public class GameBoard extends Widget {
 	/** The chosen board configuration. */
 	private final BoardConfiguration boardConfiguration;
 
-	/** Construct a new GameBoard.
+	/**
+	 * Construct a new GameBoard.
 	 * 
-	 * @param game The PartitionGame instance.
-	 * @param atlas The TextureAtlas containing all graphics required to draw the board.
-	 * @param playerConfiguration The chosen player configuration.
-	 * @param boardConfiguration The chosen board configuration.
+	 * @param game
+	 *            The PartitionGame instance.
+	 * @param atlas
+	 *            The TextureAtlas containing all graphics required to draw the board.
+	 * @param playerConfiguration
+	 *            The chosen player configuration.
+	 * @param boardConfiguration
+	 *            The chosen board configuration.
 	 */
-	public GameBoard(final PartitionGame game, final TextureAtlas atlas,
-			final PlayerConfiguration playerConfiguration, final BoardConfiguration boardConfiguration) {
+	public GameBoard(final PartitionGame game, final TextureAtlas atlas, final PlayerConfiguration playerConfiguration,
+			final BoardConfiguration boardConfiguration) {
 
 		// Save reference to the game instance
 		this.game = game;
@@ -174,8 +179,8 @@ public class GameBoard extends Widget {
 		// FUTURE: This is hard-coded for two players at this time. Should improve this.
 		for (int p = 0; p < GameState.getNumberOfPlayers(state); p++) {
 			final byte[] coords = GameState.getPlayerCoords(state, p);
-			game.batch.draw(p == 0 ? redPlayerTexture : bluePlayerTexture, coords[0], boardRows - 1 - coords[1],
-					1.0f, 1.0f);
+			game.batch.draw(p == 0 ? redPlayerTexture : bluePlayerTexture, coords[0], boardRows - 1 - coords[1], 1.0f,
+					1.0f);
 		}
 
 		// Reset transformation matrix
