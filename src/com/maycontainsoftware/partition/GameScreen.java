@@ -186,36 +186,8 @@ public class GameScreen extends BaseScreen {
 
 				@Override
 				public void touchUp(InputEvent event, float px, float py, int pointer, int button) {
-
 					final byte[] tileCoord = actorCoordToTileCoord(px, py);
-
-					try {
-						final byte phase = state.turnPhase;
-						state = GameState.apply(state, tileCoord);
-						switch (phase) {
-						case GameState.PHASE_MOVE:
-							game.playPing();
-							break;
-						case GameState.PHASE_SHOOT:
-							game.playExplosion();
-							break;
-						}
-					} catch (Error e) {
-						if (PartitionGame.DEBUG) {
-							Gdx.app.log(TAG, "Invalid move!");
-						}
-						game.playError();
-					}
-
-					// TEMP: Reset board if game cannot proceed
-					if (GameState.isGameOver(state)) {
-						state = GameState.newGameState(boardConfiguration.boardSpec);
-					} else if (GameState.isStalemate(state)) {
-						state = GameState.newGameState(boardConfiguration.boardSpec);
-					}
-
-					// Update status message
-					updateStatusMessage();
+					doTouchUp(tileCoord);
 				}
 			});
 		}
@@ -240,6 +212,36 @@ public class GameScreen extends BaseScreen {
 			}
 
 			return new byte[] { c, r };
+		}
+
+		private void doTouchUp(final byte[] tileCoord) {
+			try {
+				final byte phase = state.turnPhase;
+				state = GameState.apply(state, tileCoord);
+				switch (phase) {
+				case GameState.PHASE_MOVE:
+					game.playPing();
+					break;
+				case GameState.PHASE_SHOOT:
+					game.playExplosion();
+					break;
+				}
+			} catch (Error e) {
+				if (PartitionGame.DEBUG) {
+					Gdx.app.log(TAG, "Invalid move!");
+				}
+				game.playError();
+			}
+
+			// TEMP: Reset board if game cannot proceed
+			if (GameState.isGameOver(state)) {
+				state = GameState.newGameState(boardConfiguration.boardSpec);
+			} else if (GameState.isStalemate(state)) {
+				state = GameState.newGameState(boardConfiguration.boardSpec);
+			}
+
+			// Update status message
+			updateStatusMessage();
 		}
 
 		@Override
