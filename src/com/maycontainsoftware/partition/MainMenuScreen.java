@@ -3,14 +3,13 @@ package com.maycontainsoftware.partition;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
+import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.ScreenTransition.SolidColorFadeScreenTransition;
 
 /**
@@ -39,7 +38,6 @@ public class MainMenuScreen extends BaseScreen {
 		final TextureRegion playDown = atlas.findRegion("play_down");
 		final TextureRegion instructionsUp = atlas.findRegion("instructions_up");
 		final TextureRegion instructionsDown = atlas.findRegion("instructions_down");
-		final TextureRegion tile = atlas.findRegion("menu_tile");
 
 		root.setBackground(new TiledDrawable(atlas.findRegion("background")));
 		root.defaults().pad(5.0f);
@@ -85,14 +83,14 @@ public class MainMenuScreen extends BaseScreen {
 		});
 
 		// Horizontal row of tiles
-		root.row();
-		Group tileRow = new HorizontalGroup();
-		tileRow.addActor(new Image(tile));
-		tileRow.addActor(new Image(tile));
-		tileRow.addActor(new Image(tile));
-		tileRow.addActor(new Image(tile));
-		tileRow.addActor(new Image(tile));
-		root.add(tileRow);
+		final GameBoard gameBoard = new GameBoard(game, atlas, null, BoardConfiguration.MAIN_MENU_DEMO);
+		float boardAspect = gameBoard.getDesiredAspect();
+		final FixedAspectContainer boardContainer = new FixedAspectContainer(gameBoard, boardAspect);
+		// Know board is 5x1 in size, and know that main menu buttons are 180 width
+		final float boardWidth = 180.0f;
+		final float boardHeight = boardWidth / 5;
+		root.row().height(boardHeight);
+		root.add(boardContainer).width(boardWidth);
 
 		// Instructions button
 		root.row();
