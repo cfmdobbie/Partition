@@ -128,9 +128,9 @@ public class GameScreen extends BaseScreen {
 		root.row().height(2.0f);
 		root.add(new Image(atlas.findRegion("white1x1"))).fill();
 
-		// FixedAspectContainer is a container which forces a specific aspect ratio on its sole child. UnitScaleBoard
-		// draws the board at unit scale, but applies transformations to scale drawing to the correct size.
-		final FixedAspectContainer boardContainer = new FixedAspectContainer(new UnitScaleBoard(atlas), boardAspect);
+		// FixedAspectContainer is a container which forces a specific aspect ratio on its sole child. GameBoard draws
+		// the board at unit scale, but applies transformations to scale drawing to the correct size.
+		final FixedAspectContainer boardContainer = new FixedAspectContainer(new GameBoard(atlas), boardAspect);
 		root.row();
 		root.add(boardContainer).expand().fill();
 
@@ -162,21 +162,22 @@ public class GameScreen extends BaseScreen {
 	}
 
 	/**
-	 * UnitScaleBoard draws the Partition board at unit scale, but uses OpenGL modelview matrix transformations to
-	 * transform this unit-scale render into a render at the correct size and location.
+	 * GameBoard draws the Partition board at unit scale, but uses OpenGL modelview matrix transformations to transform
+	 * this unit-scale render into a render at the correct size and location. This avoids issues with resizing - the
+	 * board is always drawn at unit scale, so no board elements need to be updated upon resize.
 	 * 
 	 * Note that this class is not static at this time!
 	 * 
 	 * @author Charlie
 	 */
-	private class UnitScaleBoard extends Widget {
+	private class GameBoard extends Widget {
 
 		/**
-		 * Construct a new UnitScaleBoard.
+		 * Construct a new GameBoard.
 		 * 
 		 * @param atlas
 		 */
-		public UnitScaleBoard(final TextureAtlas atlas) {
+		public GameBoard(final TextureAtlas atlas) {
 			addListener(new InputListener() {
 				@Override
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
