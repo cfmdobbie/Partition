@@ -31,7 +31,9 @@ public class GameBoard extends Widget {
 	// Temporary textures
 	private final TextureRegion tileTexture;
 	private final TextureRegion redPlayerTexture;
+	private final TextureRegion redPlayerRaisedTexture;
 	private final TextureRegion bluePlayerTexture;
+	private final TextureRegion bluePlayerRaisedTexture;
 
 	// Board dimensions
 	/** Number of columns on the current board. */
@@ -86,8 +88,10 @@ public class GameBoard extends Widget {
 
 		// Store references to required Textures
 		tileTexture = atlas.findRegion("tile");
-		redPlayerTexture = atlas.findRegion("player_red0");
-		bluePlayerTexture = atlas.findRegion("player_blue0");
+		redPlayerTexture = atlas.findRegion("player_red");
+		redPlayerRaisedTexture = atlas.findRegion("player_red_raised");
+		bluePlayerTexture = atlas.findRegion("player_blue");
+		bluePlayerRaisedTexture = atlas.findRegion("player_blue_raised");
 
 		// Create new game state
 		this.state = GameState.newGameState(boardConfiguration.boardSpec);
@@ -225,8 +229,13 @@ public class GameBoard extends Widget {
 		// FUTURE: This is hard-coded for two players at this time. Should improve this.
 		for (int p = 0; p < GameState.getNumberOfPlayers(state); p++) {
 			final byte[] coords = GameState.getPlayerCoords(state, p);
-			game.batch.draw(p == 0 ? redPlayerTexture : bluePlayerTexture, coords[0], boardRows - 1 - coords[1], 1.0f,
-					1.0f);
+			if (p == state.currentPlayerIndex) {
+				game.batch.draw(p == 0 ? redPlayerRaisedTexture : bluePlayerRaisedTexture, coords[0], boardRows - 1
+						- coords[1], 1.0f, 1.0f);
+			} else {
+				game.batch.draw(p == 0 ? redPlayerTexture : bluePlayerTexture, coords[0], boardRows - 1 - coords[1],
+						1.0f, 1.0f);
+			}
 		}
 
 		// Reset transformation matrix
