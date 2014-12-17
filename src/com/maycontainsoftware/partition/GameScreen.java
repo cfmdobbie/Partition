@@ -1,16 +1,12 @@
 package com.maycontainsoftware.partition;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -31,9 +27,6 @@ public class GameScreen extends BaseScreen {
 
 	/** The screen transition. */
 	private final ScreenTransition screenTransition;
-
-	/** The status message at the bottom of the screen. */
-	final Label statusMessage;
 
 	/**
 	 * Constructor.
@@ -92,31 +85,10 @@ public class GameScreen extends BaseScreen {
 		root.row();
 		root.add(boardContainer).expand().fill();
 
-		// Divider
-		root.row().height(2.0f);
-		root.add(new Image(atlas.findRegion("white1x1"))).fill();
-
-		// Status area
-		final BitmapFont font = new BitmapFont(Gdx.files.internal("segoeuiblack24.fnt"));
-		final LabelStyle style = new Label.LabelStyle(font, Color.WHITE);
-		root.row();
-		statusMessage = new Label("", style);
-		root.add(statusMessage);
-
-		updateStatusMessage();
-
 		// Set up simple screen transition - fade in/out from/to black
 		screenTransition = new SolidColorFadeScreenTransition(root, atlas.findRegion("black"));
 
 		// And fade the screen in
 		screenTransition.doTransitionIn();
-	}
-
-	/** Update the message displayed at the bottom of the screen with respect to the current game state. */
-	private void updateStatusMessage() {
-		// XXX: TEMPORARY disabling of status message update. Might be removing this entirely.
-		// final int playerNumber = state.currentPlayerIndex + 1;
-		// statusMessage.setText("Player " + playerNumber + ": "
-		// + (state.turnPhase == GameState.PHASE_MOVE ? "Move" : "Shoot"));
 	}
 }
