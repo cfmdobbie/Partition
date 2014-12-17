@@ -46,8 +46,9 @@ public class GameScreen extends BaseScreen {
 		final TextureAtlas atlas = game.manager.get("atlas.atlas", TextureAtlas.class);
 
 		// Basic setup for root Table
-		//root.setBackground(new TiledDrawable(atlas.findRegion("background")));
-		root.setBackground(new TiledDrawable(new TextureRegion(new Texture(Gdx.files.internal("Tarpooling_01_UV_H_CM_1.jpg")))));
+		// root.setBackground(new TiledDrawable(atlas.findRegion("background")));
+		root.setBackground(new TiledDrawable(new TextureRegion(new Texture(Gdx.files
+				.internal("Tarpooling_01_UV_H_CM_1.jpg")))));
 		root.defaults().pad(5.0f);
 
 		// Top menu bar
