@@ -242,6 +242,7 @@ public class GameBoard extends Widget {
 		batch.setTransformMatrix(transformMatrix);
 	}
 
+	// Desired aspect ratio
 	public float getDesiredAspect() {
 		return boardColumns / (float) boardRows;
 	}
