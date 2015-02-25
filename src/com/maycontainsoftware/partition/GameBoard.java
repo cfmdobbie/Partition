@@ -31,9 +31,8 @@ public class GameBoard extends Widget {
 	// Temporary textures
 	private final TextureRegion tileTexture;
 	private final TextureRegion redPlayerTexture;
-	private final TextureRegion redPlayerRaisedTexture;
 	private final TextureRegion bluePlayerTexture;
-	private final TextureRegion bluePlayerRaisedTexture;
+	private final TextureRegion shadowTexture;
 
 	// Board dimensions
 	/** Number of columns on the current board. */
@@ -89,9 +88,8 @@ public class GameBoard extends Widget {
 		// Store references to required Textures
 		tileTexture = atlas.findRegion("tile");
 		redPlayerTexture = atlas.findRegion("player_red");
-		redPlayerRaisedTexture = atlas.findRegion("player_red_raised");
 		bluePlayerTexture = atlas.findRegion("player_blue");
-		bluePlayerRaisedTexture = atlas.findRegion("player_blue_raised");
+		shadowTexture = atlas.findRegion("shadow");
 
 		// Create new game state
 		this.state = GameState.newGameState(boardConfiguration.boardSpec);
@@ -228,14 +226,20 @@ public class GameBoard extends Widget {
 		// Draw players
 		// FUTURE: This is hard-coded for two players at this time. Should improve this.
 		for (int p = 0; p < GameState.getNumberOfPlayers(state); p++) {
+			// Determine whether player is active
+			final boolean active = p == state.currentPlayerIndex;
+			// Get the player's coordinates
 			final byte[] coords = GameState.getPlayerCoords(state, p);
-			if (p == state.currentPlayerIndex) {
-				game.batch.draw(p == 0 ? redPlayerRaisedTexture : bluePlayerRaisedTexture, coords[0], boardRows - 1
-						- coords[1], 1.0f, 1.0f);
-			} else {
-				game.batch.draw(p == 0 ? redPlayerTexture : bluePlayerTexture, coords[0], boardRows - 1 - coords[1],
-						1.0f, 1.0f);
+			// Determine the player texture
+			final TextureRegion playerTexture = p == 0 ? redPlayerTexture : bluePlayerTexture;
+			// Draw the player's shadow
+			game.batch.draw(shadowTexture, coords[0], boardRows - 1 - coords[1], 1.0f, 1.0f);
+			// Draw the player
+			float yoffset = 0.0f;
+			if (active) {
+				yoffset = 0.25f;
 			}
+			game.batch.draw(playerTexture, coords[0], boardRows - 1 - coords[1] + yoffset, 1.0f, 1.0f);
 		}
 
 		// Reset transformation matrix
