@@ -33,6 +33,7 @@ public class GameBoard extends Widget {
 	private final TextureRegion redPlayerTexture;
 	private final TextureRegion bluePlayerTexture;
 	private final TextureRegion shadowTexture;
+	private final TextureRegion targetTexture;
 
 	// Board dimensions
 	/** Number of columns on the current board. */
@@ -59,6 +60,9 @@ public class GameBoard extends Widget {
 	}
 
 	private TurnState turnState;
+
+	// Clock used for animation purposes, measures cumulative time in seconds
+	private float animTime = 0.0f;
 
 	/**
 	 * Construct a new GameBoard.
@@ -90,6 +94,7 @@ public class GameBoard extends Widget {
 		redPlayerTexture = atlas.findRegion("player_red");
 		bluePlayerTexture = atlas.findRegion("player_blue");
 		shadowTexture = atlas.findRegion("shadow");
+		targetTexture = atlas.findRegion("target");
 
 		// Create new game state
 		this.state = GameState.newGameState(boardConfiguration.boardSpec);
@@ -116,6 +121,9 @@ public class GameBoard extends Widget {
 	public void act(float delta) {
 		// Allow superclass to process any Actions
 		super.act(delta);
+
+		// Update animation timer
+		animTime += delta;
 
 		switch (turnState) {
 		case MOVING:
@@ -226,20 +234,37 @@ public class GameBoard extends Widget {
 		// Draw players
 		// FUTURE: This is hard-coded for two players at this time. Should improve this.
 		for (int p = 0; p < GameState.getNumberOfPlayers(state); p++) {
-			// Determine whether player is active
-			final boolean active = p == state.currentPlayerIndex;
+
+			// Determine whether the player is moving
+			final boolean playerMoving = p == state.currentPlayerIndex && state.turnPhase == GameState.PHASE_MOVE;
+
+			// Determine whether the player is shooting
+			final boolean playerShooting = p == state.currentPlayerIndex && state.turnPhase == GameState.PHASE_SHOOT;
+
 			// Get the player's coordinates
 			final byte[] coords = GameState.getPlayerCoords(state, p);
+
 			// Determine the player texture
 			final TextureRegion playerTexture = p == 0 ? redPlayerTexture : bluePlayerTexture;
+
 			// Draw the player's shadow
 			game.batch.draw(shadowTexture, coords[0], boardRows - 1 - coords[1], 1.0f, 1.0f);
-			// Draw the player
-			float yoffset = 0.0f;
-			if (active) {
-				yoffset = 0.25f;
+
+			// Calculate the player token's Y offset
+			float playerYOffset = 0.0f;
+			if (playerMoving) {
+				playerYOffset = 0.125f * (float) (-Math.cos(animTime * 2 * Math.PI * 1.5f)) + 0.125f;
 			}
-			game.batch.draw(playerTexture, coords[0], boardRows - 1 - coords[1] + yoffset, 1.0f, 1.0f);
+
+			// Draw the player
+			game.batch.draw(playerTexture, coords[0], boardRows - 1 - coords[1] + playerYOffset, 1.0f, 1.0f);
+
+			if (playerShooting) {
+				// Draw the target
+				float targetYOffset = 0.125f * (float) (-Math.cos(animTime * 2 * Math.PI * 1.5f)) + 0.25f;
+				game.batch
+						.draw(targetTexture, coords[0] + 0.25f, boardRows - 1 - coords[1] + targetYOffset, 1.0f, 1.0f);
+			}
 		}
 
 		// Reset transformation matrix
