@@ -50,7 +50,6 @@ public class GameScreen extends BaseScreen {
 		root.row();
 		final Table topBar = new Table();
 		root.add(topBar).fill();
-		topBar.setBackground(new TiledDrawable(atlas.findRegion("black")));
 
 		// Back button
 		final Button quitButton = new Button(new TextureRegionDrawable(atlas.findRegion("quit_up")),
