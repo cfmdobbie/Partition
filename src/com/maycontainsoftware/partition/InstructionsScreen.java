@@ -108,10 +108,6 @@ public class InstructionsScreen extends BaseScreen {
 
 		instructions.row();
 		instructions.add(new Image(atlas.findRegion("tile")));
-		instructions.row();
-		final Animation animation = new Animation(0.2f, atlas.findRegion("player_red0"),
-				atlas.findRegion("player_red30"), atlas.findRegion("player_red60"));
-		instructions.add(new AnimatedImage(animation));
 
 		// Set up simple screen transition - fade in/out from/to black
 		screenTransition = new SolidColorFadeScreenTransition(root, atlas.findRegion("black"));
