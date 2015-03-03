@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Widget;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 
@@ -20,7 +20,7 @@ import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
  * 
  * @author Charlie
  */
-public class GameBoard extends Widget {
+public class GameBoard extends WidgetGroup {
 
 	/** Reference to the Game instance. */
 	protected final PartitionGame game;
@@ -127,7 +127,9 @@ public class GameBoard extends Widget {
 
 		switch (turnState) {
 		case MOVING:
-			turnState = TurnState.PENDING_SHOOT;
+			if(animTime >= 1.0f) {
+				turnState = TurnState.PENDING_SHOOT;
+			}
 			break;
 		case PENDING_MOVE:
 			// No activity
@@ -173,6 +175,8 @@ public class GameBoard extends Widget {
 				state = GameState.apply(state, tileCoord);
 				game.playPing();
 				turnState = TurnState.MOVING;
+				// Reset animation time
+				animTime = 0.0f;
 			} catch (Error e) {
 				if (PartitionGame.DEBUG) {
 					Gdx.app.log(GameScreen.TAG, "Invalid move!");
