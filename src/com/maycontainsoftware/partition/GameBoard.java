@@ -127,7 +127,7 @@ public class GameBoard extends WidgetGroup {
 
 		switch (turnState) {
 		case MOVING:
-			if(animTime >= 1.0f) {
+			if (animTime >= 1.0f) {
 				turnState = TurnState.PENDING_SHOOT;
 			}
 			break;
