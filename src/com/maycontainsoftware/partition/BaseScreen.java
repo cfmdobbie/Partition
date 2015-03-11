@@ -60,27 +60,6 @@ public class BaseScreen extends ScreenAdapter {
 		if (DEBUG_ROOT_TABLES) {
 			root.debug();
 		}
-	}
-
-	@Override
-	public void render(final float delta) {
-		if (stage != null) {
-			// Update and draw the Stage
-			stage.act(delta);
-			stage.draw();
-
-			if (false) {
-				Table.drawDebug(stage);
-			}
-		}
-	}
-
-	@Override
-	public void resize(final int width, final int height) {
-		Gdx.app.debug(TAG, "resize(" + width + ", " + height + ")");
-
-		stage.setViewport(game.virtualWidth, game.virtualHeight, false, game.viewport.x, game.viewport.y,
-				game.viewport.width, game.viewport.height);
 
 		// Check whether screen is to handle the back button (and the escape key)
 		if (handleBack()) {
@@ -106,6 +85,27 @@ public class BaseScreen extends ScreenAdapter {
 			// Don't catch back button
 			Gdx.input.setCatchBackKey(false);
 		}
+	}
+
+	@Override
+	public void render(final float delta) {
+		if (stage != null) {
+			// Update and draw the Stage
+			stage.act(delta);
+			stage.draw();
+
+			if (false) {
+				Table.drawDebug(stage);
+			}
+		}
+	}
+
+	@Override
+	public void resize(final int width, final int height) {
+		Gdx.app.debug(TAG, "resize(" + width + ", " + height + ")");
+
+		stage.setViewport(game.virtualWidth, game.virtualHeight, false, game.viewport.x, game.viewport.y,
+				game.viewport.width, game.viewport.height);
 	}
 
 	@Override
