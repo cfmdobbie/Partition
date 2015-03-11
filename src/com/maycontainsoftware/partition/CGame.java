@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Scaling;
 
 public abstract class CGame extends Game {
 
@@ -40,9 +42,6 @@ public abstract class CGame extends Game {
 	/** The height of the virtual render area. */
 	public final int virtualHeight;
 
-	/** The aspect ratio of the virtual render area. */
-	private final float virtualAspectRatio;
-
 	/**
 	 * The app-global SpriteBatch. For performance reasons, a single SpriteBatch exists and is accessed from all Screens
 	 * in the app
@@ -69,8 +68,6 @@ public abstract class CGame extends Game {
 
 		this.virtualWidth = virtualWidth;
 		this.virtualHeight = virtualHeight;
-
-		virtualAspectRatio = (float) virtualWidth / (float) virtualHeight;
 	}
 
 	@Override
@@ -103,23 +100,15 @@ public abstract class CGame extends Game {
 
 		Gdx.app.debug(TAG, "resize(" + width + ", " + height + ")");
 
-		// Calculate display aspect ratio
-		final float displayAspectRatio = (float) width / (float) height;
-
 		// Recalculate glViewport
-		if (displayAspectRatio > virtualAspectRatio) {
-			// Display is wider than the game
-			viewport.setSize(height * virtualAspectRatio, height);
-			viewport.setPosition((width - height * virtualAspectRatio) / 2, 0);
-		} else if (displayAspectRatio < virtualAspectRatio) {
-			// Display is taller than the game
-			viewport.setSize(width, width / virtualAspectRatio);
-			viewport.setPosition(0, (height - width / virtualAspectRatio) / 2);
-		} else {
-			// Display exactly matches game
-			viewport.setSize(width, height);
-			viewport.setPosition(0, 0);
-		}
+		// Determine viewport size by fitting virtual screen inside actual screen
+		final Vector2 size = Scaling.fit.apply(virtualWidth, virtualHeight, width, height);
+		// Apply size to viewport rect
+		viewport.width = (int) size.x;
+		viewport.height = (int) size.y;
+		// Calculate new viewport position based on size
+		viewport.x = (int) (width - size.x) / 2;
+		viewport.y = (int) (height - size.y) / 2;
 
 		// Pass resize() call to active Screen
 		super.resize(width, height);
