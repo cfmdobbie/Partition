@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Scaling;
@@ -34,8 +33,6 @@ public abstract class CGame extends Game {
 	 * in the app
 	 */
 	SpriteBatch batch;
-
-	ShapeRenderer shapeRenderer;
 
 	/** The app-global camera. This is used by all Screens. */
 	OrthographicCamera camera;
@@ -135,9 +132,6 @@ public abstract class CGame extends Game {
 		// Dispose of stuff
 		if (batch != null) {
 			batch.dispose();
-		}
-		if (shapeRenderer != null) {
-			shapeRenderer.dispose();
 		}
 		if (manager != null) {
 			manager.dispose();
