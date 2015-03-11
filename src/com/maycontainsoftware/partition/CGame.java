@@ -17,7 +17,7 @@ import com.badlogic.gdx.utils.Scaling;
 public abstract class CGame extends Game {
 
 	/** Tag for logging purposes. */
-	private static final String TAG = CGame.class.getSimpleName();
+	private static final String TAG = CGame.class.getName();
 
 	/**
 	 * The app-global SpriteBatch. For performance reasons, a single SpriteBatch exists and is accessed from all Screens
