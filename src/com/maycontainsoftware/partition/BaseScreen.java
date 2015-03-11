@@ -1,8 +1,8 @@
 package com.maycontainsoftware.partition;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -66,7 +66,7 @@ public class BaseScreen extends ScreenAdapter {
 			stage.act(delta);
 			stage.draw();
 
-			if (PartitionGame.DEBUG) {
+			if (false) {
 				Table.drawDebug(stage);
 			}
 		}
@@ -74,9 +74,7 @@ public class BaseScreen extends ScreenAdapter {
 
 	@Override
 	public void resize(final int width, final int height) {
-		if (PartitionGame.DEBUG) {
-			Gdx.app.log(TAG, "resize(" + width + ", " + height + ")");
-		}
+		Gdx.app.debug(TAG, "resize(" + width + ", " + height + ")");
 
 		// Dispose of old Stage
 		if (stage != null) {

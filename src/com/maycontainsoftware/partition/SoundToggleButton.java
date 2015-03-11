@@ -32,9 +32,7 @@ class SoundToggleButton extends Button {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.sound = isChecked();
-				if (PartitionGame.DEBUG) {
-					Gdx.app.log(TAG, "Play sound? " + game.sound);
-				}
+				Gdx.app.debug(TAG, "Play sound? " + game.sound);
 			}
 		});
 

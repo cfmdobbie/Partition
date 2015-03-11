@@ -178,9 +178,7 @@ public class GameBoard extends WidgetGroup {
 				// Reset animation time
 				animTime = 0.0f;
 			} catch (Error e) {
-				if (PartitionGame.DEBUG) {
-					Gdx.app.log(GameScreen.TAG, "Invalid move!");
-				}
+				Gdx.app.debug(GameScreen.TAG, "Invalid move!");
 				game.playError();
 			}
 			break;
@@ -190,9 +188,7 @@ public class GameBoard extends WidgetGroup {
 				game.playExplosion();
 				turnState = TurnState.SHOOTING;
 			} catch (Error e) {
-				if (PartitionGame.DEBUG) {
-					Gdx.app.log(GameScreen.TAG, "Invalid move!");
-				}
+				Gdx.app.debug(GameScreen.TAG, "Invalid move!");
 				game.playError();
 			}
 			break;
@@ -286,18 +282,14 @@ public class GameBoard extends WidgetGroup {
 		final float w = getWidth();
 		final float h = getHeight();
 
-		if (PartitionGame.DEBUG) {
-			Gdx.app.log(GameScreen.TAG, "Board size: " + w + "x" + h);
-			Gdx.app.log(GameScreen.TAG, "Touch location: (" + px + "," + py + ")");
-		}
+		Gdx.app.debug(GameScreen.TAG, "Board size: " + w + "x" + h);
+		Gdx.app.debug(GameScreen.TAG, "Touch location: (" + px + "," + py + ")");
 
 		// Convert to a coordinate in board space
 		final byte c = (byte) (px / (w / boardColumns));
 		final byte r = (byte) ((-(py - h)) / (h / boardRows));
 
-		if (PartitionGame.DEBUG) {
-			Gdx.app.log(GameScreen.TAG, "Touch is on tile: (" + c + "," + r + ")");
-		}
+		Gdx.app.debug(GameScreen.TAG, "Touch is on tile: (" + c + "," + r + ")");
 
 		return new byte[] { c, r };
 	}
