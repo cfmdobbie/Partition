@@ -1,5 +1,6 @@
 package com.maycontainsoftware.partition;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -15,18 +16,8 @@ import com.badlogic.gdx.utils.Scaling;
 
 public abstract class CGame extends Game {
 
-	/* Logging. */
-
 	/** Tag for logging purposes. */
 	private static final String TAG = CGame.class.getSimpleName();
-
-	/* Virtual screen metrics. */
-
-	/** The width of the virtual render area. */
-	public final int virtualWidth;
-
-	/** The height of the virtual render area. */
-	public final int virtualHeight;
 
 	/**
 	 * The app-global SpriteBatch. For performance reasons, a single SpriteBatch exists and is accessed from all Screens
@@ -37,25 +28,50 @@ public abstract class CGame extends Game {
 	/** The app-global camera. This is used by all Screens. */
 	OrthographicCamera camera;
 
+	/* Virtual screen metrics. */
+
+	/** The width of the virtual render area. */
+	public final int virtualWidth;
+
+	/** The height of the virtual render area. */
+	public final int virtualHeight;
+
 	/** Rectangle that represents the glViewport. */
 	final Rectangle viewport = new Rectangle();
+
+	/* Asset-related members. */
 
 	/** The asset manager used by the loading screen to load all assets not directly required by the loading screen. */
 	AssetManager manager;
 
+	/** The TextureAtlas containing all assets used by the loading screen. */
 	TextureAtlas loadingAtlas;
+
+	/** The TextureAtlas containing all assets used by the main game screens. */
 	TextureAtlas textureAtlas;
 
+	/**
+	 * Construct a new CGame instance.
+	 * 
+	 * @param virtualWidth
+	 *            The width of the virtual rendering area.
+	 * @param virtualHeight
+	 *            The height of the virtual rendering area.
+	 */
 	public CGame(int virtualWidth, int virtualHeight) {
 
-		// N.B. Gdx.app is null at this point
+		// N.B. Gdx.app is null at this point, so no logging possible
 
+		// Stash details of virtual rendering area for later use
 		this.virtualWidth = virtualWidth;
 		this.virtualHeight = virtualHeight;
 	}
 
 	@Override
 	public void create() {
+
+		// Set logging level
+		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
 		Gdx.app.debug(TAG, "create()");
 		Gdx.app.debug(TAG, "Virtual screen size " + virtualWidth + "x" + virtualHeight);
@@ -77,6 +93,7 @@ public abstract class CGame extends Game {
 		this.setScreen(initialScreen());
 	}
 
+	/** Method to return an instance of the starting screen for the app. */
 	protected abstract Screen initialScreen();
 
 	@Override
