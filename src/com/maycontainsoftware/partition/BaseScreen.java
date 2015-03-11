@@ -36,12 +36,6 @@ public class BaseScreen extends ScreenAdapter {
 
 	// Current screen dimensions
 
-	/** Current screen width in pixels. Update on every call to resize(). */
-	protected float screenWidth;
-
-	/** Current screen height in pixels. Update on every call to resize(). */
-	protected float screenHeight;
-
 	/**
 	 * Construct a new BaseScreen instance.
 	 * 
@@ -53,6 +47,15 @@ public class BaseScreen extends ScreenAdapter {
 		// Create the root table
 		root = new Table();
 		root.setFillParent(true);
+
+		stage = new Stage(game.virtualWidth, game.virtualHeight, true, game.batch);
+		stage.setCamera(game.camera);
+
+		// Add root Table to the Stage
+		stage.addActor(root);
+
+		// Redirect input events to the Stage
+		Gdx.input.setInputProcessor(stage);
 
 		if (DEBUG_ROOT_TABLES) {
 			root.debug();
@@ -76,24 +79,8 @@ public class BaseScreen extends ScreenAdapter {
 	public void resize(final int width, final int height) {
 		Gdx.app.debug(TAG, "resize(" + width + ", " + height + ")");
 
-		// Dispose of old Stage
-		if (stage != null) {
-			stage.dispose();
-			stage = null;
-		}
-
-		// Create new Stage
-		stage = new Stage(width, height, true, game.batch);
-
-		// Add root Table to the Stage
-		stage.addActor(root);
-
-		// Redirect input events to the Stage
-		Gdx.input.setInputProcessor(stage);
-
-		// Remember screen dimensions
-		screenWidth = width;
-		screenHeight = height;
+		stage.setViewport(game.virtualWidth, game.virtualHeight, false, game.viewport.x, game.viewport.y,
+				game.viewport.width, game.viewport.height);
 
 		// Check whether screen is to handle the back button (and the escape key)
 		if (handleBack()) {
