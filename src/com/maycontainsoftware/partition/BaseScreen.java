@@ -93,9 +93,7 @@ public class BaseScreen extends ScreenAdapter {
 		stage.act(delta);
 		stage.draw();
 
-		if (false) {
-			Table.drawDebug(stage);
-		}
+		// Table.drawDebug(stage);
 	}
 
 	@Override

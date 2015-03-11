@@ -21,19 +21,6 @@ public abstract class CGame extends Game {
 	/** Tag for logging purposes. */
 	private static final String TAG = CGame.class.getSimpleName();
 
-	/** Whether debug output should be logged. */
-//	private static final boolean DEBUG = true;
-
-//	protected static final void debug(final String tag, final String message) {
-//		if (DEBUG) {
-//			Gdx.app.log(tag, message);
-//		}
-//	}
-//
-//	protected static final void log(final String tag, final String message) {
-//		Gdx.app.log(tag, message);
-//	}
-
 	/* Virtual screen metrics. */
 
 	/** The width of the virtual render area. */
