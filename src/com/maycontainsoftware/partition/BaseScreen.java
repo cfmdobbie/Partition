@@ -89,14 +89,12 @@ public class BaseScreen extends ScreenAdapter {
 
 	@Override
 	public void render(final float delta) {
-		if (stage != null) {
-			// Update and draw the Stage
-			stage.act(delta);
-			stage.draw();
+		// Update and draw the Stage
+		stage.act(delta);
+		stage.draw();
 
-			if (false) {
-				Table.drawDebug(stage);
-			}
+		if (false) {
+			Table.drawDebug(stage);
 		}
 	}
 
