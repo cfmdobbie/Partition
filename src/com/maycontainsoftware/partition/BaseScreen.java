@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
  * 
  * @author Charlie
  */
-public class BaseScreen extends ScreenAdapter {
+public class BaseScreen<G extends CGame> extends ScreenAdapter {
 
 	/** Tag for logging purposes. */
 	public static final String TAG = BaseScreen.class.getName();
@@ -23,7 +23,7 @@ public class BaseScreen extends ScreenAdapter {
 	private static final boolean DEBUG_ROOT_TABLES = false;
 
 	/** Reference to the Game instance. */
-	protected final PartitionGame game;
+	protected final G game;
 
 	/** Reference to the Stage. The Stage is re-created on every invocation of resize(). */
 	protected Stage stage;
@@ -41,7 +41,7 @@ public class BaseScreen extends ScreenAdapter {
 	 * 
 	 * @param game
 	 */
-	public BaseScreen(final PartitionGame game) {
+	public BaseScreen(final G game) {
 		this.game = game;
 
 		// Create the root table

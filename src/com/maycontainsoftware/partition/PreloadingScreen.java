@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
  * 
  * @author Charlie
  */
-public class PreloadingScreen extends BaseScreen {
+public class PreloadingScreen extends BaseScreen<PartitionGame> {
 
 	/** Developer logo texture, loaded synchronously by the constructor. */
 	private final Texture developerLogo;
