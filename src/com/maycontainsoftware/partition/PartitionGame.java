@@ -38,44 +38,42 @@ public class PartitionGame extends CGame {
 		}
 	}
 
+	/** Construct the Game instance. This game is designed to render at 720x1000 resolution. */
 	public PartitionGame() {
 		super(720, 1000);
 	}
 
 	@Override
 	protected final Screen initialScreen() {
+		// Start with the preloading screen
 		return new PreloadingScreen(this);
 	}
 
 	/** Play the "error" sound effect, if sounds are enabled. */
 	void playError() {
 		if (sound) {
-			final Sound s = manager.get("error.wav", Sound.class);
-			s.play();
+			manager.get("error.wav", Sound.class).play();
 		}
 	}
 
 	/** Play the "explosion" sound effect, if sounds are enabled. */
 	void playExplosion() {
 		if (sound) {
-			final Sound s = manager.get("explosion.wav", Sound.class);
-			s.play();
+			manager.get("explosion.wav", Sound.class).play();
 		}
 	}
 
 	/** Play the "ping" sound effect, if sounds are enabled. */
 	void playPing() {
 		if (sound) {
-			final Sound s = manager.get("ping.wav", Sound.class);
-			s.play();
+			manager.get("ping.wav", Sound.class).play();
 		}
 	}
 
 	/** Play the "tone" sound effect, if sounds are enabled. */
 	void playTone() {
 		if (sound) {
-			final Sound s = manager.get("tone.wav", Sound.class);
-			s.play();
+			manager.get("tone.wav", Sound.class).play();
 		}
 	}
 }
