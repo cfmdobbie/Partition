@@ -9,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 /**
- * Base screen for all resizeable screens in the app. This screen holds the current Stage instance and a persistent
- * Table to which Actors are to be added. Subclasses must ensure they pass render() and resize() calls to super.
+ * Generic base screen for all screens in a CGame app. This screen holds a Stage and the root Table to which Actors are
+ * to be added. Subclasses must ensure they pass render() and resize() calls to super.
  * 
  * @author Charlie
  */
@@ -19,44 +19,42 @@ public class CScreen<G extends CGame> extends ScreenAdapter {
 	/** Tag for logging purposes. */
 	public static final String TAG = CScreen.class.getName();
 
-	/** Debug flag for controlling whether to drag debug output for root tables in BaseScreen Stages. */
+	/** Debug flag for controlling whether to draw debug output for root tables in CScreen Stages. */
 	private static final boolean DEBUG_ROOT_TABLES = false;
 
-	/** Reference to the Game instance. */
+	/** Reference to the CGame instance. */
 	protected final G game;
 
-	/** Reference to the Stage. The Stage is re-created on every invocation of resize(). */
+	/** Reference to the Stage. */
 	protected Stage stage;
 
-	/**
-	 * The root table containing all UI elements. Created on class construction and persistent for the lifetime of the
-	 * class.
-	 */
+	/** The root table which exists on the Stage, to which all UI elements are to be added. */
 	protected final Table root;
 
-	// Current screen dimensions
-
 	/**
-	 * Construct a new BaseScreen instance.
+	 * Construct a new CScreen instance.
 	 * 
 	 * @param game
+	 *            The CGame subclass.
 	 */
 	public CScreen(final G game) {
 		this.game = game;
 
-		// Create the root table
-		root = new Table();
-		root.setFillParent(true);
-
+		// Create the stage
 		stage = new Stage(game.virtualWidth, game.virtualHeight, true, game.batch);
+		// Apply the standard camera to this screen's stage
 		stage.setCamera(game.camera);
 
-		// Add root Table to the Stage
+		// Create the root table
+		root = new Table();
+		// Add root Table to the Stage, full-screen
+		root.setFillParent(true);
 		stage.addActor(root);
 
 		// Redirect input events to the Stage
 		Gdx.input.setInputProcessor(stage);
 
+		// Draw debug lines if required
 		if (DEBUG_ROOT_TABLES) {
 			root.debug();
 		}
@@ -93,13 +91,17 @@ public class CScreen<G extends CGame> extends ScreenAdapter {
 		stage.act(delta);
 		stage.draw();
 
-		// Table.drawDebug(stage);
+		// Draw debug lines if required
+		if (DEBUG_ROOT_TABLES) {
+			Table.drawDebug(stage);
+		}
 	}
 
 	@Override
 	public void resize(final int width, final int height) {
 		Gdx.app.debug(TAG, "resize(" + width + ", " + height + ")");
 
+		// Update the stage's viewport with respect to the CGame's calculated viewport
 		stage.setViewport(game.virtualWidth, game.virtualHeight, false, game.viewport.x, game.viewport.y,
 				game.viewport.width, game.viewport.height);
 	}
