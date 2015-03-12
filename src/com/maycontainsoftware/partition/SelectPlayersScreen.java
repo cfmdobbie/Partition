@@ -69,12 +69,8 @@ public class SelectPlayersScreen extends CScreen<PartitionGame> {
 		root.add();
 
 		// Heading
-		root.row();
+		root.row().padBottom(30.0f);
 		root.add(new Image(atlas.findRegion("select_players_heading")));
-
-		// Spacer between heading and buttons
-		root.row().height(40.0f);
-		root.add();
 
 		// Two players
 		root.row();
