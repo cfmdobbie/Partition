@@ -63,12 +63,8 @@ public class MainMenuScreen extends CScreen<PartitionGame> {
 		root.add();
 
 		// Logo
-		root.row();
+		root.row().padBottom(30.0f);
 		root.add(new Image(atlas.findRegion("partition_logo")));
-
-		// Spacer between logo and buttons
-		root.row().height(10.0f);
-		root.add();
 
 		// Play button
 		root.row();
