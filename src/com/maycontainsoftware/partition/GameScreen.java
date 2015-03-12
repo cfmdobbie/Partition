@@ -17,7 +17,7 @@ import com.maycontainsoftware.partition.ScreenTransition.SolidColorFadeScreenTra
  * 
  * @author Charlie
  */
-public class GameScreen extends BaseScreen<PartitionGame> {
+public class GameScreen extends CScreen<PartitionGame> {
 
 	/** Tag for logging purposes. */
 	public static final String TAG = GameScreen.class.getName();

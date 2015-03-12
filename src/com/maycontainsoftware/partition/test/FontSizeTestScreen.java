@@ -5,10 +5,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.maycontainsoftware.partition.BaseScreen;
+import com.maycontainsoftware.partition.CScreen;
 import com.maycontainsoftware.partition.PartitionGame;
 
-public class FontSizeTestScreen extends BaseScreen<PartitionGame> {
+public class FontSizeTestScreen extends CScreen<PartitionGame> {
 	public FontSizeTestScreen(final PartitionGame game) {
 		super(game);
 

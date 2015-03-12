@@ -14,10 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
  * 
  * @author Charlie
  */
-public class BaseScreen<G extends CGame> extends ScreenAdapter {
+public class CScreen<G extends CGame> extends ScreenAdapter {
 
 	/** Tag for logging purposes. */
-	public static final String TAG = BaseScreen.class.getName();
+	public static final String TAG = CScreen.class.getName();
 
 	/** Debug flag for controlling whether to drag debug output for root tables in BaseScreen Stages. */
 	private static final boolean DEBUG_ROOT_TABLES = false;
@@ -41,7 +41,7 @@ public class BaseScreen<G extends CGame> extends ScreenAdapter {
 	 * 
 	 * @param game
 	 */
-	public BaseScreen(final G game) {
+	public CScreen(final G game) {
 		this.game = game;
 
 		// Create the root table

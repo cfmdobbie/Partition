@@ -28,7 +28,7 @@ import com.maycontainsoftware.partition.ScreenTransition.SolidColorFadeScreenTra
  * 
  * @author Charlie
  */
-public class InstructionsScreen extends BaseScreen<PartitionGame> {
+public class InstructionsScreen extends CScreen<PartitionGame> {
 
 	/** The screen transition. */
 	private final ScreenTransition screenTransition;
