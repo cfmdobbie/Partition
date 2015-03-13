@@ -44,9 +44,6 @@ public abstract class CGame extends Game {
 	/** The asset manager used by the loading screen to load all assets not directly required by the loading screen. */
 	AssetManager manager;
 
-	/** The TextureAtlas containing all assets used by the loading screen. */
-	TextureAtlas loadingAtlas;
-
 	/** The TextureAtlas containing all assets used by the main game screens. */
 	TextureAtlas textureAtlas;
 
