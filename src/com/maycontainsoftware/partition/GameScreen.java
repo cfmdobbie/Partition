@@ -74,7 +74,7 @@ public class GameScreen extends CScreen<PartitionGame> {
 
 		// FixedAspectContainer is a container which forces a specific aspect ratio on its sole child. GameBoard draws
 		// the board at unit scale, but applies transformations to scale drawing to the correct size.
-		final GameBoard gameBoard = new GameBoard(game, atlas, playerConfiguration, boardConfiguration);
+		final GameBoard gameBoard = new GameBoard(game, atlas, playerConfiguration, boardConfiguration, false);
 		float boardAspect = gameBoard.getDesiredAspect();
 		final FixedAspectContainer boardContainer = new FixedAspectContainer(gameBoard, boardAspect);
 		root.row();

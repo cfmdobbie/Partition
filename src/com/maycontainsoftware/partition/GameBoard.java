@@ -49,6 +49,9 @@ public class GameBoard extends WidgetGroup {
 	/** The chosen board configuration. */
 	private final BoardConfiguration boardConfiguration;
 
+	/** Whether or not the game board is in "demo" mode. */
+	private final boolean demoMode;
+
 	private static enum TurnState {
 		PENDING_MOVE,
 		MOVING,
@@ -77,7 +80,7 @@ public class GameBoard extends WidgetGroup {
 	 *            The chosen board configuration.
 	 */
 	public GameBoard(final PartitionGame game, final TextureAtlas atlas, final PlayerConfiguration playerConfiguration,
-			final BoardConfiguration boardConfiguration) {
+			final BoardConfiguration boardConfiguration, final boolean demoMode) {
 
 		// Save reference to the game instance
 		this.game = game;
@@ -85,9 +88,10 @@ public class GameBoard extends WidgetGroup {
 		// Start in PENDING_MOVE state
 		this.turnState = TurnState.PENDING_MOVE;
 
-		// Save player and board configuration
+		// Save board configuration
 		this.playerConfiguration = playerConfiguration;
 		this.boardConfiguration = boardConfiguration;
+		this.demoMode = demoMode;
 
 		// Store references to required Textures
 		tileTexture = atlas.findRegion("tile");
