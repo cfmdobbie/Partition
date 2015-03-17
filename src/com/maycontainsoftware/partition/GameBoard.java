@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -126,7 +127,7 @@ public class GameBoard extends FixedAspectContainer {
 		for (int r = 0; r < boardRows; r++) {
 			t.row();
 			for (int c = 0; c < boardColumns; c++) {
-				t.add(new Image(atlas.findRegion("tile_blue"))).expand().fill();
+				t.add(new TileActor(tileTexture)).expand().fill();
 			}
 		}
 
@@ -313,5 +314,11 @@ public class GameBoard extends FixedAspectContainer {
 		Gdx.app.debug(GameScreen.TAG, "Touch is on tile: (" + c + "," + r + ")");
 
 		return new byte[] { c, r };
+	}
+
+	static class TileActor extends Image {
+		public TileActor(final TextureRegion tileTextureRegion) {
+			super(tileTextureRegion);
+		}
 	}
 }
