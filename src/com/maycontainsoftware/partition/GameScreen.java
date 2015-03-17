@@ -72,13 +72,10 @@ public class GameScreen extends CScreen<PartitionGame> {
 		root.row().height(2.0f);
 		root.add(new Image(atlas.findRegion("white1x1"))).fill();
 
-		// FixedAspectContainer is a container which forces a specific aspect ratio on its sole child. GameBoard draws
-		// the board at unit scale, but applies transformations to scale drawing to the correct size.
+		// GameBoard manages its own fixed-aspect behaviour, so just add the board to the screen at max available size
 		final GameBoard gameBoard = new GameBoard(game, atlas, playerConfiguration, boardConfiguration, false);
-		float boardAspect = gameBoard.getDesiredAspect();
-		final FixedAspectContainer boardContainer = new FixedAspectContainer(gameBoard, boardAspect);
 		root.row();
-		root.add(boardContainer).expand().fill();
+		root.add(gameBoard).expand().fill();
 
 		// Set up simple screen transition - fade in/out from/to black
 		screenTransition = new SolidColorFadeScreenTransition(root, atlas.findRegion("black"));
