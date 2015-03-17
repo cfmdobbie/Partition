@@ -124,10 +124,10 @@ public class GameBoard extends FixedAspectContainer {
 		});
 
 		final Table t = new Table();
-		for (int r = 0; r < boardRows; r++) {
+		for (byte r = 0; r < boardRows; r++) {
 			t.row();
-			for (int c = 0; c < boardColumns; c++) {
-				t.add(new TileActor(tileTexture)).expand().fill();
+			for (byte c = 0; c < boardColumns; c++) {
+				t.add(new TileActor(tileTexture, r, c)).expand().fill();
 			}
 		}
 
@@ -316,9 +316,20 @@ public class GameBoard extends FixedAspectContainer {
 		return new byte[] { c, r };
 	}
 
-	static class TileActor extends Image {
-		public TileActor(final TextureRegion tileTextureRegion) {
+	class TileActor extends Image {
+		private final byte[] coords;
+		public TileActor(final TextureRegion tileTextureRegion, final byte row, final byte column) {
 			super(tileTextureRegion);
+
+			coords = new byte[] {row, column};
+
+			addListener(new InputListener() {
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					System.out.println("Touch:");
+					System.out.println(coords);
+					return true;
+				};
+			});
 		}
 	}
 }
