@@ -79,9 +79,11 @@ public class MainMenuScreen extends CScreen<PartitionGame> {
 		});
 
 		// Horizontal row of tiles
+		final FixedAspectContainer boardContainer = new FixedAspectContainer();
 		final GameBoard gameBoard = new GameBoard(game, atlas, null, BoardConfiguration.MAIN_MENU_DEMO, true);
 		float boardAspect = gameBoard.getDesiredAspect();
-		final FixedAspectContainer boardContainer = new FixedAspectContainer(gameBoard, boardAspect);
+		boardContainer.setChild(gameBoard);
+		boardContainer.setAspect(boardAspect);
 		// Know board is 5x1 in size, and know that main menu buttons are 180 width
 		final float boardWidth = 180.0f;
 		final float boardHeight = boardWidth / 5;
