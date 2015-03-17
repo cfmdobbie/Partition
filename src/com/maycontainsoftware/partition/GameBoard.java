@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
@@ -20,7 +21,7 @@ import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
  * 
  * @author Charlie
  */
-public class GameBoard extends WidgetGroup {
+public class GameBoard extends FixedAspectContainer {
 
 	/** Reference to the Game instance. */
 	protected final PartitionGame game;
@@ -119,6 +120,9 @@ public class GameBoard extends WidgetGroup {
 				doTouchUp(tileCoord);
 			}
 		});
+
+		setChild(new Image(atlas.findRegion("tile_highlight")));
+		setAspect(getDesiredAspect());
 	}
 
 	@Override
@@ -214,8 +218,11 @@ public class GameBoard extends WidgetGroup {
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 
+		super.draw(batch, parentAlpha);
+
+		/*
 		// Remember current transformation matrix
-		final Matrix4 transformMatrix = batch.getTransformMatrix();
+		final Matrix4 transformMatrix = batch.getTransformMatrix().cpy();
 
 		// New transformation matrix, initially identical to the current matrix
 		final Matrix4 newTransform = new Matrix4(transformMatrix);
@@ -273,6 +280,7 @@ public class GameBoard extends WidgetGroup {
 
 		// Reset transformation matrix
 		batch.setTransformMatrix(transformMatrix);
+		*/
 	}
 
 	// Desired aspect ratio
