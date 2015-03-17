@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
@@ -121,7 +122,15 @@ public class GameBoard extends FixedAspectContainer {
 			}
 		});
 
-		setChild(new Image(atlas.findRegion("tile_highlight")));
+		final Table t = new Table();
+		for (int r = 0; r < boardRows; r++) {
+			t.row();
+			for (int c = 0; c < boardColumns; c++) {
+				t.add(new Image(atlas.findRegion("tile_blue"))).expand().fill();
+			}
+		}
+
+		setChild(t);
 		setAspect(getDesiredAspect());
 	}
 
