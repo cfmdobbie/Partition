@@ -318,10 +318,11 @@ public class GameBoard extends FixedAspectContainer {
 
 	class TileActor extends Image {
 		private final byte[] coords;
+
 		public TileActor(final TextureRegion tileTextureRegion, final byte row, final byte column) {
 			super(tileTextureRegion);
 
-			coords = new byte[] {row, column};
+			coords = new byte[] { row, column };
 
 			addListener(new InputListener() {
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
