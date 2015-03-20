@@ -102,6 +102,28 @@ public class GameState {
 	}
 
 	/**
+	 * Return the number of columns on the board.
+	 * 
+	 * @param state
+	 *            The game state.
+	 * @return The number of columns.
+	 */
+	public static int getNumberOfColumns(final GameState state) {
+		return state.tileEnabled.length;
+	}
+
+	/**
+	 * Return the number of rows on the board.
+	 * 
+	 * @param state
+	 *            The game state.
+	 * @return The number of rows.
+	 */
+	public static int getNumberOfRows(final GameState state) {
+		return state.tileEnabled[0].length;
+	}
+
+	/**
 	 * Return the number of players in the game represented by the specified state.
 	 * 
 	 * @param state
