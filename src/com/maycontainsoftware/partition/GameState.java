@@ -358,7 +358,7 @@ public class GameState {
 		} else {
 			final GameState newState = duplicate(state);
 
-			switch (newState.turnPhase) {
+			switch (state.turnPhase) {
 			case PHASE_MOVE:
 				newState.playerCoords[newState.currentPlayerIndex][0] = c;
 				newState.playerCoords[newState.currentPlayerIndex][1] = r;
