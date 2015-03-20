@@ -385,7 +385,7 @@ public class GameState {
 	 * 
 	 * A special case exists for one-player games - with one player there is no other player to be isolated from, so the
 	 * game can never be declared over. (Note that the stalemate condition still exists when that one player has no
-	 * moved left.)
+	 * moves left.)
 	 * 
 	 * @param state
 	 *            The game state.
