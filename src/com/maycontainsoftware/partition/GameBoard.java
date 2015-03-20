@@ -107,8 +107,8 @@ public class GameBoard extends FixedAspectContainer {
 		this.state = GameState.newGameState(boardConfiguration.boardSpec);
 
 		// Determine board size
-		boardColumns = this.state.tileEnabled.length;
-		boardRows = this.state.tileEnabled[0].length;
+		boardColumns = GameState.getNumberOfColumns(this.state);
+		boardRows = GameState.getNumberOfRows(this.state);
 
 		addListener(new InputListener() {
 			@Override
