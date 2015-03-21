@@ -1,5 +1,6 @@
 package com.maycontainsoftware.partition;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -23,13 +24,13 @@ public class Arbiter {
 	
 	private final IBoard board;
 
-	private final List<IPlayer> players;
+	private final List<? extends IPlayer> players;
 
-	private final Set<ITile> tiles;
+	private final Set<? extends ITile> tiles;
 
 	private int activePlayerNumber;
 
-	public Arbiter(GameState initialGameState, IBoard board, List<IPlayer> players, Set<ITile> tiles) {
+	public Arbiter(GameState initialGameState, IBoard board, List<? extends IPlayer> players, Set<? extends ITile> tiles) {
 
 		// Always start waiting for the first move
 		this.turnState = GameTurnState.PENDING_MOVE;
@@ -141,5 +142,38 @@ public class Arbiter {
 				players.get(activePlayerNumber).doPendingMove();
 			}
 		}
+	}
+
+	public void doReset() {
+
+		state = GameState.duplicate(initialGameState);
+		turnState = GameTurnState.PENDING_MOVE;
+
+		for(final ITile tile : tiles) {
+			final byte[] coords = tile.getCoords();
+			final boolean enabled = state.tileEnabled[coords[0]][coords[1]];
+			tile.doReset(enabled);
+		}
+
+		for(int i = 0 ; i < players.size() ; i++) {
+			byte[] coords = state.playerCoords[i];
+			System.out.println("Player:");
+			System.out.println(coords[0]);
+			System.out.println(coords[1]);
+			ITile tile = findTileByCoords(coords);
+			System.out.println("Tile:");
+			System.out.println(tile.getCoords()[0]);
+			System.out.println(tile.getCoords()[1]);
+			players.get(i).doReset(tile);
+		}
+	}
+
+	private ITile findTileByCoords(final byte[] coords) {
+		for(ITile tile : tiles) {
+			if(Arrays.equals(tile.getCoords(), coords)) {
+				return tile;
+			}
+		}
+		return null;
 	}
 }

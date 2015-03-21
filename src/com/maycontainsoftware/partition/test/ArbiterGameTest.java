@@ -40,6 +40,7 @@ public class ArbiterGameTest {
 		}
 
 		Arbiter arbiter = new Arbiter(state, board, players, tiles);
+		arbiter.doReset();
 
 		// Move
 		arbiter.input(tileArray[1][0]);
@@ -96,6 +97,11 @@ public class ArbiterGameTest {
 		public void doShoot(ITile targetTile, Arbiter arbiter) {
 			System.out.println("Player " + playerNumber + " shooting");
 		}
+
+		@Override
+		public void doReset(ITile startingTile) {
+			System.out.println("Player " + playerNumber + " reset");
+		}
 	}
 
 	static class TestTile implements ITile {
@@ -121,6 +127,11 @@ public class ArbiterGameTest {
 		public void doShoot(Arbiter arbiter) {
 			System.out.println("Tile [" + c + "," + r + "] has been shot");
 			arbiter.shootDone();
+		}
+
+		@Override
+		public void doReset(boolean enabled) {
+			System.out.println("Tile [" + c + "," + r + "] has been reset, enabled = " + enabled);
 		}
 	}
 }

@@ -24,6 +24,11 @@ public interface ITile {
 	// anim tile disappear
 	public void doShoot(Arbiter arbiter);
 
-	// TODO: doReset()
-	// tile appear
+	/**
+	 * Notification that the tile has been reset.
+	 * 
+	 * @param enabled
+	 *            Whether the tile should start enabled.
+	 */
+	public void doReset(boolean enabled);
 }

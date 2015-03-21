@@ -34,6 +34,11 @@ public interface IPlayer {
 	// stop target bounce, hide target
 	public void doShoot(ITile targetTile, Arbiter arbiter);
 
-	// TODO: doReset()
-	// Reset: ?
+	/**
+	 * Reset player, position on starting tile.
+	 * 
+	 * @param startingTile
+	 *            The starting tile.
+	 */
+	public void doReset(ITile startingTile);
 }

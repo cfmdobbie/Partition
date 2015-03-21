@@ -1,16 +1,15 @@
 package com.maycontainsoftware.partition;
 
-import com.badlogic.gdx.Gdx;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 
@@ -23,52 +22,30 @@ import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
  * 
  * @author Charlie
  */
-public class GameBoard extends FixedAspectContainer {
+public class GameBoard extends FixedAspectContainer implements IBoard {
 
 	/** Reference to the Game instance. */
 	protected final PartitionGame game;
 
 	/** Reference to the current game state. */
-	private GameState state;
-
-	// Temporary textures
-	private final TextureRegion tileTexture;
-	private final TextureRegion redPlayerTexture;
-	private final TextureRegion bluePlayerTexture;
-	private final TextureRegion shadowTexture;
-	private final TextureRegion targetTexture;
+	//private GameState state;
 
 	// Board dimensions
 	/** Number of columns on the current board. */
-	private final int boardColumns;
+	//private final int boardColumns;
 
 	/** Number of rows on the board. */
-	private final int boardRows;
+	//private final int boardRows;
 
 	/** The chosen player configuration. */
-	@SuppressWarnings("unused")
-	private final PlayerConfiguration playerConfiguration;
+	//@SuppressWarnings("unused")
+	//private final PlayerConfiguration playerConfiguration;
 
 	/** The chosen board configuration. */
-	private final BoardConfiguration boardConfiguration;
+	//private final BoardConfiguration boardConfiguration;
 
 	/** Whether or not the game board is in "demo" mode. */
 	private final boolean demoMode;
-
-	private static enum TurnState {
-		PENDING_MOVE,
-		MOVING,
-		PENDING_SHOOT,
-		SHOOTING,
-		WIN_CHECK,
-		SWITCHING_PLAYERS,
-		STALEMATE_CHECK,
-	}
-
-	private TurnState turnState;
-
-	// Clock used for animation purposes, measures cumulative time in seconds
-	private float animTime = 0.0f;
 
 	/**
 	 * Construct a new GameBoard.
@@ -88,142 +65,74 @@ public class GameBoard extends FixedAspectContainer {
 		// Save reference to the game instance
 		this.game = game;
 
-		// Start in PENDING_MOVE state
-		this.turnState = TurnState.PENDING_MOVE;
-
 		// Save board configuration
-		this.playerConfiguration = playerConfiguration;
-		this.boardConfiguration = boardConfiguration;
+		//this.playerConfiguration = playerConfiguration;
+		//this.boardConfiguration = boardConfiguration;
 		this.demoMode = demoMode;
 
-		// Store references to required Textures
-		tileTexture = atlas.findRegion("tile");
-		redPlayerTexture = atlas.findRegion("player_red");
-		bluePlayerTexture = atlas.findRegion("player_blue");
-		shadowTexture = atlas.findRegion("shadow");
-		targetTexture = atlas.findRegion("target");
-
 		// Create new game state
-		this.state = GameState.newGameState(boardConfiguration.boardSpec);
+		final GameState state = GameState.newGameState(boardConfiguration.boardSpec);
 
-		// Determine board size
-		boardColumns = GameState.getNumberOfColumns(this.state);
-		boardRows = GameState.getNumberOfRows(this.state);
+		// Players
+		final List<PlayerActor> players = new ArrayList<PlayerActor>(GameState.getNumberOfPlayers(state));
+		for(int i = 0 ; i < GameState.getNumberOfPlayers(state); i++) {
+			players.add(new PlayerActor(i, atlas));
+		}
 
-		addListener(new InputListener() {
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				return true;
+		// Tiles
+		final Set<ITile> tileSet = new HashSet<ITile>();
+		final TileActor[][] tiles = new TileActor[GameState.getNumberOfColumns(state)][GameState.getNumberOfRows(state)];
+		for(byte c = 0 ; c < GameState.getNumberOfColumns(state) ; c++) {
+			for(byte r = 0 ; r < GameState.getNumberOfRows(state) ; r++) {
+				TileActor tile = new TileActor(atlas, c, r);
+				tiles[c][r] = tile;
+				tileSet.add(tile);
 			}
+		}
 
-			@Override
-			public void touchUp(InputEvent event, float px, float py, int pointer, int button) {
-				final byte[] tileCoord = actorCoordToTileCoord(px, py);
-				doTouchUp(tileCoord);
-			}
-		});
+		final Arbiter arbiter = new Arbiter(state, this, players, tileSet);
 
+		// Create user interface
 		final Table t = new Table();
-		for (byte r = 0; r < boardRows; r++) {
+		for(int r = 0 ; r < GameState.getNumberOfRows(state) ; r++) {
 			t.row();
-			for (byte c = 0; c < boardColumns; c++) {
-				t.add(new TileActor(tileTexture, r, c)).expand().fill();
+			for(int c = 0 ; c < GameState.getNumberOfColumns(state) ; c++) {
+				t.add(tiles[c][r]).expand().fill();
 			}
+		}
+
+		for(PlayerActor player : players) {
+			t.addActor(player);
 		}
 
 		setChild(t);
-		setAspect(getDesiredAspect());
+		setAspect(GameState.getNumberOfColumns(state) / (float)GameState.getNumberOfRows(state));
+
+		arbiter.doReset();
 	}
 
-	@Override
-	public void act(float delta) {
-		// Allow superclass to process any Actions
-		super.act(delta);
-
-		// Update animation timer
-		animTime += delta;
-
-		switch (turnState) {
-		case MOVING:
-			if (animTime >= 1.0f) {
-				turnState = TurnState.PENDING_SHOOT;
-			}
-			break;
-		case PENDING_MOVE:
-			// No activity
-			break;
-		case PENDING_SHOOT:
-			// No activity
-			break;
-		case SHOOTING:
-			turnState = TurnState.WIN_CHECK;
-			break;
-		case STALEMATE_CHECK:
-			if (GameState.isStalemate(state)) {
-				// XXX
-				state = GameState.newGameState(boardConfiguration.boardSpec);
-				turnState = TurnState.PENDING_MOVE;
-			} else {
-				turnState = TurnState.PENDING_MOVE;
-			}
-			break;
-		case SWITCHING_PLAYERS:
-			turnState = TurnState.STALEMATE_CHECK;
-			break;
-		case WIN_CHECK:
-			if (GameState.isGameOver(state)) {
-				// XXX
-				state = GameState.newGameState(boardConfiguration.boardSpec);
-				turnState = TurnState.PENDING_MOVE;
-			} else {
-				turnState = TurnState.SWITCHING_PLAYERS;
-			}
-			break;
-		}
-	}
-
-	private void doTouchUp(final byte[] tileCoord) {
-
-		switch (turnState) {
-		case MOVING:
-			// Ignore
-			break;
-		case PENDING_MOVE:
-			try {
-				state = GameState.apply(state, tileCoord);
-				game.playPing();
-				turnState = TurnState.MOVING;
-				// Reset animation time
-				animTime = 0.0f;
-			} catch (Error e) {
-				Gdx.app.debug(GameScreen.TAG, "Invalid move!");
-				game.playError();
-			}
-			break;
-		case PENDING_SHOOT:
-			try {
-				state = GameState.apply(state, tileCoord);
-				game.playExplosion();
-				turnState = TurnState.SHOOTING;
-			} catch (Error e) {
-				Gdx.app.debug(GameScreen.TAG, "Invalid move!");
-				game.playError();
-			}
-			break;
-		case SHOOTING:
-			// Ignore
-			break;
-		case STALEMATE_CHECK:
-			// Ignore
-			break;
-		case SWITCHING_PLAYERS:
-			// Ignore
-			break;
-		case WIN_CHECK:
-			// Ignore
-			break;
-		}
-	}
+//		case PENDING_MOVE:
+//			try {
+//				state = GameState.apply(state, tileCoord);
+//				game.playPing();
+//				turnState = TurnState.MOVING;
+//				// Reset animation time
+//				animTime = 0.0f;
+//			} catch (Error e) {
+//				Gdx.app.debug(GameScreen.TAG, "Invalid move!");
+//				game.playError();
+//			}
+//			break;
+//		case PENDING_SHOOT:
+//			try {
+//				state = GameState.apply(state, tileCoord);
+//				game.playExplosion();
+//				turnState = TurnState.SHOOTING;
+//			} catch (Error e) {
+//				Gdx.app.debug(GameScreen.TAG, "Invalid move!");
+//				game.playError();
+//			}
+//			break;
 
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
@@ -293,44 +202,152 @@ public class GameBoard extends FixedAspectContainer {
 		*/
 	}
 
-	// Desired aspect ratio
-	public float getDesiredAspect() {
-		return boardColumns / (float) boardRows;
+//	public byte[] actorCoordToTileCoord(final float px, final float py) {
+//
+//		// Determine board size
+//		final float w = getWidth();
+//		final float h = getHeight();
+//
+//		Gdx.app.debug(GameScreen.TAG, "Board size: " + w + "x" + h);
+//		Gdx.app.debug(GameScreen.TAG, "Touch location: (" + px + "," + py + ")");
+//
+//		// Convert to a coordinate in board space
+//		final byte c = (byte) (px / (w / boardColumns));
+//		final byte r = (byte) ((-(py - h)) / (h / boardRows));
+//
+//		Gdx.app.debug(GameScreen.TAG, "Touch is on tile: (" + c + "," + r + ")");
+//
+//		return new byte[] { c, r };
+//	}
+
+	@Override
+	public void doGameOver() {
+		// TODO
 	}
 
-	public byte[] actorCoordToTileCoord(final float px, final float py) {
-
-		// Determine board size
-		final float w = getWidth();
-		final float h = getHeight();
-
-		Gdx.app.debug(GameScreen.TAG, "Board size: " + w + "x" + h);
-		Gdx.app.debug(GameScreen.TAG, "Touch location: (" + px + "," + py + ")");
-
-		// Convert to a coordinate in board space
-		final byte c = (byte) (px / (w / boardColumns));
-		final byte r = (byte) ((-(py - h)) / (h / boardRows));
-
-		Gdx.app.debug(GameScreen.TAG, "Touch is on tile: (" + c + "," + r + ")");
-
-		return new byte[] { c, r };
+	@Override
+	public void doStalemate() {
+		// TODO
 	}
 
-	class TileActor extends Image {
-		private final byte[] coords;
+	static class PlayerActor extends Actor implements IPlayer {
 
-		public TileActor(final TextureRegion tileTextureRegion, final byte row, final byte column) {
-			super(tileTextureRegion);
+		private static final String[] playerTextureNames = {"player_red", "player_blue"};
 
-			coords = new byte[] { row, column };
+		private final TextureRegion playerTexture;
 
-			addListener(new InputListener() {
-				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-					System.out.println("Touch:");
-					System.out.println(coords);
-					return true;
-				};
-			});
+		private final TextureRegion shadowTexture;
+
+		private final TextureRegion targetTexture;
+
+		private TileActor tile;
+
+		private boolean pendingFirstDraw = true;
+
+		public PlayerActor(final int id, final TextureAtlas atlas) {
+
+			playerTexture = atlas.findRegion(playerTextureNames[id]);
+			shadowTexture = atlas.findRegion("shadow");
+			targetTexture = atlas.findRegion("target");
+		}
+
+		@Override
+		public void doPendingMove() {
+		}
+
+		@Override
+		public void doMove(final ITile targetTile, final Arbiter arbiter) {
+		}
+
+		@Override
+		public void doPendingShoot() {
+		}
+
+		@Override
+		public void doShoot(final ITile targetTile, final Arbiter arbiter) {
+		}
+
+		@Override
+		public void act(float delta) {
+
+//			if(pendingFirstDraw) {
+//				// We were waiting for the tiles to be correctly laid out, but as the player is being drawn, this
+//				// must now have happened.
+//				pendingFirstDraw = false;
+//				// Update player size and position from the tile
+//				this.setPosition(tile.getX(), tile.getY());
+//				System.out.println("Set pos to: " + getX() + "," + getY());
+//				this.setSize(tile.getWidth(), tile.getHeight());
+//				System.out.println("Set size to: " + getWidth() + "," + getHeight());
+//			}
+//			System.out.println("Have set pos to: " + getX() + "," + getY());
+//
+//			System.out.println("Tile's X: " + tile.getX());
+
+			super.act(delta);
+		}
+
+		@Override
+		public void draw(final SpriteBatch batch, final float parentAlpha) {
+
+			batch.draw(shadowTexture, getX(), getY(), getWidth(), getHeight());
+			batch.draw(playerTexture, getX(), getY(), getWidth(), getHeight());
+		}
+
+		@Override
+		public void doReset(final ITile startingTile) {
+
+			tile = (TileActor)startingTile;
+
+			if(!pendingFirstDraw) {
+				// Tile must be validly positioned
+				this.setPosition(tile.getX(), tile.getY());
+			}
+		}
+	}
+
+	static class TileActor extends Actor implements ITile {
+
+		private final TextureRegion tileTexture;
+
+		private final byte column;
+
+		private final byte row;
+
+		private boolean enabled;
+
+		public TileActor(final TextureAtlas atlas, final byte column, final byte row) {
+
+			tileTexture = atlas.findRegion("tile");
+
+			this.column = column;
+
+			this.row = row;
+		}
+
+		@Override
+		public byte[] getCoords() {
+			return new byte[]{column, row};
+		}
+
+		@Override
+		public void doError() {
+		}
+
+		@Override
+		public void doShoot(final Arbiter arbiter) {
+		}
+
+		@Override
+		public void draw(final SpriteBatch batch, final float parentAlpha) {
+			if (enabled) {
+				batch.draw(tileTexture, getX(), getY(), getWidth(), getHeight());
+			}
+		}
+
+		@Override
+		public void doReset(final boolean enabled) {
+			this.enabled = enabled;
 		}
 	}
 }
