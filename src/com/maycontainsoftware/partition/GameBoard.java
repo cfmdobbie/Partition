@@ -47,6 +47,9 @@ public class GameBoard extends FixedAspectContainer implements IBoard {
 	/** Whether or not the game board is in "demo" mode. */
 	private final boolean demoMode;
 
+	// XXX: Temporary black texture
+	private final TextureRegion blackTexture;
+
 	/**
 	 * Construct a new GameBoard.
 	 * 
@@ -64,6 +67,9 @@ public class GameBoard extends FixedAspectContainer implements IBoard {
 
 		// Save reference to the game instance
 		this.game = game;
+
+		// XXX: Temporary black texture
+		blackTexture = atlas.findRegion("black");
 
 		// Save board configuration
 		//this.playerConfiguration = playerConfiguration;
@@ -136,6 +142,9 @@ public class GameBoard extends FixedAspectContainer implements IBoard {
 
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
+
+		// XXX: Temporary black texture
+		batch.draw(blackTexture, getX(), getY(), getWidth(), getHeight());
 
 		super.draw(batch, parentAlpha);
 
