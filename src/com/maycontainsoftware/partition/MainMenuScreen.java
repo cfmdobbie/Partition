@@ -24,7 +24,7 @@ public class MainMenuScreen extends CScreen<PartitionGame> {
 	private final ScreenTransition screenTransition;
 
 	/**
-	 * Construct a new MainMenuScree.
+	 * Construct a new MainMenuScreen.
 	 * 
 	 * @param game
 	 *            The PartitionGame instance.
