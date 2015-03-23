@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
@@ -42,19 +41,9 @@ public class MainMenuScreen extends CScreen<PartitionGame> {
 		root.setBackground(new TiledDrawable(atlas.findRegion("background")));
 		root.defaults().pad(5.0f);
 
-		// Top menu bar
+		// Sound toggle button
 		root.row();
-		final Table topBar = new Table();
-		root.add(topBar).fill();
-
-		// Widgets in top menu bar
-		topBar.row();
-		topBar.add().expandX();
-		topBar.add(new SoundToggleButton(game, atlas));
-
-		// Divider
-		root.row().height(2.0f);
-		root.add(new Image(atlas.findRegion("white1x1"))).fill();
+		root.add(new SoundToggleButton(game, atlas)).expandX().right();
 
 		// Main screen content
 
