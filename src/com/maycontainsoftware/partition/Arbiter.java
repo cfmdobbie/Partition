@@ -21,7 +21,7 @@ public class Arbiter {
 	private final GameState initialGameState;
 
 	private GameState state;
-	
+
 	private final IBoard board;
 
 	private final List<? extends IPlayer> players;
@@ -34,18 +34,18 @@ public class Arbiter {
 
 		// Always start waiting for the first move
 		this.turnState = GameTurnState.PENDING_MOVE;
-		
+
 		// Remember the initial game state - will need to use it to reset the game
 		this.initialGameState = initialGameState;
-		
+
 		// Current state is a duplicate of the initial game state
 		this.state = GameState.duplicate(initialGameState);
-		
+
 		// Store references to the other participants in the logical game process
 		this.board = board;
 		this.players = players;
 		this.tiles = tiles;
-		
+
 		// Retrieve the current player from the game state
 		this.activePlayerNumber = state.currentPlayerIndex;
 	}
@@ -58,10 +58,10 @@ public class Arbiter {
 				// Move is valid
 				// Apply the action to get a new game state
 				state = GameState.apply(state, tile.getCoords());
-				
+
 				// Update the current logical game turn phase
 				turnState = GameTurnState.MOVING;
-				
+
 				// Tell the player that it should move
 				players.get(activePlayerNumber).doMove(tile, this);
 			} else {
@@ -74,13 +74,13 @@ public class Arbiter {
 			if (GameState.isValidMove(state, tile.getCoords())) {
 				// Apply the action to get a new game state
 				state = GameState.apply(state, tile.getCoords());
-				
+
 				// Update the current logical game turn phase
 				turnState = GameTurnState.SHOOTING;
-				
+
 				// Tell the player that it should shoot
 				players.get(activePlayerNumber).doShoot(tile, this);
-				
+
 				// Tell the tile that it has been shot
 				tile.doShoot(this);
 			} else {
@@ -105,7 +105,7 @@ public class Arbiter {
 
 		// Now waiting for a decision on which tile to shoot
 		turnState = GameTurnState.PENDING_SHOOT;
-		
+
 		// Tell the player that it is now pending a shoot
 		players.get(activePlayerNumber).doPendingShoot();
 	}
@@ -117,22 +117,22 @@ public class Arbiter {
 		// Check for a win
 		turnState = GameTurnState.WIN_CHECK;
 
-		if(GameState.isGameOver(state)) {
+		if (GameState.isGameOver(state)) {
 			// Someone has won - tell the board
 			board.doGameOver();
 		} else {
 			// Nobody has one, continue
-			
+
 			// Now switching players
 			turnState = GameTurnState.SWITCHING_PLAYERS;
-			
+
 			// Get the new player number from the game state
 			activePlayerNumber = state.currentPlayerIndex;
-			
+
 			// Now need to check for a stalemate
 			turnState = GameTurnState.STALEMATE_CHECK;
-			
-			if(GameState.isStalemate(state)) {
+
+			if (GameState.isStalemate(state)) {
 				// Game is a stalemate - tell the board
 				board.doStalemate();
 			} else {
@@ -149,13 +149,13 @@ public class Arbiter {
 		state = GameState.duplicate(initialGameState);
 		turnState = GameTurnState.PENDING_MOVE;
 
-		for(final ITile tile : tiles) {
+		for (final ITile tile : tiles) {
 			final byte[] coords = tile.getCoords();
 			final boolean enabled = state.tileEnabled[coords[0]][coords[1]];
 			tile.doReset(enabled);
 		}
 
-		for(int i = 0 ; i < players.size() ; i++) {
+		for (int i = 0; i < players.size(); i++) {
 			byte[] coords = state.playerCoords[i];
 			System.out.println("Player:");
 			System.out.println(coords[0]);
@@ -169,8 +169,8 @@ public class Arbiter {
 	}
 
 	private ITile findTileByCoords(final byte[] coords) {
-		for(ITile tile : tiles) {
-			if(Arrays.equals(tile.getCoords(), coords)) {
+		for (ITile tile : tiles) {
+			if (Arrays.equals(tile.getCoords(), coords)) {
 				return tile;
 			}
 		}
