@@ -22,7 +22,7 @@ import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
  * 
  * @author Charlie
  */
-public class GameBoard extends FixedAspectContainer implements IBoard {
+public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 	/** Reference to the Game instance. */
 	protected final PartitionGame game;
@@ -45,8 +45,11 @@ public class GameBoard extends FixedAspectContainer implements IBoard {
 	 * @param boardConfiguration
 	 *            The chosen board configuration.
 	 */
-	public GameBoard(final PartitionGame game, final TextureAtlas atlas, final PlayerConfiguration playerConfiguration,
-			final BoardConfiguration boardConfiguration, final boolean demoMode) {
+	public GameBoard(final PartitionGame game, final TextureAtlas atlas, final float width, final float height,
+			final PlayerConfiguration playerConfiguration, final BoardConfiguration boardConfiguration,
+			final boolean demoMode) {
+
+		super(width, height);
 
 		// Save reference to the game instance
 		this.game = game;
@@ -92,8 +95,8 @@ public class GameBoard extends FixedAspectContainer implements IBoard {
 			t.addActor(player);
 		}
 
-		setChild(t);
-		setAspect(GameState.getNumberOfColumns(state) / (float) GameState.getNumberOfRows(state));
+		t.setFillParent(true);
+		this.addActor(t);
 
 		arbiter.doReset();
 	}

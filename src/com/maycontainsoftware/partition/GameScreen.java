@@ -73,7 +73,7 @@ public class GameScreen extends CScreen<PartitionGame> {
 		root.add(new Image(atlas.findRegion("white1x1"))).fill();
 
 		// GameBoard manages its own fixed-aspect behaviour, so just add the board to the screen at max available size
-		final GameBoard gameBoard = new GameBoard(game, atlas, playerConfiguration, boardConfiguration, false);
+		final GameBoard gameBoard = new GameBoard(game, atlas, 500, 500, playerConfiguration, boardConfiguration, false);
 		root.row();
 		root.add(gameBoard).expand().fill();
 

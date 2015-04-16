@@ -68,15 +68,12 @@ public class MainMenuScreen extends CScreen<PartitionGame> {
 		});
 
 		// Horizontal row of tiles
-		final GameBoard gameBoard = new GameBoard(game, atlas, null, BoardConfiguration.MAIN_MENU_DEMO, true);
 		// Know board is 5x1 in size, and know that main menu buttons are 180 width
 		final float boardWidth = 180.0f;
 		final float boardHeight = boardWidth / 5;
-		gameBoard.setSize(boardWidth, boardHeight);
-		// Setting the size isn't enough - Actor will be resized to 0x0 unless the Cell size is set
-		// XXX: Does this mean GameBoard should be a Widget, not an Actor?
-		root.row().height(boardHeight);
-		root.add(gameBoard).width(boardWidth);
+		final GameBoard gameBoard = new GameBoard(game, atlas, boardWidth, boardHeight, null, BoardConfiguration.MAIN_MENU_DEMO, true);
+		root.row();
+		root.add(gameBoard);
 
 		// Instructions button
 		root.row();
