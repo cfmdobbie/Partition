@@ -8,10 +8,13 @@ import java.util.Set;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Scaling;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
@@ -198,11 +201,20 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		@Override
 		public void doMove(final ITile targetTile, final Arbiter arbiter) {
-			// TODO: Slide entire player token to new location
+
+			// Slide static player token to new location
+
 			final TileActor tile = (TileActor) targetTile;
-			this.setPosition(tile.getX(), tile.getY());
 			pendingMove = false;
-			arbiter.moveDone();
+
+			this.addAction(Actions.sequence(Actions.moveTo(tile.getX(), tile.getY(), 0.2f, Interpolation.sine),
+					new Action() {
+						@Override
+						public boolean act(float delta) {
+							arbiter.moveDone();
+							return true;
+						}
+					}));
 		}
 
 		@Override
