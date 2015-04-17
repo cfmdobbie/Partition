@@ -28,7 +28,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 	protected final PartitionGame game;
 
 	/** Whether or not the game board is in "demo" mode. */
-	private final boolean demoMode;
+	private final boolean isDemoMode;
 
 	// XXX: Temporary black texture
 	private final TextureRegion blackTexture;
@@ -47,7 +47,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 	 */
 	public GameBoard(final PartitionGame game, final TextureAtlas atlas, final float width, final float height,
 			final PlayerConfiguration playerConfiguration, final BoardConfiguration boardConfiguration,
-			final boolean demoMode) {
+			final boolean isDemoMode) {
 
 		super(width, height);
 
@@ -58,7 +58,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		blackTexture = atlas.findRegion("black");
 
 		// Save board configuration
-		this.demoMode = demoMode;
+		this.isDemoMode = isDemoMode;
 
 		// Create new game state
 		final GameState state = GameState.newGameState(boardConfiguration.boardSpec);
