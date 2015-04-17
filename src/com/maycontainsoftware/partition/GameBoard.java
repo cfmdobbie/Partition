@@ -8,8 +8,10 @@ import java.util.Set;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Scaling;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 
@@ -95,7 +97,15 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 			t.addActor(player);
 		}
 
-		t.setFillParent(true);
+		// Determine the area to be occupied by the board
+		final Vector2 size = Scaling.fit.apply(GameState.getNumberOfColumns(state), GameState.getNumberOfRows(state),
+				width, height);
+		// Determine the position of the board
+		final Vector2 position = new Vector2((width - size.x) / 2, (height - size.y) / 2);
+
+		// Set table size and position
+		t.setSize(size.x, size.y);
+		t.setPosition(position.x, position.y);
 		this.addActor(t);
 
 		arbiter.doReset();
