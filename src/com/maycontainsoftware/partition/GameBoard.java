@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -161,25 +159,19 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 	 * 
 	 * @author Charlie
 	 */
-	static class PlayerActor extends Actor implements IPlayer {
+	static class PlayerActor extends Group implements IPlayer {
 
 		/** Names of the player token textures. */
 		private static final String[] playerTextureNames = { "player_red", "player_blue" };
 
-		/** Reference to the player token texture. */
-		private final TextureRegion playerTexture;
+		/** Actor to represent the shadow. */
+		private final Actor shadow;
 
-		/** Reference to the shadow texture. */
-		private final TextureRegion shadowTexture;
+		/** Actor to represent the player token. */
+		private final Actor player;
 
-		/** Reference to the target texture. */
-		private final TextureRegion targetTexture;
-
-		/** Whether we're currently pending a move event. */
-		private boolean pendingMove = false;
-
-		/** Whether we're currently pending a shoot event. */
-		private boolean pendingShoot = false;
+		/** Actor to represent the target. */
+		private final Actor target;
 
 		/**
 		 * Construct a new PlayerActor.
@@ -191,15 +183,21 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		 */
 		public PlayerActor(final int id, final TextureAtlas atlas) {
 
-			playerTexture = atlas.findRegion(playerTextureNames[id]);
-			shadowTexture = atlas.findRegion("shadow");
-			targetTexture = atlas.findRegion("target");
+			shadow = new Image(atlas.findRegion("shadow"));
+			addActor(shadow);
+			player = new Image(atlas.findRegion(playerTextureNames[id]));
+			addActor(player);
+			target = new Image(atlas.findRegion("target"));
+			addActor(target);
 		}
 
 		@Override
 		public void doPendingMove() {
-			// TODO: Static shadow, bouncing player token
-			pendingMove = true;
+
+			// Player token bounces up and down
+			player.addAction(Actions.forever(Actions.sequence(
+					Actions.moveBy(0.0f, getHeight() / 3, 0.5f, Interpolation.sine),
+					Actions.moveBy(0.0f, -getHeight() / 3, 0.5f, Interpolation.sine))));
 		}
 
 		@Override
@@ -208,7 +206,8 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 			// Slide static player token to new location
 
 			final TileActor tile = (TileActor) targetTile;
-			pendingMove = false;
+			player.clearActions();
+			player.setPosition(0.0f, 0.0f);
 
 			this.addAction(Actions.sequence(Actions.moveTo(tile.getX(), tile.getY(), 0.2f, Interpolation.sine),
 					new Action() {
@@ -222,35 +221,21 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		@Override
 		public void doPendingShoot() {
-			// TODO: Static shadow and player token, bouncing target
-			pendingShoot = true;
+
+			// Bouncing target graphic
+			target.setColor(Color.WHITE);
+			target.addAction(Actions.forever(Actions.sequence(
+					Actions.moveBy(0.0f, getHeight() / 2, 1.0f, Interpolation.sine),
+					Actions.moveBy(0.0f, -getHeight() / 2, 1.0f, Interpolation.sine))));
 		}
 
 		@Override
 		public void doShoot(final ITile targetTile, final Arbiter arbiter) {
-			// TODO: Shooting animation?
-			pendingShoot = false;
-		}
 
-		@Override
-		public void draw(final SpriteBatch batch, final float parentAlpha) {
-
-			batch.setColor(Color.WHITE);
-
-			// Draw shadow
-			batch.draw(shadowTexture, getX(), getY(), getWidth(), getHeight());
-
-			// Draw player
-			if (pendingMove) {
-				batch.draw(playerTexture, getX(), getY() + getHeight() / 4, getWidth(), getHeight());
-			} else {
-				batch.draw(playerTexture, getX(), getY(), getWidth(), getHeight());
-			}
-
-			// Draw target as required
-			if (pendingShoot) {
-				batch.draw(targetTexture, getX(), getY(), getWidth(), getHeight());
-			}
+			// Stop bouncing target
+			target.clearActions();
+			target.setPosition(0.0f, 0.0f);
+			target.setColor(Color.CLEAR);
 		}
 
 		@Override
@@ -261,6 +246,20 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 			// Tile must be validly positioned and sized
 			this.setPosition(tile.getX(), tile.getY());
 			this.setSize(tile.getWidth(), tile.getHeight());
+
+			// Reset shadow
+			shadow.setSize(getWidth(), getHeight());
+
+			// Reset player
+			player.setSize(getWidth(), getHeight());
+			player.clearActions();
+			player.setPosition(0.0f, 0.0f);
+
+			// Reset target
+			target.setSize(getWidth(), getHeight());
+			target.clearActions();
+			target.setColor(Color.CLEAR);
+			target.setPosition(0.0f, 0.0f);
 		}
 	}
 
