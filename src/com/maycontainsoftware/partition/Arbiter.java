@@ -11,7 +11,7 @@ import java.util.Set;
  * 
  * @author Charlie
  */
-public class Arbiter {
+public class Arbiter<T extends ITile, P extends IPlayer<T>> {
 
 	/** The different turn states the game can be in. */
 	private static enum GameTurnState {
@@ -39,10 +39,10 @@ public class Arbiter {
 	private final IBoard board;
 
 	/** The logical player components. */
-	private final List<? extends IPlayer> players;
+	private final List<P> players;
 
 	/** The logical tile components. */
-	private final Set<? extends ITile> tiles;
+	private final Set<T> tiles;
 
 	/** The currently active player. */
 	private int activePlayerNumber;
@@ -59,8 +59,8 @@ public class Arbiter {
 	 * @param tiles
 	 *            The logical tile components.
 	 */
-	public Arbiter(final GameState initialGameState, final IBoard board, final List<? extends IPlayer> players,
-			final Set<? extends ITile> tiles) {
+	public Arbiter(final GameState initialGameState, final IBoard board, final List<P> players,
+			final Set<T> tiles) {
 
 		// Always start waiting for the first move
 		this.turnState = GameTurnState.PENDING_MOVE;
@@ -81,7 +81,7 @@ public class Arbiter {
 	}
 
 	/** Accept a selection event on a tile. */
-	public void input(final ITile tile) {
+	public void input(final T tile) {
 		switch (turnState) {
 		case PENDING_MOVE:
 			// We were waiting for a move
@@ -191,7 +191,7 @@ public class Arbiter {
 		// Start on the initial game turn state - pending the first move
 		turnState = GameTurnState.PENDING_MOVE;
 
-		for (final ITile tile : tiles) {
+		for (final T tile : tiles) {
 			// Determine the tile coordinates
 			final byte[] coords = tile.getCoords();
 			// Determine whether the tile should be enabled or disabled
@@ -204,7 +204,7 @@ public class Arbiter {
 			// Determine the player coordinates
 			final byte[] coords = state.playerCoords[i];
 			// Locate the logical tile that the player is on
-			final ITile tile = findTileByCoords(coords);
+			final T tile = findTileByCoords(coords);
 			// Reset the player
 			players.get(i).doReset(tile);
 		}
@@ -217,8 +217,8 @@ public class Arbiter {
 	 *            The given coordinates.
 	 * @return The logical tile component with the given coordinates, or null if no such tile exists.
 	 */
-	private ITile findTileByCoords(final byte[] coords) {
-		for (final ITile tile : tiles) {
+	private T findTileByCoords(final byte[] coords) {
+		for (final T tile : tiles) {
 			if (Arrays.equals(tile.getCoords(), coords)) {
 				return tile;
 			}

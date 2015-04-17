@@ -22,7 +22,7 @@ public interface ITile {
 	 *            notify the Arbiter.
 	 */
 	// anim tile disappear
-	public void doShoot(Arbiter arbiter);
+	public void doShoot(Arbiter<? extends ITile, ? extends IPlayer<? extends ITile>> arbiter);
 
 	/**
 	 * Notification that the tile has been reset.

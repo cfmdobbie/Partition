@@ -1,6 +1,6 @@
 package com.maycontainsoftware.partition;
 
-public interface IPlayer {
+public interface IPlayer<T extends ITile> {
 
 	/** Notification that this player is now pending shoot. */
 	// start periodic anim bounce
@@ -15,7 +15,7 @@ public interface IPlayer {
 	 *            The Arbiter to notify once all actions are complete using the moveDone() callback.
 	 */
 	// stop anim bounce, anim move to new location
-	public void doMove(ITile targetTile, Arbiter arbiter);
+	public void doMove(T targetTile, Arbiter<T, IPlayer<T>> arbiter);
 
 	/** Notification that this player is now pending a shoot action. */
 	// start target periodic anim bounce, show target
@@ -32,7 +32,7 @@ public interface IPlayer {
 	 *            should notify the Arbiter.
 	 */
 	// stop target bounce, hide target
-	public void doShoot(ITile targetTile, Arbiter arbiter);
+	public void doShoot(T targetTile, Arbiter<T, IPlayer<T>> arbiter);
 
 	/**
 	 * Reset player, position on starting tile.
@@ -40,5 +40,5 @@ public interface IPlayer {
 	 * @param startingTile
 	 *            The starting tile.
 	 */
-	public void doReset(ITile startingTile);
+	public void doReset(T startingTile);
 }

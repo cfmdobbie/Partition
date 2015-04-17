@@ -21,7 +21,7 @@ public class ArbiterGameTest {
 		TestBoard board = new TestBoard();
 
 		// Players
-		List<IPlayer> players = new ArrayList<IPlayer>();
+		List<TestPlayer> players = new ArrayList<TestPlayer>();
 		for (int i = 0; i < GameState.getNumberOfPlayers(state); i++) {
 			players.add(new TestPlayer(i));
 		}
@@ -29,8 +29,8 @@ public class ArbiterGameTest {
 		// Tiles
 		final int columns = GameState.getNumberOfColumns(state);
 		final int rows = GameState.getNumberOfRows(state);
-		ITile[][] tileArray = new ITile[columns][rows];
-		Set<ITile> tiles = new HashSet<ITile>();
+		TestTile[][] tileArray = new TestTile[columns][rows];
+		Set<TestTile> tiles = new HashSet<TestTile>();
 		for (int c = 0; c < columns; c++) {
 			for (int r = 0; r < rows; r++) {
 				TestTile tile = new TestTile(c, r);
@@ -39,7 +39,7 @@ public class ArbiterGameTest {
 			}
 		}
 
-		Arbiter arbiter = new Arbiter(state, board, players, tiles);
+		Arbiter<TestTile, TestPlayer> arbiter = new Arbiter<TestTile, TestPlayer>(state, board, players, tiles);
 		arbiter.doReset();
 
 		// Move
@@ -69,7 +69,7 @@ public class ArbiterGameTest {
 		}
 	}
 
-	static class TestPlayer implements IPlayer {
+	static class TestPlayer implements IPlayer<TestTile> {
 
 		final int playerNumber;
 
@@ -83,7 +83,7 @@ public class ArbiterGameTest {
 		}
 
 		@Override
-		public void doMove(ITile targetTile, Arbiter arbiter) {
+		public void doMove(TestTile targetTile, Arbiter<TestTile, TestPlayer> arbiter) {
 			System.out.println("Player " + playerNumber + " moving");
 			arbiter.moveDone();
 		}
@@ -94,12 +94,12 @@ public class ArbiterGameTest {
 		}
 
 		@Override
-		public void doShoot(ITile targetTile, Arbiter arbiter) {
+		public void doShoot(TestTile targetTile, Arbiter<TestTile, TestPlayer> arbiter) {
 			System.out.println("Player " + playerNumber + " shooting");
 		}
 
 		@Override
-		public void doReset(ITile startingTile) {
+		public void doReset(TestTile startingTile) {
 			System.out.println("Player " + playerNumber + " reset");
 		}
 	}
@@ -124,7 +124,7 @@ public class ArbiterGameTest {
 		}
 
 		@Override
-		public void doShoot(Arbiter arbiter) {
+		public void doShoot(Arbiter<TestTile, TestPlayer> arbiter) {
 			System.out.println("Tile [" + c + "," + r + "] has been shot");
 			arbiter.shootDone();
 		}

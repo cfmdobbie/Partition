@@ -61,7 +61,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		final GameState state = GameState.newGameState(boardConfiguration.boardSpec);
 
 		// Players
-		final List<PlayerActor> players = new ArrayList<PlayerActor>(GameState.getNumberOfPlayers(state));
+		final List<IPlayer<TileActor>> players = new ArrayList<IPlayer<TileActor>>(GameState.getNumberOfPlayers(state));
 		for (int i = 0; i < GameState.getNumberOfPlayers(state); i++) {
 			players.add(new PlayerActor(i, atlas));
 		}
@@ -77,7 +77,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 			}
 		}
 
-		final Arbiter arbiter = new Arbiter(state, this, players, tileSet);
+		final Arbiter<TileActor> arbiter = new Arbiter<TileActor>(state, this, players, tileSet);
 
 		// Tell all tiles how to access the arbiter
 		for (final TileActor tile : tileSet) {
@@ -130,7 +130,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		// TODO
 	}
 
-	static class PlayerActor extends Actor implements IPlayer {
+	static class PlayerActor extends Actor implements IPlayer<TileActor> {
 
 		private static final String[] playerTextureNames = { "player_red", "player_blue" };
 
@@ -154,7 +154,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		}
 
 		@Override
-		public void doMove(final ITile targetTile, final Arbiter arbiter) {
+		public void doMove(final TileActor targetTile, final Arbiter<TileActor> arbiter) {
 		}
 
 		@Override
@@ -162,7 +162,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		}
 
 		@Override
-		public void doShoot(final ITile targetTile, final Arbiter arbiter) {
+		public void doShoot(final TileActor targetTile, final Arbiter<TileActor> arbiter) {
 		}
 
 		@Override
@@ -173,7 +173,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		}
 
 		@Override
-		public void doReset(final ITile startingTile) {
+		public void doReset(final TileActor startingTile) {
 
 			tile = (TileActor) startingTile;
 
@@ -192,7 +192,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		private boolean enabled;
 
-		private Arbiter arbiter;
+		private Arbiter<TileActor> arbiter;
 
 		public TileActor(final TextureAtlas atlas, final byte column, final byte row) {
 
@@ -211,7 +211,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 			});
 		}
 
-		public void setArbiter(Arbiter arbiter) {
+		public void setArbiter(Arbiter<TileActor> arbiter) {
 			this.arbiter = arbiter;
 		}
 
@@ -222,10 +222,13 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		@Override
 		public void doError() {
+			// TODO: Flash error symbol over tile
 		}
 
 		@Override
-		public void doShoot(final Arbiter arbiter) {
+		public void doShoot(final Arbiter<? extends ITile> arbiter) {
+			// TODO: Animate tile disappearance
+			enabled = false;
 		}
 
 		@Override
