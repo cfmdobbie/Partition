@@ -31,9 +31,6 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 	/** Whether or not the game board is in "demo" mode. */
 	private final boolean isDemoMode;
 
-	// XXX: Temporary black texture
-	private final TextureRegion blackTexture;
-
 	/**
 	 * Construct a new GameBoard.
 	 * 
@@ -54,9 +51,6 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		// Save reference to the game instance
 		this.game = game;
-
-		// XXX: Temporary black texture
-		blackTexture = atlas.findRegion("black");
 
 		// Save board configuration
 		this.isDemoMode = isDemoMode;
@@ -117,15 +111,6 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		}
 
 		arbiter.doReset();
-	}
-
-	@Override
-	public void draw(SpriteBatch batch, float parentAlpha) {
-
-		// XXX: Temporary black texture
-		batch.draw(blackTexture, getX(), getY(), getWidth(), getHeight());
-
-		super.draw(batch, parentAlpha);
 	}
 
 	@Override
