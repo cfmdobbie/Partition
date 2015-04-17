@@ -142,8 +142,6 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		private TileActor tile;
 
-		private boolean pendingFirstDraw = true;
-
 		public PlayerActor(final int id, final TextureAtlas atlas) {
 
 			playerTexture = atlas.findRegion(playerTextureNames[id]);
@@ -179,10 +177,8 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 			tile = (TileActor) startingTile;
 
-			if (!pendingFirstDraw) {
-				// Tile must be validly positioned
-				this.setPosition(tile.getX(), tile.getY());
-			}
+			// Tile must be validly positioned
+			this.setPosition(tile.getX(), tile.getY());
 		}
 	}
 
