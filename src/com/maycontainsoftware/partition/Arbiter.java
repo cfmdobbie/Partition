@@ -4,8 +4,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * The Arbiter is the class that manages the logical flow of the game. It is responsible for remembering what turn state
+ * the game is in, holding the current logical state, accepting input and feedback from the interactive part of the
+ * application, and informing logical game elements of events that have occurred that they may be interested in.
+ * 
+ * @author Charlie
+ */
 public class Arbiter {
 
+	/** The different turn states the game can be in. */
 	private static enum GameTurnState {
 		PENDING_MOVE,
 		MOVING,
@@ -14,23 +22,45 @@ public class Arbiter {
 		WIN_CHECK,
 		SWITCHING_PLAYERS,
 		STALEMATE_CHECK,
+		WON,
+		STALEMATE,
 	}
 
+	/** The current game turn state. */
 	private GameTurnState turnState;
 
+	/** The initial logical game state. */
 	private final GameState initialGameState;
 
+	/** The current logical game state. */
 	private GameState state;
 
+	/** A reference to the logical board component. */
 	private final IBoard board;
 
+	/** The logical player components. */
 	private final List<? extends IPlayer> players;
 
+	/** The logical tile components. */
 	private final Set<? extends ITile> tiles;
 
+	/** The currently active player. */
 	private int activePlayerNumber;
 
-	public Arbiter(GameState initialGameState, IBoard board, List<? extends IPlayer> players, Set<? extends ITile> tiles) {
+	/**
+	 * Create a new Arbiter.
+	 * 
+	 * @param initialGameState
+	 *            The initial game state; the state to which we must return if the game is reset.
+	 * @param board
+	 *            The logical board component.
+	 * @param players
+	 *            The logical player components.
+	 * @param tiles
+	 *            The logical tile components.
+	 */
+	public Arbiter(final GameState initialGameState, final IBoard board, final List<? extends IPlayer> players,
+			final Set<? extends ITile> tiles) {
 
 		// Always start waiting for the first move
 		this.turnState = GameTurnState.PENDING_MOVE;
@@ -50,7 +80,8 @@ public class Arbiter {
 		this.activePlayerNumber = state.currentPlayerIndex;
 	}
 
-	public void input(ITile tile) {
+	/** Accept a selection event on a tile. */
+	public void input(final ITile tile) {
 		switch (turnState) {
 		case PENDING_MOVE:
 			// We were waiting for a move
@@ -93,14 +124,17 @@ public class Arbiter {
 		case STALEMATE_CHECK:
 		case SWITCHING_PLAYERS:
 		case WIN_CHECK:
+		case WON:
+		case STALEMATE:
 		default:
-			// Not a valid phase for accepting user input - ignore
+			// Not a valid phase for accepting user input on a tile - ignore
 			break;
 		}
 	}
 
+	/** Receive notification that a move event has been completed by the application components. */
 	public void moveDone() {
-		// Check that were were moving
+		// Check that we were moving
 		assert (turnState == GameTurnState.MOVING);
 
 		// Now waiting for a decision on which tile to shoot
@@ -110,6 +144,7 @@ public class Arbiter {
 		players.get(activePlayerNumber).doPendingShoot();
 	}
 
+	/** Receive notification that a shoot event has been completed by the application components. */
 	public void shootDone() {
 		// Check that were were shooting
 		assert (turnState == GameTurnState.SHOOTING);
@@ -120,8 +155,10 @@ public class Arbiter {
 		if (GameState.isGameOver(state)) {
 			// Someone has won - tell the board
 			board.doGameOver();
+			// And update the turn state
+			turnState = GameTurnState.WON;
 		} else {
-			// Nobody has one, continue
+			// Nobody has won, continue
 
 			// Now switching players
 			turnState = GameTurnState.SWITCHING_PLAYERS;
@@ -135,8 +172,10 @@ public class Arbiter {
 			if (GameState.isStalemate(state)) {
 				// Game is a stalemate - tell the board
 				board.doStalemate();
+				// And update the turn state
+				turnState = GameTurnState.STALEMATE;
 			} else {
-				// Continue to pending a decision on which tile to move to
+				// Continue to state of pending a decision on which tile to move to
 				turnState = GameTurnState.PENDING_MOVE;
 				// Tell the player it is now pending a move
 				players.get(activePlayerNumber).doPendingMove();
@@ -144,32 +183,42 @@ public class Arbiter {
 		}
 	}
 
+	/** Reset the game to the original state. */
 	public void doReset() {
 
+		// Reset to the initial game state
 		state = GameState.duplicate(initialGameState);
+		// Start on the initial game turn state - pending the first move
 		turnState = GameTurnState.PENDING_MOVE;
 
 		for (final ITile tile : tiles) {
+			// Determine the tile coordinates
 			final byte[] coords = tile.getCoords();
+			// Determine whether the tile should be enabled or disabled
 			final boolean enabled = state.tileEnabled[coords[0]][coords[1]];
+			// Reset the tile
 			tile.doReset(enabled);
 		}
 
 		for (int i = 0; i < players.size(); i++) {
-			byte[] coords = state.playerCoords[i];
-			System.out.println("Player:");
-			System.out.println(coords[0]);
-			System.out.println(coords[1]);
-			ITile tile = findTileByCoords(coords);
-			System.out.println("Tile:");
-			System.out.println(tile.getCoords()[0]);
-			System.out.println(tile.getCoords()[1]);
+			// Determine the player coordinates
+			final byte[] coords = state.playerCoords[i];
+			// Locate the logical tile that the player is on
+			final ITile tile = findTileByCoords(coords);
+			// Reset the player
 			players.get(i).doReset(tile);
 		}
 	}
 
+	/**
+	 * Find the logical tile component that relates to the given coordinates.
+	 * 
+	 * @param coords
+	 *            The given coordinates.
+	 * @return The logical tile component with the given coordinates, or null if no such tile exists.
+	 */
 	private ITile findTileByCoords(final byte[] coords) {
-		for (ITile tile : tiles) {
+		for (final ITile tile : tiles) {
 			if (Arrays.equals(tile.getCoords(), coords)) {
 				return tile;
 			}
