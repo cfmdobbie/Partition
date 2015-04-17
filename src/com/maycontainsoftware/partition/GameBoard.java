@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
@@ -76,6 +78,11 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		}
 
 		final Arbiter arbiter = new Arbiter(state, this, players, tileSet);
+
+		// Tell all tiles how to access the arbiter
+		for (final TileActor tile : tileSet) {
+			tile.setArbiter(arbiter);
+		}
 
 		// Create user interface
 
@@ -185,6 +192,8 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		private boolean enabled;
 
+		private Arbiter arbiter;
+
 		public TileActor(final TextureAtlas atlas, final byte column, final byte row) {
 
 			tileTexture = atlas.findRegion("tile");
@@ -192,6 +201,18 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 			this.column = column;
 
 			this.row = row;
+
+			this.addListener(new InputListener() {
+				@Override
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					arbiter.input(TileActor.this);
+					return true;
+				}
+			});
+		}
+
+		public void setArbiter(Arbiter arbiter) {
+			this.arbiter = arbiter;
 		}
 
 		@Override
