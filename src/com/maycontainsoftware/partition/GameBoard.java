@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Scaling;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
@@ -72,7 +71,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		}
 
 		// Tiles
-		final Set<ITile> tileSet = new HashSet<ITile>();
+		final Set<TileActor> tileSet = new HashSet<TileActor>();
 		final TileActor[][] tiles = new TileActor[GameState.getNumberOfColumns(state)][GameState.getNumberOfRows(state)];
 		for (byte c = 0; c < GameState.getNumberOfColumns(state); c++) {
 			for (byte r = 0; r < GameState.getNumberOfRows(state); r++) {
@@ -85,28 +84,37 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		final Arbiter arbiter = new Arbiter(state, this, players, tileSet);
 
 		// Create user interface
-		final Table t = new Table();
-		for (int r = 0; r < GameState.getNumberOfRows(state); r++) {
-			t.row();
-			for (int c = 0; c < GameState.getNumberOfColumns(state); c++) {
-				t.add(tiles[c][r]).expand().fill();
-			}
-		}
-
-		for (PlayerActor player : players) {
-			t.addActor(player);
-		}
 
 		// Determine the area to be occupied by the board
-		final Vector2 size = Scaling.fit.apply(GameState.getNumberOfColumns(state), GameState.getNumberOfRows(state),
-				width, height);
-		// Determine the position of the board
-		final Vector2 position = new Vector2((width - size.x) / 2, (height - size.y) / 2);
+		final Vector2 boardSize = Scaling.fit.apply(GameState.getNumberOfColumns(state),
+				GameState.getNumberOfRows(state), width, height);
 
-		// Set table size and position
-		t.setSize(size.x, size.y);
-		t.setPosition(position.x, position.y);
-		this.addActor(t);
+		// Determine the position of the board
+		final Vector2 boardPosition = new Vector2((width - boardSize.x) / 2, (height - boardSize.y) / 2);
+
+		// Determine the size of an individual tile (note: tiles are square!)
+		final float tileSize = boardSize.x / GameState.getNumberOfColumns(state);
+
+		for (final TileActor tile : tileSet) {
+			// Determin tile coordinates
+			final byte[] coords = tile.getCoords();
+			final byte x = coords[0];
+			final byte y = coords[1];
+
+			// Add tile to the board
+			this.addActor(tile);
+
+			// Set tile size
+			tile.setSize(tileSize, tileSize);
+
+			// Set tile position
+			tile.setPosition(boardPosition.x + tileSize * x, boardPosition.y + boardSize.y - tileSize * (y + 1));
+		}
+
+		// Add players to the board
+		for (PlayerActor player : players) {
+			this.addActor(player);
+		}
 
 		arbiter.doReset();
 	}
