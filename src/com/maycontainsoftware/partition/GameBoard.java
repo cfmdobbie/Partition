@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -12,9 +13,11 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Scaling;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
@@ -232,6 +235,8 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		@Override
 		public void draw(final SpriteBatch batch, final float parentAlpha) {
 
+			batch.setColor(Color.WHITE);
+
 			// Draw shadow
 			batch.draw(shadowTexture, getX(), getY(), getWidth(), getHeight());
 
@@ -264,10 +269,13 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 	 * 
 	 * @author Charlie
 	 */
-	static class TileActor extends Actor implements ITile {
+	static class TileActor extends Group implements ITile {
 
 		/** Reference to tile texture. */
 		private final TextureRegion tileTexture;
+
+		/** Actor to represent the graphical error notification. */
+		private final Actor error;
 
 		/** Column number. */
 		private final byte column;
@@ -292,8 +300,21 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 			tileTexture = atlas.findRegion("tile");
 
+			// Graphical error notification
+			error = new Image(atlas.findRegion("tile_error"));
+			this.addActor(error);
+
 			this.column = column;
 			this.row = row;
+		}
+
+		@Override
+		protected void sizeChanged() {
+
+			// Set sizes of child actors
+			error.setSize(getWidth(), getHeight());
+
+			super.sizeChanged();
 		}
 
 		@Override
@@ -303,7 +324,8 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		@Override
 		public void doError() {
-			// TODO: briefly flash up error notification
+			// Flash up error notification
+			error.addAction(Actions.sequence(Actions.color(Color.WHITE), Actions.color(Color.CLEAR, 0.5f)));
 		}
 
 		@Override
@@ -318,13 +340,18 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 			// Draw the tile
 			if (enabled) {
+				batch.setColor(Color.WHITE);
 				batch.draw(tileTexture, getX(), getY(), getWidth(), getHeight());
 			}
+
+			super.draw(batch, parentAlpha);
 		}
 
 		@Override
 		public void doReset(final boolean enabled) {
 			this.enabled = enabled;
+
+			error.setColor(Color.CLEAR);
 		}
 	}
 }
