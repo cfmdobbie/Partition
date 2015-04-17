@@ -208,6 +208,9 @@ public class Arbiter {
 			// Reset the player
 			players.get(i).doReset(tile);
 		}
+
+		// Notify first player that it is their turn
+		players.get(0).doPendingMove();
 	}
 
 	/**

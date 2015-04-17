@@ -128,12 +128,12 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 	@Override
 	public void doGameOver() {
-		// TODO
+		// TODO: Game-over message, reset button
 	}
 
 	@Override
 	public void doStalemate() {
-		// TODO
+		// TODO: Stalemate message, reset button
 	}
 
 	static class PlayerActor extends Actor implements IPlayer {
@@ -148,6 +148,10 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		private TileActor tile;
 
+		private boolean pendingMove = false;
+
+		private boolean pendingShoot = false;
+
 		public PlayerActor(final int id, final TextureAtlas atlas) {
 
 			playerTexture = atlas.findRegion(playerTextureNames[id]);
@@ -157,25 +161,43 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		@Override
 		public void doPendingMove() {
+			// TODO: Static shadow, bouncing player token
+			pendingMove = true;
 		}
 
 		@Override
 		public void doMove(final ITile targetTile, final Arbiter arbiter) {
+			// TODO: Slide entire player token to new location
+			final TileActor tile = (TileActor) targetTile;
+			this.setPosition(tile.getX(), tile.getY());
+			pendingMove = false;
+			arbiter.moveDone();
 		}
 
 		@Override
 		public void doPendingShoot() {
+			// TODO: Static shadow and player token, bouncing target
+			pendingShoot = true;
 		}
 
 		@Override
 		public void doShoot(final ITile targetTile, final Arbiter arbiter) {
+			// TODO: Shooting animation?
+			pendingShoot = false;
 		}
 
 		@Override
 		public void draw(final SpriteBatch batch, final float parentAlpha) {
 
 			batch.draw(shadowTexture, getX(), getY(), getWidth(), getHeight());
-			batch.draw(playerTexture, getX(), getY(), getWidth(), getHeight());
+			if (pendingMove) {
+				batch.draw(playerTexture, getX(), getY() + getHeight() / 4, getWidth(), getHeight());
+			} else {
+				batch.draw(playerTexture, getX(), getY(), getWidth(), getHeight());
+			}
+			if (pendingShoot) {
+				batch.draw(targetTexture, getX(), getY(), getWidth(), getHeight());
+			}
 		}
 
 		@Override
@@ -185,6 +207,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 			// Tile must be validly positioned
 			this.setPosition(tile.getX(), tile.getY());
+			this.setSize(tile.getWidth(), tile.getHeight());
 		}
 	}
 
@@ -214,10 +237,14 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		@Override
 		public void doError() {
+			// TODO: briefly flash up error notification
 		}
 
 		@Override
 		public void doShoot(final Arbiter arbiter) {
+			// TODO: fade tile out
+			enabled = false;
+			arbiter.shootDone();
 		}
 
 		@Override
