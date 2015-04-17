@@ -271,8 +271,8 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 	 */
 	static class TileActor extends Group implements ITile {
 
-		/** Reference to tile texture. */
-		private final TextureRegion tileTexture;
+		/** Actor to represent the actual tile. */
+		private final Actor tile;
 
 		/** Actor to represent the graphical error notification. */
 		private final Actor error;
@@ -282,9 +282,6 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		/** Row number. */
 		private final byte row;
-
-		/** Whether or not this tile is enabled - i.e. visible and available for moving/shooting. */
-		private boolean enabled;
 
 		/**
 		 * Construct a new TileActor.
@@ -298,7 +295,9 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		 */
 		public TileActor(final TextureAtlas atlas, final byte column, final byte row) {
 
-			tileTexture = atlas.findRegion("tile");
+			// The actual tile
+			tile = new Image(atlas.findRegion("tile"));
+			this.addActor(tile);
 
 			// Graphical error notification
 			error = new Image(atlas.findRegion("tile_error"));
@@ -312,6 +311,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		protected void sizeChanged() {
 
 			// Set sizes of child actors
+			tile.setSize(getWidth(), getHeight());
 			error.setSize(getWidth(), getHeight());
 
 			super.sizeChanged();
@@ -330,27 +330,20 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		@Override
 		public void doShoot(final Arbiter arbiter) {
-			// TODO: fade tile out
-			enabled = false;
-			arbiter.shootDone();
-		}
-
-		@Override
-		public void draw(final SpriteBatch batch, final float parentAlpha) {
-
-			// Draw the tile
-			if (enabled) {
-				batch.setColor(Color.WHITE);
-				batch.draw(tileTexture, getX(), getY(), getWidth(), getHeight());
-			}
-
-			super.draw(batch, parentAlpha);
+			// Fade tile out
+			tile.addAction(Actions.sequence(Actions.color(Color.WHITE), Actions.color(Color.CLEAR, 0.15f),
+					new Action() {
+						@Override
+						public boolean act(float delta) {
+							arbiter.shootDone();
+							return true;
+						}
+					}));
 		}
 
 		@Override
 		public void doReset(final boolean enabled) {
-			this.enabled = enabled;
-
+			tile.setColor(enabled ? Color.WHITE : Color.CLEAR);
 			error.setColor(Color.CLEAR);
 		}
 	}
