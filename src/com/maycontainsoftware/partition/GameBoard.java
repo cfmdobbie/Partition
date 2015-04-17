@@ -90,7 +90,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		final float tileSize = boardSize.x / GameState.getNumberOfColumns(state);
 
 		for (final TileActor tile : tileSet) {
-			// Determin tile coordinates
+			// Determine tile coordinates
 			final byte[] coords = tile.getCoords();
 			final byte x = coords[0];
 			final byte y = coords[1];
