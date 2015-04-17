@@ -79,9 +79,15 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		final Arbiter arbiter = new Arbiter(state, this, players, tileSet);
 
-		// Tell all tiles how to access the arbiter
+		// Direct tile input events to the arbiter's input method
 		for (final TileActor tile : tileSet) {
-			tile.setArbiter(arbiter);
+			tile.addListener(new InputListener() {
+				@Override
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					arbiter.input(tile);
+					return true;
+				}
+			});
 		}
 
 		// Create user interface
@@ -192,8 +198,6 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		private boolean enabled;
 
-		private Arbiter arbiter;
-
 		public TileActor(final TextureAtlas atlas, final byte column, final byte row) {
 
 			tileTexture = atlas.findRegion("tile");
@@ -201,18 +205,6 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 			this.column = column;
 
 			this.row = row;
-
-			this.addListener(new InputListener() {
-				@Override
-				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-					arbiter.input(TileActor.this);
-					return true;
-				}
-			});
-		}
-
-		public void setArbiter(Arbiter arbiter) {
-			this.arbiter = arbiter;
 		}
 
 		@Override
