@@ -17,11 +17,7 @@ import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 
 /**
- * GameBoard draws the Partition board at unit scale, but uses OpenGL modelview matrix transformations to transform this
- * unit-scale render into a render at the correct size and location. This avoids issues with resizing - the board is
- * always drawn at unit scale, so no board elements need to be updated upon resize.
- * 
- * Note that this class is not static at this time!
+ * A representation of a game board.
  * 
  * @author Charlie
  */
@@ -33,6 +29,9 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 	/** Whether or not the game board is in "demo" mode. */
 	private final boolean isDemoMode;
 
+	/** The Arbiter that controls the game board. */
+	private final Arbiter arbiter;
+
 	/**
 	 * Construct a new GameBoard.
 	 * 
@@ -40,10 +39,17 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 	 *            The PartitionGame instance.
 	 * @param atlas
 	 *            The TextureAtlas containing all graphics required to draw the board.
+	 * @param width
+	 *            The (fixed) board width.
+	 * @param height
+	 *            The (fixed) board height.
 	 * @param playerConfiguration
 	 *            The chosen player configuration.
 	 * @param boardConfiguration
 	 *            The chosen board configuration.
+	 * @param isDemoMode
+	 *            Whether or not the game is running in demo mode, a mode which is intended for use on the main menu and
+	 *            on the instructions screen.
 	 */
 	public GameBoard(final PartitionGame game, final TextureAtlas atlas, final float width, final float height,
 			final PlayerConfiguration playerConfiguration, final BoardConfiguration boardConfiguration,
@@ -67,20 +73,19 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		}
 
 		// Tiles
-		final Set<TileActor> tileSet = new HashSet<TileActor>();
-		final TileActor[][] tiles = new TileActor[GameState.getNumberOfColumns(state)][GameState.getNumberOfRows(state)];
+		final Set<TileActor> tiles = new HashSet<TileActor>();
 		for (byte c = 0; c < GameState.getNumberOfColumns(state); c++) {
 			for (byte r = 0; r < GameState.getNumberOfRows(state); r++) {
 				TileActor tile = new TileActor(atlas, c, r);
-				tiles[c][r] = tile;
-				tileSet.add(tile);
+				tiles.add(tile);
 			}
 		}
 
-		final Arbiter arbiter = new Arbiter(state, this, players, tileSet);
+		// Create the Arbiter
+		arbiter = new Arbiter(state, this, players, tiles);
 
 		// Direct tile input events to the arbiter's input method
-		for (final TileActor tile : tileSet) {
+		for (final TileActor tile : tiles) {
 			tile.addListener(new InputListener() {
 				@Override
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -102,7 +107,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		// Determine the size of an individual tile (note: tiles are square!)
 		final float tileSize = boardSize.x / GameState.getNumberOfColumns(state);
 
-		for (final TileActor tile : tileSet) {
+		for (final TileActor tile : tiles) {
 			// Determine tile coordinates
 			final byte[] coords = tile.getCoords();
 			final byte x = coords[0];
@@ -123,35 +128,61 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 			this.addActor(player);
 		}
 
+		// Reset the arbiter to set the game to its initial state
 		arbiter.doReset();
 	}
 
 	@Override
 	public void doGameOver() {
-		// TODO: Game-over message, reset button
+		if (isDemoMode) {
+			arbiter.doReset();
+		} else {
+			// TODO: Game-over message, reset button
+		}
 	}
 
 	@Override
 	public void doStalemate() {
-		// TODO: Stalemate message, reset button
+		if (isDemoMode) {
+			arbiter.doReset();
+		} else {
+			// TODO: Stalemate message, reset button
+		}
 	}
 
+	/**
+	 * Actor to represent a player component in the arbiter structure.
+	 * 
+	 * @author Charlie
+	 */
 	static class PlayerActor extends Actor implements IPlayer {
 
+		/** Names of the player token textures. */
 		private static final String[] playerTextureNames = { "player_red", "player_blue" };
 
+		/** Reference to the player token texture. */
 		private final TextureRegion playerTexture;
 
+		/** Reference to the shadow texture. */
 		private final TextureRegion shadowTexture;
 
+		/** Reference to the target texture. */
 		private final TextureRegion targetTexture;
 
-		private TileActor tile;
-
+		/** Whether we're currently pending a move event. */
 		private boolean pendingMove = false;
 
+		/** Whether we're currently pending a shoot event. */
 		private boolean pendingShoot = false;
 
+		/**
+		 * Construct a new PlayerActor.
+		 * 
+		 * @param id
+		 *            The player id.
+		 * @param atlas
+		 *            The main app TextureAtlas.
+		 */
 		public PlayerActor(final int id, final TextureAtlas atlas) {
 
 			playerTexture = atlas.findRegion(playerTextureNames[id]);
@@ -189,12 +220,17 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		@Override
 		public void draw(final SpriteBatch batch, final float parentAlpha) {
 
+			// Draw shadow
 			batch.draw(shadowTexture, getX(), getY(), getWidth(), getHeight());
+
+			// Draw player
 			if (pendingMove) {
 				batch.draw(playerTexture, getX(), getY() + getHeight() / 4, getWidth(), getHeight());
 			} else {
 				batch.draw(playerTexture, getX(), getY(), getWidth(), getHeight());
 			}
+
+			// Draw target as required
 			if (pendingShoot) {
 				batch.draw(targetTexture, getX(), getY(), getWidth(), getHeight());
 			}
@@ -203,30 +239,48 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		@Override
 		public void doReset(final ITile startingTile) {
 
-			tile = (TileActor) startingTile;
+			final TileActor tile = (TileActor) startingTile;
 
-			// Tile must be validly positioned
+			// Tile must be validly positioned and sized
 			this.setPosition(tile.getX(), tile.getY());
 			this.setSize(tile.getWidth(), tile.getHeight());
 		}
 	}
 
+	/**
+	 * Actor to represent a tile component in the arbiter structure.
+	 * 
+	 * @author Charlie
+	 */
 	static class TileActor extends Actor implements ITile {
 
+		/** Reference to tile texture. */
 		private final TextureRegion tileTexture;
 
+		/** Column number. */
 		private final byte column;
 
+		/** Row number. */
 		private final byte row;
 
+		/** Whether or not this tile is enabled - i.e. visible and available for moving/shooting. */
 		private boolean enabled;
 
+		/**
+		 * Construct a new TileActor.
+		 * 
+		 * @param atlas
+		 *            The main app TextureAtlas.
+		 * @param column
+		 *            This tile's column.
+		 * @param row
+		 *            This tile's row.
+		 */
 		public TileActor(final TextureAtlas atlas, final byte column, final byte row) {
 
 			tileTexture = atlas.findRegion("tile");
 
 			this.column = column;
-
 			this.row = row;
 		}
 
@@ -249,6 +303,8 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		@Override
 		public void draw(final SpriteBatch batch, final float parentAlpha) {
+
+			// Draw the tile
 			if (enabled) {
 				batch.draw(tileTexture, getX(), getY(), getWidth(), getHeight());
 			}
