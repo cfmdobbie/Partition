@@ -224,9 +224,10 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 			// Bouncing target graphic
 			target.setColor(Color.WHITE);
+			target.setPosition(getWidth() / 6, 0.0f);
 			target.addAction(Actions.forever(Actions.sequence(
-					Actions.moveBy(0.0f, getHeight() / 2, 1.0f, Interpolation.sine),
-					Actions.moveBy(0.0f, -getHeight() / 2, 1.0f, Interpolation.sine))));
+					Actions.moveBy(0.0f, getHeight() / 2, 0.5f, Interpolation.sine),
+					Actions.moveBy(0.0f, -getHeight() / 2, 0.5f, Interpolation.sine))));
 		}
 
 		@Override
