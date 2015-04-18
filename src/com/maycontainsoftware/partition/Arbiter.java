@@ -13,6 +13,9 @@ import java.util.Set;
  */
 public class Arbiter {
 
+	/** Logging flag to control direct sysout logging. */
+	private static final boolean DEBUG_LOG = false;
+
 	/** The different turn states the game can be in. */
 	private static enum GameTurnState {
 		PENDING_MOVE,
@@ -68,8 +71,19 @@ public class Arbiter {
 		// Remember the initial game state - will need to use it to reset the game
 		this.initialGameState = initialGameState;
 
+		if (DEBUG_LOG) {
+			System.out.println("<init>, initialGameState:");
+			System.out.println("Player 0 coords: [" + initialGameState.playerCoords[0][0] + ","
+					+ initialGameState.playerCoords[0][1] + "]");
+		}
+
 		// Current state is a duplicate of the initial game state
 		this.state = GameState.duplicate(initialGameState);
+
+		if (DEBUG_LOG) {
+			System.out.println("<init>, first duplicated state:");
+			System.out.println("Player 0 coords: [" + state.playerCoords[0][0] + "," + state.playerCoords[0][1] + "]");
+		}
 
 		// Store references to the other participants in the logical game process
 		this.board = board;
@@ -186,10 +200,24 @@ public class Arbiter {
 	/** Reset the game to the original state. */
 	public void doReset() {
 
+		if (DEBUG_LOG) {
+			System.out.println("doReset, initialGameState:");
+			System.out.println("Player 0 coords: [" + initialGameState.playerCoords[0][0] + ","
+					+ initialGameState.playerCoords[0][1] + "]");
+
+			System.out.println("doReset, current state:");
+			System.out.println("Player 0 coords: [" + state.playerCoords[0][0] + "," + state.playerCoords[0][1] + "]");
+		}
+
 		// Reset to the initial game state
 		state = GameState.duplicate(initialGameState);
 		// Start on the initial game turn state - pending the first move
 		turnState = GameTurnState.PENDING_MOVE;
+
+		if (DEBUG_LOG) {
+			System.out.println("doReset, duplicated state:");
+			System.out.println("Player 0 coords: [" + state.playerCoords[0][0] + "," + state.playerCoords[0][1] + "]");
+		}
 
 		for (final ITile tile : tiles) {
 			// Determine the tile coordinates
@@ -201,8 +229,14 @@ public class Arbiter {
 		}
 
 		for (int i = 0; i < players.size(); i++) {
+
 			// Determine the player coordinates
 			final byte[] coords = state.playerCoords[i];
+
+			if (DEBUG_LOG) {
+				System.out.println("doReset, player " + i + " coords: " + coords[0] + "," + coords[1]);
+			}
+
 			// Locate the logical tile that the player is on
 			final ITile tile = findTileByCoords(coords);
 			// Reset the player
