@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
@@ -48,6 +49,8 @@ class PlayerActor extends Group implements IPlayer {
 		addActor(player);
 		target = new Image(atlas.findRegion("target"));
 		addActor(target);
+
+		this.setTouchable(Touchable.disabled);
 	}
 
 	@Override
