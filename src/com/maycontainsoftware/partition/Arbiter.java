@@ -167,10 +167,10 @@ public class Arbiter {
 		turnState = GameTurnState.WIN_CHECK;
 
 		if (GameState.isGameOver(state)) {
-			// Someone has won - tell the board
-			board.doGameOver();
-			// And update the turn state
+			// Update the turn state
 			turnState = GameTurnState.WON;
+			// Tell the board
+			board.doGameOver();
 		} else {
 			// Nobody has won, continue
 
@@ -184,10 +184,10 @@ public class Arbiter {
 			turnState = GameTurnState.STALEMATE_CHECK;
 
 			if (GameState.isStalemate(state)) {
-				// Game is a stalemate - tell the board
-				board.doStalemate();
-				// And update the turn state
+				// Update the turn state
 				turnState = GameTurnState.STALEMATE;
+				// Tell the board
+				board.doStalemate();
 			} else {
 				// Continue to state of pending a decision on which tile to move to
 				turnState = GameTurnState.PENDING_MOVE;
