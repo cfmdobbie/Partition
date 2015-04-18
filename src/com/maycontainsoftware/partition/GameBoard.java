@@ -146,7 +146,15 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		Gdx.app.debug(TAG, "doGameOver()");
 
 		if (isDemoMode) {
-			arbiter.doReset();
+
+			this.addAction(Actions.sequence(Actions.delay(0.5f), Actions.fadeOut(0.1f), Actions.delay(0.5f), new Action() {
+				@Override
+				public boolean act(float delta) {
+					arbiter.doReset();
+					return true;
+				}
+			}, Actions.fadeIn(0.1f)));
+
 		} else {
 			// TODO: Game-over message, reset button
 		}
@@ -158,7 +166,15 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		Gdx.app.debug(TAG, "doStalemate()");
 
 		if (isDemoMode) {
-			arbiter.doReset();
+
+			this.addAction(Actions.sequence(Actions.delay(0.5f), Actions.fadeOut(0.1f), Actions.delay(0.5f), new Action() {
+				@Override
+				public boolean act(float delta) {
+					arbiter.doReset();
+					return true;
+				}
+			}, Actions.fadeIn(0.1f)));
+
 		} else {
 			// TODO: Stalemate message, reset button
 		}
