@@ -76,6 +76,7 @@ class TileActor extends Group implements ITile {
 		Gdx.app.debug(TAG, "Tile [" + getCoords()[0] + "," + getCoords()[1] + "] doError()");
 
 		// Flash up error notification
+		error.clearActions();
 		error.addAction(Actions.sequence(Actions.color(Color.WHITE), Actions.color(Color.CLEAR, 0.5f)));
 	}
 
