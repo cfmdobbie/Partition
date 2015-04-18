@@ -38,7 +38,7 @@ public class LoadingScreen extends CScreen<PartitionGame> {
 		loadingAtlas = game.manager.get("loading.atlas", TextureAtlas.class);
 
 		// TODO: Really want tiled background to fade in over about 0.5 secs
-		//root.setBackground(new TiledDrawable(loadingAtlas.findRegion("background")));
+		// root.setBackground(new TiledDrawable(loadingAtlas.findRegion("background")));
 
 		// Developer logo
 		root.row().padBottom(10.0f);
@@ -65,7 +65,7 @@ public class LoadingScreen extends CScreen<PartitionGame> {
 	/** Enqueue all Texture assets required by the app. */
 	private void enqueueTextures() {
 		// TODO: Enqueue Textures
-		//game.manager.load("yellow.png", Texture.class);
+		// game.manager.load("yellow.png", Texture.class);
 	}
 
 	/** Enqueue all Sound assets required by the app. */
