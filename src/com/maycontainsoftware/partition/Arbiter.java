@@ -65,33 +65,20 @@ public class Arbiter {
 	public Arbiter(final GameState initialGameState, final IBoard board, final List<? extends IPlayer> players,
 			final Set<? extends ITile> tiles) {
 
-		// Always start waiting for the first move
-		this.turnState = GameTurnState.PENDING_MOVE;
-
 		// Remember the initial game state - will need to use it to reset the game
 		this.initialGameState = initialGameState;
 
 		if (DEBUG_LOG) {
 			System.out.println("<init>, initialGameState:");
-			System.out.println("Player 0 coords: [" + initialGameState.playerCoords[0][0] + ","
-					+ initialGameState.playerCoords[0][1] + "]");
-		}
-
-		// Current state is a duplicate of the initial game state
-		this.state = GameState.duplicate(initialGameState);
-
-		if (DEBUG_LOG) {
-			System.out.println("<init>, first duplicated state:");
-			System.out.println("Player 0 coords: [" + state.playerCoords[0][0] + "," + state.playerCoords[0][1] + "]");
+			// Player 0 coordinates
+			final byte[] coords = initialGameState.playerCoords[0];
+			System.out.println("Player 0 coords: [" + coords[0] + "," + coords[1] + "]");
 		}
 
 		// Store references to the other participants in the logical game process
 		this.board = board;
 		this.players = players;
 		this.tiles = tiles;
-
-		// Retrieve the current player from the game state
-		this.activePlayerNumber = state.currentPlayerIndex;
 	}
 
 	/** Accept a selection event on a tile. */
@@ -205,25 +192,34 @@ public class Arbiter {
 			System.out.println("Player 0 coords: [" + initialGameState.playerCoords[0][0] + ","
 					+ initialGameState.playerCoords[0][1] + "]");
 
-			System.out.println("doReset, current state:");
-			System.out.println("Player 0 coords: [" + state.playerCoords[0][0] + "," + state.playerCoords[0][1] + "]");
+			if (state != null) {
+				System.out.println("doReset, current state:");
+				System.out.println("Player 0 coords: [" + state.playerCoords[0][0] + "," + state.playerCoords[0][1]
+						+ "]");
+			}
 		}
 
 		// Reset to the initial game state
 		state = GameState.duplicate(initialGameState);
-		// Start on the initial game turn state - pending the first move
-		turnState = GameTurnState.PENDING_MOVE;
 
-		if (DEBUG_LOG) {
-			System.out.println("doReset, duplicated state:");
-			System.out.println("Player 0 coords: [" + state.playerCoords[0][0] + "," + state.playerCoords[0][1] + "]");
-		}
+		// Always start waiting for the first move
+		this.turnState = GameTurnState.PENDING_MOVE;
+
+		// Retrieve the current player from the game state
+		this.activePlayerNumber = state.currentPlayerIndex;
 
 		for (final ITile tile : tiles) {
+
 			// Determine the tile coordinates
 			final byte[] coords = tile.getCoords();
+
 			// Determine whether the tile should be enabled or disabled
 			final boolean enabled = state.tileEnabled[coords[0]][coords[1]];
+
+			if (DEBUG_LOG) {
+				System.out.println("doReset, resetting tile [" + coords[0] + "," + coords[1] + "]");
+			}
+
 			// Reset the tile
 			tile.doReset(enabled);
 		}
@@ -243,8 +239,8 @@ public class Arbiter {
 			players.get(i).doReset(tile);
 		}
 
-		// Notify first player that it is their turn
-		players.get(0).doPendingMove();
+		// Notify active player that it is their turn
+		players.get(activePlayerNumber).doPendingMove();
 	}
 
 	/**
