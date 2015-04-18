@@ -350,14 +350,24 @@ public class GameState {
 	 * @return A duplicate of the specified state.
 	 */
 	public static GameState duplicate(final GameState state) {
+
 		final GameState duplicate = new GameState();
+
+		// Current player - straight copy
 		duplicate.currentPlayerIndex = state.currentPlayerIndex;
-		duplicate.playerCoords = Arrays.copyOf(state.playerCoords, state.playerCoords.length);
+		// Player coordinates - nested array copy
+		duplicate.playerCoords = new byte[state.playerCoords.length][];
+		for (int i = 0; i < duplicate.playerCoords.length; i++) {
+			duplicate.playerCoords[i] = Arrays.copyOf(state.playerCoords[i], state.playerCoords[i].length);
+		}
+		// Enabled tiles - nested array copy
 		duplicate.tileEnabled = new boolean[state.tileEnabled.length][];
 		for (int i = 0; i < duplicate.tileEnabled.length; i++) {
 			duplicate.tileEnabled[i] = Arrays.copyOf(state.tileEnabled[i], state.tileEnabled[i].length);
 		}
+		// Turn phase - straight copy
 		duplicate.turnPhase = state.turnPhase;
+
 		return duplicate;
 	}
 
