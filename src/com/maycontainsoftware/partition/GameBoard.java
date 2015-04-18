@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
@@ -26,6 +27,9 @@ import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
  * @author Charlie
  */
 public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
+
+	/** Tag for logging purposes. */
+	private static final String TAG = GameBoard.class.getName();
 
 	/** Reference to the Game instance. */
 	protected final PartitionGame game;
@@ -138,6 +142,9 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 	@Override
 	public void doGameOver() {
+
+		Gdx.app.debug(TAG, "doGameOver()");
+
 		if (isDemoMode) {
 			arbiter.doReset();
 		} else {
@@ -147,6 +154,9 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 	@Override
 	public void doStalemate() {
+
+		Gdx.app.debug(TAG, "doStalemate()");
+
 		if (isDemoMode) {
 			arbiter.doReset();
 		} else {
@@ -160,6 +170,9 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 	 * @author Charlie
 	 */
 	static class PlayerActor extends Group implements IPlayer {
+
+		/** Tag for logging purposes. */
+		private static final String TAG = PlayerActor.class.getName();
 
 		/** Names of the player token textures. */
 		private static final String[] playerTextureNames = { "player_red", "player_blue" };
@@ -194,6 +207,8 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		@Override
 		public void doPendingMove() {
 
+			Gdx.app.debug(TAG, "doPendingMove()");
+
 			// Player token bounces up and down
 			player.addAction(Actions.forever(Actions.sequence(
 					Actions.moveBy(0.0f, getHeight() / 3, 0.5f, Interpolation.sine),
@@ -202,6 +217,8 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		@Override
 		public void doMove(final ITile targetTile, final Arbiter arbiter) {
+
+			Gdx.app.debug(TAG, "doMove()");
 
 			// Slide static player token to new location
 
@@ -222,6 +239,8 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		@Override
 		public void doPendingShoot() {
 
+			Gdx.app.debug(TAG, "doPendingShoot()");
+
 			// Bouncing target graphic
 			target.setColor(Color.WHITE);
 			target.setPosition(getWidth() / 6, 0.0f);
@@ -233,6 +252,8 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		@Override
 		public void doShoot(final ITile targetTile, final Arbiter arbiter) {
 
+			Gdx.app.debug(TAG, "doShoot()");
+
 			// Stop bouncing target
 			target.clearActions();
 			target.setPosition(0.0f, 0.0f);
@@ -241,6 +262,10 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		@Override
 		public void doReset(final ITile startingTile) {
+
+			Gdx.app.debug(TAG, "doReset()");
+			Gdx.app.debug(TAG, "Moving to tile [" + startingTile.getCoords()[0] + "," + startingTile.getCoords()[1]
+					+ "]");
 
 			final TileActor tile = (TileActor) startingTile;
 
@@ -270,6 +295,9 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 	 * @author Charlie
 	 */
 	static class TileActor extends Group implements ITile {
+
+		/** Tag for logging purposes. */
+		private static final String TAG = TileActor.class.getName();
 
 		/** Actor to represent the actual tile. */
 		private final Actor tile;
@@ -324,12 +352,18 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		@Override
 		public void doError() {
+
+			Gdx.app.debug(TAG, "Tile [" + getCoords()[0] + "," + getCoords()[1] + "] doError()");
+
 			// Flash up error notification
 			error.addAction(Actions.sequence(Actions.color(Color.WHITE), Actions.color(Color.CLEAR, 0.5f)));
 		}
 
 		@Override
 		public void doShoot(final Arbiter arbiter) {
+
+			Gdx.app.debug(TAG, "Tile [" + getCoords()[0] + "," + getCoords()[1] + "] doShoot()");
+
 			// Fade tile out
 			tile.addAction(Actions.sequence(Actions.color(Color.WHITE), Actions.color(Color.CLEAR, 0.15f),
 					new Action() {
@@ -343,6 +377,9 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		@Override
 		public void doReset(final boolean enabled) {
+
+			Gdx.app.debug(TAG, "Tile [" + getCoords()[0] + "," + getCoords()[1] + "] doReset()");
+
 			tile.setColor(enabled ? Color.WHITE : Color.CLEAR);
 			error.setColor(Color.CLEAR);
 		}
