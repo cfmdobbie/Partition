@@ -20,6 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
+import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
+import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 import com.maycontainsoftware.partition.ScreenTransition.SolidColorFadeScreenTransition;
 
 /**
@@ -73,41 +75,73 @@ public class InstructionsScreen extends CScreen<PartitionGame> {
 		root.row().height(2.0f);
 		root.add(new Image(atlas.findRegion("white1x1"))).fill();
 
+		// All text styles used on this screen
+
+		final LabelStyle bodyStyle = new Label.LabelStyle(new BitmapFont(Gdx.files.internal("segoeuiblack24.fnt")),
+				Color.WHITE);
+		final LabelStyle titleStyle = new Label.LabelStyle(new BitmapFont(Gdx.files.internal("segoeuiblack32.fnt")),
+				Color.BLUE);
+
 		// Scrollable table to hold instructions
 		final Table instructions = new Table();
-		instructions.defaults().pad(10.0f);
+		instructions.defaults().pad(10.0f).expandX().fillX();
 		// instructions.debug();
-
 		// Add table to stage, wrapped in a scrolling pane
 		root.row();
 		root.add(new ScrollPane(instructions)).expand().fill();
 
-		// Fonts
-		final BitmapFont bodyFont = new BitmapFont(Gdx.files.internal("segoeuiblack16.fnt"));
-		final BitmapFont titleFont = new BitmapFont(Gdx.files.internal("segoeuiblack32.fnt"));
-		// Styles
-		final LabelStyle bodyStyle = new Label.LabelStyle(bodyFont, Color.WHITE);
-		final LabelStyle titleStyle = new Label.LabelStyle(titleFont, Color.BLUE);
-
 		// Instructions
-		// TODO: Proper instructions!
-		instructions.row();
-		instructions.add(new Label("Title Text", titleStyle));
-
-		final String[] lines = {
-				"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-				"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-				"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-				"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." };
-		for (String line : lines) {
-			final Label label = new Label(line, bodyStyle);
-			label.setWrap(true);
-			instructions.row();
-			instructions.add(label).fillX().expandX();
-		}
 
 		instructions.row();
-		instructions.add(new Image(atlas.findRegion("tile")));
+		instructions.add(makeLabel("How To Play", titleStyle));
+
+		instructions.row();
+		instructions
+				.add(makeLabel(
+						"Partition is a game with very simple rules but one that requires careful thought to win.  The aim of the game is to acquire more area than your opponent.",
+						bodyStyle));
+
+		instructions.row();
+		instructions.add(makeLabel(
+				"Players take it in turns first to move to a new square, then to remove a square from the board.",
+				bodyStyle));
+
+		instructions.row();
+		instructions
+				.add(makeLabel(
+						"Movements can be made any number of squares in a straight line (including diagonally).  The square that is removed must similarly be in a straight line from the player.",
+						bodyStyle));
+
+		instructions.row();
+		instructions
+				.add(makeLabel(
+						"The game ends either when the players are separated, in which case the winner is the player on the largest patch of squares, or in a stalemate when both players are on the same patch of squares but a player cannot move.",
+						bodyStyle));
+
+		instructions.row();
+		instructions.add(makeLabel("Examples", titleStyle));
+
+		instructions.row();
+		instructions.add(makeLabel("The player left in the largest patch of squares wins.  Try it out!", bodyStyle));
+
+		instructions.row();
+		instructions.add(new GameBoard(game, atlas, 125.0f * 4, 125.0f, PlayerConfiguration.TWO_PLAYER,
+				BoardConfiguration.LOSE_DEMO, true));
+
+		instructions.row();
+		instructions.add(makeLabel("If the players end up in areas of equal size, the game is a draw:", bodyStyle));
+
+		instructions.row();
+		instructions.add(new GameBoard(game, atlas, 125.0f * 3, 125.0f, PlayerConfiguration.TWO_PLAYER,
+				BoardConfiguration.DRAW_DEMO, true));
+
+		instructions.row();
+		instructions.add(makeLabel(
+				"If the players are not isolated but a player cannot move, the game ends in a stalemate:", bodyStyle));
+
+		instructions.row();
+		instructions.add(new GameBoard(game, atlas, 125.0f * 3, 125.0f, PlayerConfiguration.TWO_PLAYER,
+				BoardConfiguration.STALEMATE_DEMO, true));
 
 		// Set up simple screen transition - fade in/out from/to black
 		screenTransition = new SolidColorFadeScreenTransition(root, atlas.findRegion("black"));
@@ -125,6 +159,13 @@ public class InstructionsScreen extends CScreen<PartitionGame> {
 	protected void doBack() {
 		game.setScreen(new MainMenuScreen(game));
 		InstructionsScreen.this.dispose();
+	}
+
+	/** Utility method to make a new text label. */
+	private Label makeLabel(final String text, final LabelStyle style) {
+		final Label label = new Label(text, style);
+		label.setWrap(true);
+		return label;
 	}
 
 	/**
