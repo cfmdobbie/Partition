@@ -24,6 +24,9 @@ class PlayerActor extends Group implements IPlayer {
 	/** Names of the player token textures. */
 	private static final String[] playerTextureNames = { "player_red", "player_blue" };
 
+	/** Reference to the sound engine. */
+	private final CSoundEngine soundEngine;
+
 	/** Actor to represent the shadow. */
 	private final Actor shadow;
 
@@ -40,7 +43,10 @@ class PlayerActor extends Group implements IPlayer {
 	 * @param id
 	 *            The player id.
 	 */
-	public PlayerActor(final TextureAtlas atlas, final int id) {
+	public PlayerActor(final TextureAtlas atlas, final CSoundEngine soundEngine, final int id) {
+
+		// Save reference to the sound engine
+		this.soundEngine = soundEngine;
 
 		shadow = new Image(atlas.findRegion("shadow"));
 		addActor(shadow);
@@ -67,6 +73,9 @@ class PlayerActor extends Group implements IPlayer {
 	public void doMove(final ITile targetTile, final Arbiter arbiter) {
 
 		Gdx.app.debug(TAG, "doMove()");
+
+		// Play the appropriate sound effect
+		soundEngine.play(SoundEngine.SoundId.PING);
 
 		// Slide static player token to new location
 

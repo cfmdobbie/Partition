@@ -19,6 +19,9 @@ class TileActor extends Group implements ITile {
 	/** Tag for logging purposes. */
 	private static final String TAG = TileActor.class.getName();
 
+	/** Reference to the sound engine. */
+	private final CSoundEngine soundEngine;
+
 	/** Actor to represent the actual tile. */
 	private final Actor tile;
 
@@ -41,7 +44,10 @@ class TileActor extends Group implements ITile {
 	 * @param row
 	 *            This tile's row.
 	 */
-	public TileActor(final TextureAtlas atlas, final byte column, final byte row) {
+	public TileActor(final TextureAtlas atlas, final CSoundEngine soundEngine, final byte column, final byte row) {
+
+		// Save reference to the sound engine
+		this.soundEngine = soundEngine;
 
 		// The actual tile
 		tile = new Image(atlas.findRegion("tile"));
@@ -75,6 +81,9 @@ class TileActor extends Group implements ITile {
 
 		Gdx.app.debug(TAG, "Tile [" + getCoords()[0] + "," + getCoords()[1] + "] doError()");
 
+		// Play the error sound effect
+		soundEngine.play(SoundEngine.SoundId.ERROR);
+
 		// Flash up error notification
 		error.clearActions();
 		error.addAction(Actions.sequence(Actions.color(Color.WHITE), Actions.color(Color.CLEAR, 0.5f)));
@@ -84,6 +93,9 @@ class TileActor extends Group implements ITile {
 	public void doShoot(final Arbiter arbiter) {
 
 		Gdx.app.debug(TAG, "Tile [" + getCoords()[0] + "," + getCoords()[1] + "] doShoot()");
+
+		// Play the tile destruction sound effect
+		soundEngine.play(SoundEngine.SoundId.EXPLOSION);
 
 		// Fade tile out
 		tile.addAction(Actions.sequence(Actions.color(Color.WHITE), Actions.color(Color.CLEAR, 0.15f), new Action() {

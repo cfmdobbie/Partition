@@ -72,14 +72,14 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		// Players
 		final List<PlayerActor> players = new ArrayList<PlayerActor>(GameState.getNumberOfPlayers(state));
 		for (int i = 0; i < GameState.getNumberOfPlayers(state); i++) {
-			players.add(new PlayerActor(atlas, i));
+			players.add(new PlayerActor(atlas, game.soundEngine, i));
 		}
 
 		// Tiles
 		final Set<TileActor> tiles = new HashSet<TileActor>();
 		for (byte c = 0; c < GameState.getNumberOfColumns(state); c++) {
 			for (byte r = 0; r < GameState.getNumberOfRows(state); r++) {
-				TileActor tile = new TileActor(atlas, c, r);
+				TileActor tile = new TileActor(atlas, game.soundEngine, c, r);
 				tiles.add(tile);
 			}
 		}
