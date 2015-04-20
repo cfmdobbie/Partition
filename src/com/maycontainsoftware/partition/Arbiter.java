@@ -136,51 +136,58 @@ public class Arbiter {
 	/** Receive notification that a move event has been completed by the application components. */
 	public void moveDone() {
 		// Check that we were moving
-		assert (turnState == GameTurnState.MOVING);
+		if (turnState == GameTurnState.MOVING) {
 
-		// Now waiting for a decision on which tile to shoot
-		turnState = GameTurnState.PENDING_SHOOT;
+			// Now waiting for a decision on which tile to shoot
+			turnState = GameTurnState.PENDING_SHOOT;
 
-		// Tell the player that it is now pending a shoot
-		players.get(activePlayerNumber).doPendingShoot();
+			// Tell the player that it is now pending a shoot
+			players.get(activePlayerNumber).doPendingShoot();
+
+		} else {
+			throw new RuntimeException("Arbiter::moveDone;incorrect_turnState:" + turnState);
+		}
 	}
 
 	/** Receive notification that a shoot event has been completed by the application components. */
 	public void shootDone() {
 		// Check that were were shooting
-		assert (turnState == GameTurnState.SHOOTING);
+		if (turnState == GameTurnState.SHOOTING) {
 
-		// Check for a win
-		turnState = GameTurnState.WIN_CHECK;
+			// Check for a win
+			turnState = GameTurnState.WIN_CHECK;
 
-		if (GameState.isGameOver(state)) {
-			// Update the turn state
-			turnState = GameTurnState.WON;
-			// Tell the board
-			board.doGameOver();
-		} else {
-			// Nobody has won, continue
-
-			// Now switching players
-			turnState = GameTurnState.SWITCHING_PLAYERS;
-
-			// Get the new player number from the game state
-			activePlayerNumber = state.currentPlayerIndex;
-
-			// Now need to check for a stalemate
-			turnState = GameTurnState.STALEMATE_CHECK;
-
-			if (GameState.isStalemate(state)) {
+			if (GameState.isGameOver(state)) {
 				// Update the turn state
-				turnState = GameTurnState.STALEMATE;
+				turnState = GameTurnState.WON;
 				// Tell the board
-				board.doStalemate();
+				board.doGameOver();
 			} else {
-				// Continue to state of pending a decision on which tile to move to
-				turnState = GameTurnState.PENDING_MOVE;
-				// Tell the player it is now pending a move
-				players.get(activePlayerNumber).doPendingMove();
+				// Nobody has won, continue
+
+				// Now switching players
+				turnState = GameTurnState.SWITCHING_PLAYERS;
+
+				// Get the new player number from the game state
+				activePlayerNumber = state.currentPlayerIndex;
+
+				// Now need to check for a stalemate
+				turnState = GameTurnState.STALEMATE_CHECK;
+
+				if (GameState.isStalemate(state)) {
+					// Update the turn state
+					turnState = GameTurnState.STALEMATE;
+					// Tell the board
+					board.doStalemate();
+				} else {
+					// Continue to state of pending a decision on which tile to move to
+					turnState = GameTurnState.PENDING_MOVE;
+					// Tell the player it is now pending a move
+					players.get(activePlayerNumber).doPendingMove();
+				}
 			}
+		} else {
+			throw new RuntimeException("Arbiter::shootDone;incorrect_turnState:" + turnState);
 		}
 	}
 
