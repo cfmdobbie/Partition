@@ -47,6 +47,9 @@ public abstract class CGame extends Game {
 	/** The TextureAtlas containing all assets used by the main game screens. */
 	TextureAtlas textureAtlas;
 
+	/** Sound engine. */
+	CSoundEngine soundEngine;
+
 	/**
 	 * Construct a new CGame instance.
 	 * 
@@ -86,12 +89,18 @@ public abstract class CGame extends Game {
 		// Create asset manager
 		manager = new AssetManager();
 
+		// Create sound engine
+		soundEngine = makeSoundEngine();
+
 		// Load first screen
 		this.setScreen(initialScreen());
 	}
 
 	/** Method to return an instance of the starting screen for the app. */
 	protected abstract Screen initialScreen();
+
+	/** Method to create the sound engine. */
+	protected abstract CSoundEngine makeSoundEngine();
 
 	@Override
 	public void resize(final int width, final int height) {

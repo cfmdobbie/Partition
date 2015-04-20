@@ -60,7 +60,7 @@ public class InstructionsScreen extends CScreen<PartitionGame> {
 		backButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.playTone();
+				game.soundEngine.play(SoundEngine.SoundId.TONE);
 				screenTransition.doTransitionOut(game, InstructionsScreen.this, new MainMenuScreen(game));
 			}
 		});

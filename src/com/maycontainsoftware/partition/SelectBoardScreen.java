@@ -49,7 +49,7 @@ public class SelectBoardScreen extends CScreen<PartitionGame> {
 		backButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.playTone();
+				game.soundEngine.play(SoundEngine.SoundId.TONE);
 				screenTransition.doTransitionOut(game, SelectBoardScreen.this, new SelectPlayersScreen(game));
 			}
 		});
@@ -86,7 +86,7 @@ public class SelectBoardScreen extends CScreen<PartitionGame> {
 		boardHubButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.playTone();
+				game.soundEngine.play(SoundEngine.SoundId.TONE);
 				screenTransition.doTransitionOut(game, SelectBoardScreen.this, new GameScreen(game,
 						playerConfiguration, BoardConfiguration.HUB));
 			}
@@ -98,7 +98,7 @@ public class SelectBoardScreen extends CScreen<PartitionGame> {
 		boardOpenButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.playTone();
+				game.soundEngine.play(SoundEngine.SoundId.TONE);
 				screenTransition.doTransitionOut(game, SelectBoardScreen.this, new GameScreen(game,
 						playerConfiguration, BoardConfiguration.OPEN));
 			}
@@ -112,7 +112,7 @@ public class SelectBoardScreen extends CScreen<PartitionGame> {
 		boardWallButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.playTone();
+				game.soundEngine.play(SoundEngine.SoundId.TONE);
 				screenTransition.doTransitionOut(game, SelectBoardScreen.this, new GameScreen(game,
 						playerConfiguration, BoardConfiguration.WALL));
 			}
@@ -124,7 +124,7 @@ public class SelectBoardScreen extends CScreen<PartitionGame> {
 		boardHolesButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.playTone();
+				game.soundEngine.play(SoundEngine.SoundId.TONE);
 				screenTransition.doTransitionOut(game, SelectBoardScreen.this, new GameScreen(game,
 						playerConfiguration, BoardConfiguration.HOLES));
 			}

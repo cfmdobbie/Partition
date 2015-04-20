@@ -49,7 +49,7 @@ public class SelectPlayersScreen extends CScreen<PartitionGame> {
 		backButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.playTone();
+				game.soundEngine.play(SoundEngine.SoundId.TONE);
 				screenTransition.doTransitionOut(game, SelectPlayersScreen.this, new MainMenuScreen(game));
 			}
 		});
@@ -80,7 +80,7 @@ public class SelectPlayersScreen extends CScreen<PartitionGame> {
 		twoPlayersButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.playTone();
+				game.soundEngine.play(SoundEngine.SoundId.TONE);
 				screenTransition.doTransitionOut(game, SelectPlayersScreen.this, new SelectBoardScreen(game,
 						PartitionGame.PlayerConfiguration.TWO_PLAYER));
 			}

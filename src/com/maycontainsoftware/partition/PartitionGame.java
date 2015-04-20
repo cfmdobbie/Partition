@@ -1,7 +1,6 @@
 package com.maycontainsoftware.partition;
 
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 
 /**
  * The main Game instance.
@@ -12,9 +11,6 @@ public class PartitionGame extends CGame {
 
 	/** Tag for logging purposes. */
 	public static final String TAG = PartitionGame.class.getName();
-
-	/** Sound setting. For now, defaults to true and changes are not persisted. */
-	boolean sound = true;
 
 	/** Enumeration of player configurations. */
 	public static enum PlayerConfiguration {
@@ -52,31 +48,8 @@ public class PartitionGame extends CGame {
 		return new PreloadingScreen(this);
 	}
 
-	/** Play the "error" sound effect, if sounds are enabled. */
-	void playError() {
-		if (sound) {
-			manager.get("error.wav", Sound.class).play();
-		}
-	}
-
-	/** Play the "explosion" sound effect, if sounds are enabled. */
-	void playExplosion() {
-		if (sound) {
-			manager.get("explosion.wav", Sound.class).play();
-		}
-	}
-
-	/** Play the "ping" sound effect, if sounds are enabled. */
-	void playPing() {
-		if (sound) {
-			manager.get("ping.wav", Sound.class).play();
-		}
-	}
-
-	/** Play the "tone" sound effect, if sounds are enabled. */
-	void playTone() {
-		if (sound) {
-			manager.get("tone.wav", Sound.class).play();
-		}
+	@Override
+	protected CSoundEngine makeSoundEngine() {
+		return new SoundEngine(manager);
 	}
 }

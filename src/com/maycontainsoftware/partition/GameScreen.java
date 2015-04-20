@@ -57,7 +57,7 @@ public class GameScreen extends CScreen<PartitionGame> {
 		quitButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.playTone();
+				game.soundEngine.play(SoundEngine.SoundId.TONE);
 				screenTransition.doTransitionOut(game, GameScreen.this, new MainMenuScreen(game));
 			}
 		});
