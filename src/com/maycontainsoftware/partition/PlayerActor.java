@@ -35,13 +35,12 @@ class PlayerActor extends Group implements IPlayer {
 
 	/**
 	 * Construct a new PlayerActor.
-	 * 
-	 * @param id
-	 *            The player id.
 	 * @param atlas
 	 *            The main app TextureAtlas.
+	 * @param id
+	 *            The player id.
 	 */
-	public PlayerActor(final int id, final TextureAtlas atlas) {
+	public PlayerActor(final TextureAtlas atlas, final int id) {
 
 		shadow = new Image(atlas.findRegion("shadow"));
 		addActor(shadow);
