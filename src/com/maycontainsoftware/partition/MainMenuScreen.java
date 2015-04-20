@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
+import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 import com.maycontainsoftware.partition.ScreenTransition.SolidColorFadeScreenTransition;
 
 /**
@@ -63,7 +64,8 @@ public class MainMenuScreen extends CScreen<PartitionGame> {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				screenTransition.doTransitionOut(game, MainMenuScreen.this, new SelectPlayersScreen(game));
+				screenTransition.doTransitionOut(game, MainMenuScreen.this, new SelectBoardScreen(game,
+						PlayerConfiguration.TWO_PLAYER));
 			}
 		});
 

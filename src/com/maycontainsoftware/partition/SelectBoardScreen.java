@@ -50,7 +50,7 @@ public class SelectBoardScreen extends CScreen<PartitionGame> {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				screenTransition.doTransitionOut(game, SelectBoardScreen.this, new SelectPlayersScreen(game));
+				screenTransition.doTransitionOut(game, SelectBoardScreen.this, new MainMenuScreen(game));
 			}
 		});
 
@@ -148,7 +148,7 @@ public class SelectBoardScreen extends CScreen<PartitionGame> {
 
 	@Override
 	protected void doBack() {
-		game.setScreen(new SelectPlayersScreen(game));
+		game.setScreen(new MainMenuScreen(game));
 		SelectBoardScreen.this.dispose();
 	}
 }
