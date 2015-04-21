@@ -3,6 +3,7 @@ package com.maycontainsoftware.partition;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
@@ -136,23 +137,48 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 	}
 
 	@Override
-	public void doGameOver() {
+	public void doWin(IPlayer winner, Map<IPlayer, Set<ITile>> playerTerritories, Set<ITile> unreachable) {
 
-		Gdx.app.debug(TAG, "doGameOver()");
+		Gdx.app.debug(TAG, "doWin()");
 
 		if (isDemoMode) {
-
-			this.addAction(Actions.sequence(Actions.delay(1.0f), Actions.fadeOut(0.25f), Actions.delay(0.5f),
-					new Action() {
-						@Override
-						public boolean act(float delta) {
-							arbiter.doReset();
-							return true;
-						}
-					}, Actions.fadeIn(0.25f)));
-
+			demoModeBoardReset();
 		} else {
 			// TODO: Game-over message, reset button
 		}
+	}
+
+	@Override
+	public void doDraw(Set<IPlayer> winners, Map<IPlayer, Set<ITile>> playerTerritories, Set<ITile> unreachable) {
+
+		Gdx.app.debug(TAG, "doDraw()");
+
+		if (isDemoMode) {
+			demoModeBoardReset();
+		} else {
+			// TODO: Game-over message, reset button
+		}
+	}
+
+	@Override
+	public void doStalemate(Set<ITile> unreachable) {
+
+		Gdx.app.debug(TAG, "doStalemate()");
+
+		if (isDemoMode) {
+			demoModeBoardReset();
+		} else {
+			// TODO: Game-over message, reset button
+		}
+	}
+
+	private void demoModeBoardReset() {
+		this.addAction(Actions.sequence(Actions.delay(1.0f), Actions.fadeOut(0.25f), Actions.delay(0.5f), new Action() {
+			@Override
+			public boolean act(float delta) {
+				arbiter.doReset();
+				return true;
+			}
+		}, Actions.fadeIn(0.25f)));
 	}
 }

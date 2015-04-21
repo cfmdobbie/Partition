@@ -3,6 +3,7 @@ package com.maycontainsoftware.partition.test;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.maycontainsoftware.partition.Arbiter;
@@ -59,8 +60,18 @@ public class ArbiterGameTest {
 	static class TestBoard implements IBoard {
 
 		@Override
-		public void doGameOver() {
-			System.out.println("Game Over");
+		public void doWin(IPlayer winner, Map<IPlayer, Set<ITile>> playerTerritories, Set<ITile> unreachable) {
+			System.out.println("Win");
+		}
+
+		@Override
+		public void doDraw(Set<IPlayer> winners, Map<IPlayer, Set<ITile>> playerTerritories, Set<ITile> unreachable) {
+			System.out.println("Draw");
+		}
+
+		@Override
+		public void doStalemate(Set<ITile> unreachable) {
+			System.out.println("Stalemate");
 		}
 	}
 

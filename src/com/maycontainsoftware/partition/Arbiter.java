@@ -1,7 +1,10 @@
 package com.maycontainsoftware.partition;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -160,8 +163,25 @@ public class Arbiter {
 			if (GameState.isGameOver(state)) {
 				// Update the turn state
 				turnState = GameTurnState.WON;
+
+				// Determine which tiles are unreachable
+				final Set<ITile> unreachable = getUnreachableTiles();
+
+				// Calculate the player territories
+				final Map<IPlayer, Set<ITile>> playerTerritories = getPlayerTerritories();
+
+				// Need to determine whether there was an outright winner, or a draw between one or more players
+				// Determine the winners from the claimed territories
+				final Set<IPlayer> winners = getWinningPlayers(playerTerritories);
+
 				// Tell the board
-				board.doGameOver();
+				if (winners.size() == 1) {
+					// One winner - it's an outright win
+					board.doWin(winners.toArray(new IPlayer[] {})[0], playerTerritories, unreachable);
+				} else {
+					// Multiple winners - it's a draw
+					board.doDraw(winners, playerTerritories, unreachable);
+				}
 			} else {
 				// Nobody has won, continue
 
@@ -175,10 +195,15 @@ public class Arbiter {
 				turnState = GameTurnState.STALEMATE_CHECK;
 
 				if (GameState.isStalemate(state)) {
+
 					// Update the turn state
 					turnState = GameTurnState.STALEMATE;
+
+					// Determine which tiles are unreachable
+					final Set<ITile> unreachable = getUnreachableTiles();
+
 					// Tell the board
-					board.doGameOver();
+					board.doStalemate(unreachable);
 				} else {
 					// Continue to state of pending a decision on which tile to move to
 					turnState = GameTurnState.PENDING_MOVE;
@@ -248,6 +273,74 @@ public class Arbiter {
 
 		// Notify active player that it is their turn
 		players.get(activePlayerNumber).doPendingMove();
+	}
+
+	/**
+	 * Get all unreachable tiles. This method is intended to be used at the end of a game to notify the IBoard of the
+	 * final state, but is valid to be called at any time.
+	 * 
+	 * @return A Set of all unreachable ITiles
+	 */
+	private Set<ITile> getUnreachableTiles() {
+		final Set<ITile> unreachable = new HashSet<ITile>();
+		final Set<byte[]> stateUnreachable = GameState.getUnreachableTiles(state);
+		for (final byte[] coords : stateUnreachable) {
+			unreachable.add(findTileByCoords(coords));
+		}
+		return unreachable;
+	}
+
+	/**
+	 * Get final player territories. This method is only valid to call at the end of a game, and only when either a
+	 * single player has won, or a draw condition exists - i.e. not in the case of a stalemate.
+	 * 
+	 * @return A map of IPlayers to their respective territories, in the form of a Set of ITiles.
+	 */
+	private Map<IPlayer, Set<ITile>> getPlayerTerritories() {
+		// Territory
+		final Map<IPlayer, Set<ITile>> territory = new HashMap<IPlayer, Set<ITile>>();
+		for (int i = 0; i < GameState.getNumberOfPlayers(state); i++) {
+			final IPlayer player = players.get(i);
+			final Set<ITile> reachable = new HashSet<ITile>();
+			final Set<byte[]> stateReachable = GameState.getReachableTiles(state, i);
+			for (final byte[] coords : stateReachable) {
+				reachable.add(findTileByCoords(coords));
+			}
+			territory.put(player, reachable);
+		}
+		return territory;
+	}
+
+	/**
+	 * Determine the winning players. This may be a single player in the case of an outright win, or multiple players in
+	 * the case of a draw.
+	 * 
+	 * @param territory
+	 *            The current player territories.
+	 * @return A list of the winning players.
+	 */
+	private Set<IPlayer> getWinningPlayers(final Map<IPlayer, Set<ITile>> territory) {
+		// Collect together the player scores
+		final Map<IPlayer, Integer> playerScores = new HashMap<IPlayer, Integer>(territory.size());
+		for (final IPlayer player : territory.keySet()) {
+			playerScores.put(player, territory.get(player).size());
+		}
+		// Determine the top score
+		int topScore = 0;
+		for (final IPlayer player : playerScores.keySet()) {
+			if (topScore < playerScores.get(player)) {
+				topScore = playerScores.get(player);
+			}
+		}
+		// Determine all the top-scoring players
+		final Set<IPlayer> winners = new HashSet<IPlayer>(1);
+		for (final IPlayer player : playerScores.keySet()) {
+			if (playerScores.get(player) == topScore) {
+				winners.add(player);
+			}
+		}
+
+		return winners;
 	}
 
 	/**
