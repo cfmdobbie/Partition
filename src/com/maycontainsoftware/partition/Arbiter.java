@@ -178,7 +178,7 @@ public class Arbiter {
 					// Update the turn state
 					turnState = GameTurnState.STALEMATE;
 					// Tell the board
-					board.doStalemate();
+					board.doGameOver();
 				} else {
 					// Continue to state of pending a decision on which tile to move to
 					turnState = GameTurnState.PENDING_MOVE;

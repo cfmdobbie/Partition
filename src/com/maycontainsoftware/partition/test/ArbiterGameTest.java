@@ -59,11 +59,6 @@ public class ArbiterGameTest {
 	static class TestBoard implements IBoard {
 
 		@Override
-		public void doStalemate() {
-			System.out.println("Stalemate");
-		}
-
-		@Override
 		public void doGameOver() {
 			System.out.println("Game Over");
 		}

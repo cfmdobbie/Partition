@@ -155,25 +155,4 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 			// TODO: Game-over message, reset button
 		}
 	}
-
-	@Override
-	public void doStalemate() {
-
-		Gdx.app.debug(TAG, "doStalemate()");
-
-		if (isDemoMode) {
-
-			this.addAction(Actions.sequence(Actions.delay(1.0f), Actions.fadeOut(0.25f), Actions.delay(0.5f),
-					new Action() {
-						@Override
-						public boolean act(float delta) {
-							arbiter.doReset();
-							return true;
-						}
-					}, Actions.fadeIn(0.25f)));
-
-		} else {
-			// TODO: Stalemate message, reset button
-		}
-	}
 }
