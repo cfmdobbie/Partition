@@ -77,10 +77,15 @@ public class ArbiterGameTest {
 
 	static class TestPlayer implements IPlayer {
 
-		final int playerNumber;
+		private final int playerNumber;
 
 		public TestPlayer(int playerNumber) {
 			this.playerNumber = playerNumber;
+		}
+
+		@Override
+		public int getPlayerNumber() {
+			return playerNumber;
 		}
 
 		@Override

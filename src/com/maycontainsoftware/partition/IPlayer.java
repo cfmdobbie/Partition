@@ -2,6 +2,12 @@ package com.maycontainsoftware.partition;
 
 public interface IPlayer {
 
+	/**
+	 * Each IPlayer instance needs a unique player number that relates to one defined in the board state. This method
+	 * returns that number.
+	 */
+	public int getPlayerNumber();
+
 	/** Notification that this player is now pending shoot. */
 	public void doPendingMove();
 

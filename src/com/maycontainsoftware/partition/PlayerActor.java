@@ -24,6 +24,9 @@ class PlayerActor extends Group implements IPlayer {
 	/** Names of the player token textures. */
 	private static final String[] playerTextureNames = { "player_red", "player_blue" };
 
+	/** The player number. */
+	private final int playerNumber;
+
 	/** Reference to the sound engine. */
 	private final CSoundEngine soundEngine;
 
@@ -38,24 +41,33 @@ class PlayerActor extends Group implements IPlayer {
 
 	/**
 	 * Construct a new PlayerActor.
+	 * 
 	 * @param atlas
 	 *            The main app TextureAtlas.
-	 * @param id
+	 * @param playerNumber
 	 *            The player id.
 	 */
-	public PlayerActor(final TextureAtlas atlas, final CSoundEngine soundEngine, final int id) {
+	public PlayerActor(final TextureAtlas atlas, final CSoundEngine soundEngine, final int playerNumber) {
+
+		// Save player number
+		this.playerNumber = playerNumber;
 
 		// Save reference to the sound engine
 		this.soundEngine = soundEngine;
 
 		shadow = new Image(atlas.findRegion("shadow"));
 		addActor(shadow);
-		player = new Image(atlas.findRegion(playerTextureNames[id]));
+		player = new Image(atlas.findRegion(playerTextureNames[playerNumber]));
 		addActor(player);
 		target = new Image(atlas.findRegion("target"));
 		addActor(target);
 
 		this.setTouchable(Touchable.disabled);
+	}
+
+	@Override
+	public int getPlayerNumber() {
+		return playerNumber;
 	}
 
 	@Override
