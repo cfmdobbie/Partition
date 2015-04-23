@@ -10,7 +10,6 @@ public interface ITile {
 	public byte[] getCoords();
 
 	/** Notification that an erroneous move has been performed against this tile. */
-	// Error beep, flash up visual error notification
 	public void doError();
 
 	/**
@@ -21,7 +20,6 @@ public interface ITile {
 	 *            shootDone(). Note that the player is also notified that it has shot, but only one of these two should
 	 *            notify the Arbiter.
 	 */
-	// anim tile disappear
 	public void doShoot(Arbiter arbiter);
 
 	/**

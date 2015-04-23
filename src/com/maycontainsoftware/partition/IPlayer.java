@@ -3,7 +3,6 @@ package com.maycontainsoftware.partition;
 public interface IPlayer {
 
 	/** Notification that this player is now pending shoot. */
-	// start periodic anim bounce
 	public void doPendingMove();
 
 	/**
@@ -14,11 +13,9 @@ public interface IPlayer {
 	 * @param arbiter
 	 *            The Arbiter to notify once all actions are complete using the moveDone() callback.
 	 */
-	// stop anim bounce, anim move to new location
 	public void doMove(ITile targetTile, Arbiter arbiter);
 
 	/** Notification that this player is now pending a shoot action. */
-	// start target periodic anim bounce, show target
 	public void doPendingShoot();
 
 	/**
@@ -31,7 +28,6 @@ public interface IPlayer {
 	 *            shootDone(). Note that the tile is also notified that it has been shot, but only one of these two
 	 *            should notify the Arbiter.
 	 */
-	// stop target bounce, hide target
 	public void doShoot(ITile targetTile, Arbiter arbiter);
 
 	/**
