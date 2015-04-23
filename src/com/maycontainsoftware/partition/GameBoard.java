@@ -145,6 +145,8 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 			demoModeBoardReset();
 		} else {
 			// TODO: Game-over message, reset button
+			notifyTilesOwned(playerTerritories);
+			notifyTilesUnreachable(unreachable);
 		}
 	}
 
@@ -157,6 +159,8 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 			demoModeBoardReset();
 		} else {
 			// TODO: Game-over message, reset button
+			notifyTilesOwned(playerTerritories);
+			notifyTilesUnreachable(unreachable);
 		}
 	}
 
@@ -169,6 +173,34 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 			demoModeBoardReset();
 		} else {
 			// TODO: Game-over message, reset button
+			notifyTilesUnreachable(unreachable);
+		}
+	}
+
+	/**
+	 * Notify tiles that were outright owned by a player at the end of a game of this fact.
+	 * 
+	 * @param playerTerritories
+	 *            The player territories as supplied by the Arbiter.
+	 */
+	private void notifyTilesOwned(final Map<IPlayer, Set<ITile>> playerTerritories) {
+		for (final IPlayer player : playerTerritories.keySet()) {
+			final Set<ITile> tiles = playerTerritories.get(player);
+			for (final ITile tile : tiles) {
+				((TileActor) tile).endOwned(player.getPlayerNumber());
+			}
+		}
+	}
+
+	/**
+	 * Notify tiles that were unreachable at the end of a game of this fact.
+	 * 
+	 * @param unreachable
+	 *            The unreachable tiles as supplied by the Arbiter.
+	 */
+	private void notifyTilesUnreachable(final Set<ITile> unreachable) {
+		for (final ITile tile : unreachable) {
+			((TileActor) tile).endUnreachable();
 		}
 	}
 
