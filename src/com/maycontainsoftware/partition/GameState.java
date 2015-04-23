@@ -338,7 +338,9 @@ public class GameState {
 	 */
 	public static Set<byte[]> getUnreachableTiles(final GameState state) {
 		final Set<byte[]> tiles = GameState.getAllTiles(state);
-		tiles.removeAll(GameState.getReachableTiles(state));
+		for (int i = 0; i < getNumberOfPlayers(state); i++) {
+			tiles.removeAll(GameState.getReachableTiles(state, i));
+		}
 		return tiles;
 	}
 
