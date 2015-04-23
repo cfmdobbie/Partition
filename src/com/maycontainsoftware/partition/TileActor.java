@@ -103,7 +103,7 @@ class TileActor extends Group implements ITile {
 
 		tile.clearActions();
 		tile.setColor(Color.WHITE);
-		tile.addAction(Actions.color(Color.CLEAR, 0.1f));
+		tile.addAction(Actions.sequence(Actions.delay((row + column) * 0.05f), Actions.color(Color.CLEAR, 0.1f)));
 	}
 
 	/**
@@ -138,14 +138,16 @@ class TileActor extends Group implements ITile {
 	private void doRedHighlight() {
 		redHighlight.clearActions();
 		redHighlight.setColor(Color.CLEAR);
-		redHighlight.addAction(Actions.color(Color.WHITE, 0.1f));
+		redHighlight
+				.addAction(Actions.sequence(Actions.delay((row + column) * 0.05f), Actions.color(Color.WHITE, 0.1f)));
 	}
 
 	/** Activate a blue highlight on this tile. */
 	private void doBlueHighlight() {
 		blueHighlight.clearActions();
 		blueHighlight.setColor(Color.CLEAR);
-		blueHighlight.addAction(Actions.color(Color.WHITE, 0.1f));
+		blueHighlight.addAction(Actions.sequence(Actions.delay((row + column) * 0.05f),
+				Actions.color(Color.WHITE, 0.1f)));
 	}
 
 	@Override
