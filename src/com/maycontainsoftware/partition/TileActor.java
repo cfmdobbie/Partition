@@ -28,6 +28,12 @@ class TileActor extends Group implements ITile {
 	/** Actor to represent the graphical error notification. */
 	private final Actor error;
 
+	/** Actor to represent a red highlight. */
+	private final Actor redHighlight;
+
+	/** Actor to represent a blue highlight. */
+	private final Actor blueHighlight;
+
 	/** Column number. */
 	private final byte column;
 
@@ -57,6 +63,14 @@ class TileActor extends Group implements ITile {
 		error = new Image(atlas.findRegion("tile_error"));
 		this.addActor(error);
 
+		// Red highlight
+		redHighlight = new Image(atlas.findRegion("highlight_red"));
+		this.addActor(redHighlight);
+
+		// Blue highlight
+		blueHighlight = new Image(atlas.findRegion("highlight_blue"));
+		this.addActor(blueHighlight);
+
 		this.column = column;
 		this.row = row;
 	}
@@ -67,6 +81,8 @@ class TileActor extends Group implements ITile {
 		// Set sizes of child actors
 		tile.setSize(getWidth(), getHeight());
 		error.setSize(getWidth(), getHeight());
+		redHighlight.setSize(getWidth(), getHeight());
+		blueHighlight.setSize(getWidth(), getHeight());
 
 		super.sizeChanged();
 	}
@@ -74,6 +90,20 @@ class TileActor extends Group implements ITile {
 	@Override
 	public byte[] getCoords() {
 		return new byte[] { column, row };
+	}
+
+	/** Activate a red highlight on this tile. */
+	public void doRedHighlight() {
+		redHighlight.clearActions();
+		redHighlight.setColor(Color.CLEAR);
+		redHighlight.addAction(Actions.color(Color.WHITE, 0.1f));
+	}
+
+	/** Activate a blue highlight on this tile. */
+	public void doBlueHighlight() {
+		blueHighlight.clearActions();
+		blueHighlight.setColor(Color.CLEAR);
+		blueHighlight.addAction(Actions.color(Color.WHITE, 0.1f));
 	}
 
 	@Override
@@ -114,5 +144,7 @@ class TileActor extends Group implements ITile {
 
 		tile.setColor(enabled ? Color.WHITE : Color.CLEAR);
 		error.setColor(Color.CLEAR);
+		redHighlight.setColor(Color.CLEAR);
+		blueHighlight.setColor(Color.CLEAR);
 	}
 }
