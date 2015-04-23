@@ -40,6 +40,9 @@ class TileActor extends Group implements ITile {
 	/** Row number. */
 	private final byte row;
 
+	/** Whether or not the tile is currently enabled. */
+	private boolean enabled;
+
 	/**
 	 * Construct a new TileActor.
 	 * 
@@ -111,18 +114,23 @@ class TileActor extends Group implements ITile {
 
 		Gdx.app.debug(TAG, "Tile [" + getCoords()[0] + "," + getCoords()[1] + "] doError()");
 
-		// Play the error sound effect
-		soundEngine.play(SoundEngine.SoundId.ERROR);
+		if (enabled) {
+			// Play the error sound effect
+			soundEngine.play(SoundEngine.SoundId.ERROR);
 
-		// Flash up error notification
-		error.clearActions();
-		error.addAction(Actions.sequence(Actions.color(Color.WHITE), Actions.color(Color.CLEAR, 0.5f)));
+			// Flash up error notification
+			error.clearActions();
+			error.addAction(Actions.sequence(Actions.color(Color.WHITE), Actions.color(Color.CLEAR, 0.5f)));
+		}
 	}
 
 	@Override
 	public void doShoot(final Arbiter arbiter) {
 
 		Gdx.app.debug(TAG, "Tile [" + getCoords()[0] + "," + getCoords()[1] + "] doShoot()");
+
+		// No longer enabled
+		enabled = false;
 
 		// Play the tile destruction sound effect
 		soundEngine.play(SoundEngine.SoundId.EXPLOSION);
@@ -139,6 +147,8 @@ class TileActor extends Group implements ITile {
 
 	@Override
 	public void doReset(final boolean enabled) {
+
+		this.enabled = enabled;
 
 		Gdx.app.debug(TAG, "Tile [" + getCoords()[0] + "," + getCoords()[1] + "] doReset()");
 
