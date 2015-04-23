@@ -165,7 +165,7 @@ public class Arbiter {
 				turnState = GameTurnState.WON;
 
 				// Determine which tiles are unreachable
-				final Set<ITile> unreachable = getUnreachableTiles();
+				final Set<ITile> unreachable = getUnreachableEnabledTiles();
 
 				// Calculate the player territories
 				final Map<IPlayer, Set<ITile>> playerTerritories = getPlayerTerritories();
@@ -200,7 +200,7 @@ public class Arbiter {
 					turnState = GameTurnState.STALEMATE;
 
 					// Determine which tiles are unreachable
-					final Set<ITile> unreachable = getUnreachableTiles();
+					final Set<ITile> unreachable = getUnreachableEnabledTiles();
 
 					// Tell the board
 					board.doStalemate(unreachable);
@@ -276,14 +276,14 @@ public class Arbiter {
 	}
 
 	/**
-	 * Get all unreachable tiles. This method is intended to be used at the end of a game to notify the IBoard of the
-	 * final state, but is valid to be called at any time.
+	 * Get all enabled unreachable tiles. This method is intended to be used at the end of a game to notify the IBoard
+	 * of the final state, but is valid to be called at any time.
 	 * 
 	 * @return A Set of all unreachable ITiles
 	 */
-	private Set<ITile> getUnreachableTiles() {
+	private Set<ITile> getUnreachableEnabledTiles() {
 		final Set<ITile> unreachable = new HashSet<ITile>();
-		final Set<byte[]> stateUnreachable = GameState.getUnreachableTiles(state);
+		final Set<byte[]> stateUnreachable = GameState.getUnreachableEnabledTiles(state);
 		for (final byte[] coords : stateUnreachable) {
 			unreachable.add(findTileByCoords(coords));
 		}

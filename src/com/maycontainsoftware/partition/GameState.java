@@ -3,6 +3,7 @@ package com.maycontainsoftware.partition;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -330,18 +331,28 @@ public class GameState {
 	}
 
 	/**
-	 * All tiles on the board that cannot be reached.
+	 * All tiles on the board that are enabled but cannot be reached.
 	 * 
 	 * @param state
 	 *            The game state.
-	 * @return A set of two-element byte arrays containing tile coordinates of all tiles that cannot be reached.
+	 * @return A set of two-element byte arrays containing tile coordinates of all tiles that are enabled but cannot be
+	 *         reached.
 	 */
-	public static Set<byte[]> getUnreachableTiles(final GameState state) {
+	public static Set<byte[]> getUnreachableEnabledTiles(final GameState state) {
+		// All tiles
 		final Set<byte[]> tiles = GameState.getAllTiles(state);
+		// Remove reachable tiles
 		for (int i = 0; i < getNumberOfPlayers(state); i++) {
 			tiles.removeAll(GameState.getReachableTiles(state, i));
 		}
-		return tiles;
+		// Collect together only those that are enabled
+		final Set<byte[]> enabledTiles = new HashSet<byte[]>();
+		for (final byte[] coords : tiles) {
+			if (state.tileEnabled[coords[0]][coords[1]]) {
+				enabledTiles.add(coords);
+			}
+		}
+		return enabledTiles;
 	}
 
 	/**
