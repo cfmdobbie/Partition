@@ -95,15 +95,54 @@ class TileActor extends Group implements ITile {
 		return new byte[] { column, row };
 	}
 
+	/** Notify tile that at the end of the game it was unreachable. */
+	public void endUnreachable() {
+		if (!enabled) {
+			throw new RuntimeException("TileActor::endOwned;enabled");
+		}
+
+		tile.clearActions();
+		tile.setColor(Color.WHITE);
+		tile.addAction(Actions.color(Color.CLEAR, 0.1f));
+	}
+
+	/**
+	 * Notify the tile that at the end of the game it existed on a patch occupied by a single player.
+	 * 
+	 * @param playerNumber
+	 *            The player number of the player that owns this tile.
+	 */
+	public void endOwned(final int playerNumber) {
+		if (!enabled) {
+			throw new RuntimeException("TileActor::endOwned;enabled");
+		}
+
+		switch (playerNumber) {
+		case 0:
+			doRedHighlight();
+			break;
+		case 1:
+			doBlueHighlight();
+			break;
+		}
+	}
+
+	/** Notify the tile that at the end of the game it existed on a patch occupied by multiple players. */
+	public void endShared() {
+		if (!enabled) {
+			throw new RuntimeException("TileActor::endOwned;enabled");
+		}
+	}
+
 	/** Activate a red highlight on this tile. */
-	public void doRedHighlight() {
+	private void doRedHighlight() {
 		redHighlight.clearActions();
 		redHighlight.setColor(Color.CLEAR);
 		redHighlight.addAction(Actions.color(Color.WHITE, 0.1f));
 	}
 
 	/** Activate a blue highlight on this tile. */
-	public void doBlueHighlight() {
+	private void doBlueHighlight() {
 		blueHighlight.clearActions();
 		blueHighlight.setColor(Color.CLEAR);
 		blueHighlight.addAction(Actions.color(Color.WHITE, 0.1f));
