@@ -247,9 +247,9 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		slate.row();
 
 		// Play again
-		final Button playAgainButton = new Button(new TextureRegionDrawable(atlas.findRegion("end_play_again")),
-				new TextureRegionDrawable(atlas.findRegion("end_play_again")));
-		slate.add(playAgainButton);
+		final Button playAgainButton = new Button(new TextureRegionDrawable(atlas.findRegion("play_again_off")),
+				new TextureRegionDrawable(atlas.findRegion("play_again_on")));
+		slate.add(playAgainButton).expand();
 		playAgainButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -260,9 +260,9 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		});
 
 		// Main menu
-		final Button mainMenuButton = new Button(new TextureRegionDrawable(atlas.findRegion("end_main_menu")),
-				new TextureRegionDrawable(atlas.findRegion("end_main_menu")));
-		slate.add(mainMenuButton);
+		final Button mainMenuButton = new Button(new TextureRegionDrawable(atlas.findRegion("main_menu_off")),
+				new TextureRegionDrawable(atlas.findRegion("main_menu_on")));
+		slate.add(mainMenuButton).expand();
 		mainMenuButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -273,7 +273,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		// Fixed size, based on button graphic sizes. Yes, this means this slate is inappropriate to display on very
 		// small boards!
-		slate.setSize(390, 160);
+		slate.setSize(390, 92);
 		// Center slate on the game board
 		slate.setPosition(getWidth() / 2 - slate.getWidth() / 2, getHeight() / 2 - slate.getHeight() / 2);
 
