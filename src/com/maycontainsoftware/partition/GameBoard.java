@@ -30,6 +30,9 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 	/** Reference to the Game instance. */
 	protected final PartitionGame game;
 
+	/** Reference to the texture atlas. */
+	private final TextureAtlas atlas;
+
 	/** Whether or not the game board is in "demo" mode. */
 	private final boolean isDemoMode;
 
@@ -61,8 +64,9 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		super(width, height);
 
-		// Save reference to the game instance
+		// Save references to useful objects
 		this.game = game;
+		this.atlas = atlas;
 
 		// Save board configuration
 		this.isDemoMode = isDemoMode;
