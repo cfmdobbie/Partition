@@ -10,9 +10,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
@@ -151,6 +155,8 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 			// TODO: Game-over message, reset button
 			notifyTilesOwned(playerTerritories);
 			notifyTilesUnreachable(unreachable);
+
+			this.addActor(makeEndSlate());
 		}
 	}
 
@@ -165,6 +171,8 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 			// TODO: Game-over message, reset button
 			notifyTilesOwned(playerTerritories);
 			notifyTilesUnreachable(unreachable);
+
+			this.addActor(makeEndSlate());
 		}
 	}
 
@@ -178,6 +186,8 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		} else {
 			// TODO: Game-over message, reset button
 			notifyTilesUnreachable(unreachable);
+
+			this.addActor(makeEndSlate());
 		}
 	}
 
@@ -216,5 +226,31 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 				return true;
 			}
 		}, Actions.fadeIn(0.25f)));
+	}
+
+	/**
+	 * Construct an end-slate suitable for display on this board. Note that the positioning of the slate depends on the
+	 * board dimensions, so is only valid after the game board has been laid out.
+	 * 
+	 * @return The constructed end-slate.
+	 */
+	private Actor makeEndSlate() {
+
+		final Table slate = new Table();
+		// Background texture
+		slate.setBackground(new TiledDrawable(atlas.findRegion("black")));
+		// Slight alpha so board is still visible
+		slate.setColor(1.0f, 1.0f, 1.0f, 0.75f);
+		// Add buttons
+		slate.row();
+		slate.add(new Image(atlas.findRegion("end_play_again"))).expand();
+		slate.add(new Image(atlas.findRegion("end_main_menu"))).expand();
+		// Fixed size, based on button graphic sizes. Yes, this means this slate is inappropriate to display on very
+		// small boards!
+		slate.setSize(390, 160);
+		// Center slate on the game board
+		slate.setPosition(getWidth() / 2 - slate.getWidth() / 2, getHeight() / 2 - slate.getHeight() / 2);
+
+		return slate;
 	}
 }
