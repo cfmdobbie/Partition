@@ -14,8 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
@@ -243,8 +245,32 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		slate.setColor(1.0f, 1.0f, 1.0f, 0.75f);
 		// Add buttons
 		slate.row();
-		slate.add(new Image(atlas.findRegion("end_play_again"))).expand();
-		slate.add(new Image(atlas.findRegion("end_main_menu"))).expand();
+
+		// Play again
+		final Button playAgainButton = new Button(new TextureRegionDrawable(atlas.findRegion("end_play_again")),
+				new TextureRegionDrawable(atlas.findRegion("end_play_again")));
+		slate.add(playAgainButton);
+		playAgainButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				game.soundEngine.play(SoundEngine.SoundId.TONE);
+				GameBoard.this.removeActor(slate);
+				arbiter.doReset();
+			}
+		});
+
+		// Main menu
+		final Button mainMenuButton = new Button(new TextureRegionDrawable(atlas.findRegion("end_main_menu")),
+				new TextureRegionDrawable(atlas.findRegion("end_main_menu")));
+		slate.add(mainMenuButton);
+		mainMenuButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				game.soundEngine.play(SoundEngine.SoundId.TONE);
+				game.setScreen(new MainMenuScreen(game));
+			}
+		});
+
 		// Fixed size, based on button graphic sizes. Yes, this means this slate is inappropriate to display on very
 		// small boards!
 		slate.setSize(390, 160);
