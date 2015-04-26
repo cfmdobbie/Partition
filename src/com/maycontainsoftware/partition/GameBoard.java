@@ -154,7 +154,6 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		if (isDemoMode) {
 			demoModeBoardReset();
 		} else {
-			// TODO: Game-over message, reset button
 			notifyTilesOwned(playerTerritories);
 			notifyTilesUnreachable(unreachable);
 
@@ -170,7 +169,6 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		if (isDemoMode) {
 			demoModeBoardReset();
 		} else {
-			// TODO: Game-over message, reset button
 			notifyTilesOwned(playerTerritories);
 			notifyTilesUnreachable(unreachable);
 
@@ -186,7 +184,6 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		if (isDemoMode) {
 			demoModeBoardReset();
 		} else {
-			// TODO: Game-over message, reset button
 			notifyTilesUnreachable(unreachable);
 
 			this.addActor(makeEndSlate());
