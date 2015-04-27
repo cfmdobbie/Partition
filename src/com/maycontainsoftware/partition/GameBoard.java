@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -157,7 +158,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 			notifyTilesOwned(playerTerritories);
 			notifyTilesUnreachable(unreachable);
 
-			this.addActor(makeEndSlate());
+			this.addActor(makeEndSlate(winner.getPlayerNumber() == 0 ? SlateMessage.WIN_P0 : SlateMessage.WIN_P1));
 		}
 	}
 
@@ -172,7 +173,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 			notifyTilesOwned(playerTerritories);
 			notifyTilesUnreachable(unreachable);
 
-			this.addActor(makeEndSlate());
+			this.addActor(makeEndSlate(SlateMessage.DRAW));
 		}
 	}
 
@@ -186,7 +187,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		} else {
 			notifyTilesUnreachable(unreachable);
 
-			this.addActor(makeEndSlate());
+			this.addActor(makeEndSlate(SlateMessage.STALEMATE));
 		}
 	}
 
@@ -228,12 +229,53 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 	}
 
 	/**
+	 * An enumeration of all possible end-slate message, one for each possible game outcome.
+	 * 
+	 * @author Charlie
+	 */
+	private static enum SlateMessage {
+		WIN_P0("Red player wins!", Color.RED),
+		WIN_P1("Blue player wins!", Color.BLUE),
+		DRAW("It's a draw!", Color.GRAY),
+		STALEMATE("Stalemate!", Color.GRAY);
+
+		/** The text of this message. */
+		private final String text;
+
+		/** The color associated with this message. */
+		private final Color color;
+
+		/**
+		 * Construct a new end-slate message
+		 * 
+		 * @param text
+		 *            The text of this message.
+		 * @param color
+		 *            The color associated with this message.
+		 */
+		private SlateMessage(final String text, final Color color) {
+			this.text = text;
+			this.color = color;
+		}
+
+		/** Get the text of this end-slate message. */
+		public String getText() {
+			return text;
+		}
+
+		/** Get the color associated with this end-slate message. */
+		public Color getColor() {
+			return color;
+		}
+	}
+
+	/**
 	 * Construct an end-slate suitable for display on this board. Note that the positioning of the slate depends on the
 	 * board dimensions, so is only valid after the game board has been laid out.
 	 * 
 	 * @return The constructed end-slate.
 	 */
-	private Actor makeEndSlate() {
+	private Actor makeEndSlate(final SlateMessage message) {
 
 		final Table slate = new Table();
 		// Background texture
