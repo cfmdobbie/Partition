@@ -17,8 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
@@ -237,9 +237,10 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		final Table slate = new Table();
 		// Background texture
-		slate.setBackground(new TiledDrawable(atlas.findRegion("black")));
+		slate.setBackground(new NinePatchDrawable(atlas.createPatch("slate_border")));
 		// Slight alpha so board is still visible
 		slate.setColor(1.0f, 1.0f, 1.0f, 0.75f);
+
 		// Add buttons
 		slate.row();
 
@@ -270,7 +271,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		// Fixed size, based on button graphic sizes. Yes, this means this slate is inappropriate to display on very
 		// small boards!
-		slate.setSize(390, 92);
+		slate.setSize(390 * 1.5f, 92 * 1.5f);
 		// Center slate on the game board
 		slate.setPosition(getWidth() / 2 - slate.getWidth() / 2, getHeight() / 2 - slate.getHeight() / 2);
 
