@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -16,7 +17,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -283,6 +286,12 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 		// Slight alpha so board is still visible
 		slate.setColor(1.0f, 1.0f, 1.0f, 0.75f);
 
+		// Add message
+		slate.row();
+		final LabelStyle labelStyle = new Label.LabelStyle(new BitmapFont(Gdx.files.internal("segoeuiblack48.fnt")),
+				message.getColor());
+		slate.add(new Label(message.getText(), labelStyle)).colspan(2);
+
 		// Add buttons
 		slate.row();
 
@@ -313,7 +322,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 
 		// Fixed size, based on button graphic sizes. Yes, this means this slate is inappropriate to display on very
 		// small boards!
-		slate.setSize(390 * 1.5f, 92 * 1.5f);
+		slate.setSize(580, 180);
 		// Center slate on the game board
 		slate.setPosition(getWidth() / 2 - slate.getWidth() / 2, getHeight() / 2 - slate.getHeight() / 2);
 
