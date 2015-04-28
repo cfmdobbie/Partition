@@ -63,7 +63,10 @@ public class FixedAspectContainer extends WidgetGroup {
 	 *            The new aspect ratio.
 	 */
 	public void setAspect(final float aspect) {
-		// TODO: Consider issues with aspect <0 or ==0
+
+		if (aspect <= 0) {
+			throw new IllegalArgumentException("Invalid aspect ratio: " + aspect);
+		}
 		this.aspect = aspect;
 	}
 

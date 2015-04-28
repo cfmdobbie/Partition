@@ -139,8 +139,7 @@ public abstract class CGame extends Game {
 		Gdx.gl.glEnable(GL10.GL_SCISSOR_TEST);
 		Gdx.gl.glScissor((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
 
-		// Reset SpriteBatch color to white
-		// TODO: This doesn't appear to be necessary - check this!
+		// Reset SpriteBatch color to white. Should not be necessary, but is a reasonable safety measure.
 		batch.setColor(Color.WHITE);
 
 		// Pass render() call to active Screen

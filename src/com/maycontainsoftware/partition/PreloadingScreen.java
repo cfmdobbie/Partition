@@ -22,8 +22,6 @@ public class PreloadingScreen extends CScreen<PartitionGame> {
 	public PreloadingScreen(final PartitionGame game) {
 		super(game);
 
-		// TODO: Load different assets dependent on current horizontal screen resolution.
-
 		// Queue developer logo
 		game.manager.load("developer_logo.png", Texture.class);
 

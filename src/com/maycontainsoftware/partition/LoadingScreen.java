@@ -31,8 +31,6 @@ public class LoadingScreen extends CScreen<PartitionGame> {
 	public LoadingScreen(final PartitionGame game) {
 		super(game);
 
-		// TODO: Load different assets dependent on current horizontal screen resolution.
-
 		// Extract required assets from the asset manager
 		developerLogo = game.manager.get("developer_logo.png", Texture.class);
 		loadingAtlas = game.manager.get("loading.atlas", TextureAtlas.class);
@@ -64,13 +62,11 @@ public class LoadingScreen extends CScreen<PartitionGame> {
 
 	/** Enqueue all Texture assets required by the app. */
 	private void enqueueTextures() {
-		// TODO: Enqueue Textures
 		// game.manager.load("yellow.png", Texture.class);
 	}
 
 	/** Enqueue all Sound assets required by the app. */
 	private void enqueueSounds() {
-		// TODO: Enqueue Sounds
 		game.manager.load("error.wav", Sound.class);
 		game.manager.load("explosion.wav", Sound.class);
 		game.manager.load("ping.wav", Sound.class);
@@ -89,13 +85,11 @@ public class LoadingScreen extends CScreen<PartitionGame> {
 
 	/** Enqueue all TextureAtlas assets required by the app. */
 	private void enqueueAtlases() {
-		// TODO: Enqueue TextureAtlases
 		game.manager.load("atlas.atlas", TextureAtlas.class);
 	}
 
 	/** Enqueue all Skin assets required by the app. */
 	private void enqueueSkins() {
-		// TODO: Enqueue Skins
 	}
 
 	@Override
