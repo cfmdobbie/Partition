@@ -100,7 +100,7 @@ public class LoadingScreen extends CScreen<PartitionGame> {
 		if (game.manager.update()) {
 			// All assets loaded!
 			// TODO: Want to fade screen out once all asset loading is complete
-			game.setScreen(new MainMenuScreen(game));
+			game.setScreen(new MainScreen(game));
 		}
 	}
 
