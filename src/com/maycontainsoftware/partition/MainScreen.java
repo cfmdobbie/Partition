@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 
@@ -68,7 +67,16 @@ public class MainScreen extends CScreen<PartitionGame> {
 		initialActor.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				panelArea.push(new Image(atlas.findRegion("play_down")));
+
+				final Actor next = new Button(new TextureRegionDrawable(atlas.findRegion("play_down")));
+				next.addListener(new InputListener() {
+					@Override
+					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+						panelArea.pop();
+						return true;
+					}
+				});
+				panelArea.push(next);
 				return true;
 			}
 		});
