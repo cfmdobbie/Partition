@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.maycontainsoftware.partition.PanelArea.Panel;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
+import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 
 /**
  * The main menu panel. This is the first panel that is seen.
@@ -52,8 +53,7 @@ public class MainPanel extends Panel {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				// TODO: SelectBoardPanel
-				panelArea.push(new Panel());
+				panelArea.push(new SelectBoardPanel(game, PlayerConfiguration.TWO_PLAYER));
 			}
 		});
 
