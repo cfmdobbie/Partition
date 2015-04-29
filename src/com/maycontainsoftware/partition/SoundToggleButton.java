@@ -32,7 +32,7 @@ class SoundToggleButton extends Button {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.soundEngine.setEnabled(isChecked());
-				Gdx.app.debug(TAG, "Play sound? " + game.soundEngine);
+				Gdx.app.debug(TAG, "Play sound? " + game.soundEngine.isEnabled());
 			}
 		});
 
