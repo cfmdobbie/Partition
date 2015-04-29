@@ -53,7 +53,7 @@ public class MainScreen extends CScreen<PartitionGame> {
 		final float panelAreaY = pad;
 
 		// Create the panel area
-		final PanelArea panelArea = new PanelArea(new PanelArea.Panel());
+		final PanelArea panelArea = new PanelArea(new MainPanel(game));
 
 		// Set panel area position and size
 		panelArea.setPosition(panelAreaX, panelAreaY);
