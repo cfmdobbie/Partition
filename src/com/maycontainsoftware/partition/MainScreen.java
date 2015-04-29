@@ -42,11 +42,25 @@ public class MainScreen extends CScreen<PartitionGame> {
 		soundToggle.setY(game.virtualHeight - pad - soundImageSize);
 		root.addActor(soundToggle);
 
-		// Temporary actor to show working area on screen
-		final Actor black = new Image(atlas.findRegion("black"));
-		black.setPosition(pad, pad);
-		black.setWidth(game.virtualWidth - pad * 2);
-		black.setHeight(game.virtualHeight - pad * 3 - soundImageSize);
-		root.addActor(black);
+		// Area with interchangeable panels containing the actual screen content
+
+		// Width is screen width less padding on either side
+		final float panelAreaWidth = game.virtualWidth - pad * 2;
+		// Height is screen height less height of sound toggle button and three bits of padding
+		final float panelAreaHeight = game.virtualHeight - soundImageSize - pad * 3;
+
+		// Location is one set of padding away from the origin in each direction
+		final float panelAreaX = pad;
+		final float panelAreaY = pad;
+
+		// XXX: Temporary representative actor
+		final Actor panelArea = new Image(atlas.findRegion("black"));
+
+		// Set panel area position and size
+		panelArea.setPosition(panelAreaX, panelAreaY);
+		panelArea.setSize(panelAreaWidth, panelAreaHeight);
+
+		// Add it to the root table
+		root.addActor(panelArea);
 	}
 }
