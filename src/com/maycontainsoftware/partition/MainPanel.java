@@ -75,8 +75,7 @@ public class MainPanel extends Panel {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				// TODO: InstructionsPanel
-				panelArea.push(new Panel());
+				panelArea.push(new InstructionsPanel(game));
 			}
 		});
 
