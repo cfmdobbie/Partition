@@ -3,10 +3,6 @@ package com.maycontainsoftware.partition;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 
 /**
@@ -56,30 +52,8 @@ public class MainScreen extends CScreen<PartitionGame> {
 		final float panelAreaX = pad;
 		final float panelAreaY = pad;
 
-		// Create initial panel
-		// XXX: Temporary representative actor
-		final Button initialActor = new Button(new TextureRegionDrawable(atlas.findRegion("play_up")));
-
 		// Create the panel area
-		final PanelArea panelArea = new PanelArea(initialActor);
-
-		// XXX: Temporary listener to test push() function of panel area
-		initialActor.addListener(new InputListener() {
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
-				final Actor next = new Button(new TextureRegionDrawable(atlas.findRegion("play_down")));
-				next.addListener(new InputListener() {
-					@Override
-					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-						panelArea.pop();
-						return true;
-					}
-				});
-				panelArea.push(next);
-				return true;
-			}
-		});
+		final PanelArea panelArea = new PanelArea(new PanelArea.Panel());
 
 		// Set panel area position and size
 		panelArea.setPosition(panelAreaX, panelAreaY);

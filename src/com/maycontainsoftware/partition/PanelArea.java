@@ -4,8 +4,8 @@ import java.util.Stack;
 
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 
 /**
@@ -20,7 +20,7 @@ public class PanelArea extends WidgetGroup {
 	 * Stack of panels of UI content. Aside from during animations, only one panel is visible - the top panel in the
 	 * stack.
 	 */
-	private final Stack<Actor> panels = new Stack<Actor>();
+	private final Stack<Panel> panels = new Stack<Panel>();
 
 	/** Time to animate between panels, in seconds. */
 	private final static float SWITCH_TIME = 0.5f;
@@ -31,10 +31,11 @@ public class PanelArea extends WidgetGroup {
 	 * @param initial
 	 *            The first visible panel.
 	 */
-	public PanelArea(final Actor initial) {
+	public PanelArea(final Panel initial) {
 
 		// Initialize the stack with the first panel
 		panels.push(initial);
+		initial.setPanelArea(this);
 
 		// Add new panel to the UI
 		this.addActor(initial);
@@ -48,14 +49,15 @@ public class PanelArea extends WidgetGroup {
 	 * @param next
 	 *            The new panel of content.
 	 */
-	public void push(final Actor next) {
+	public void push(final Panel next) {
 
 		// Animate previous panel off to the left
-		final Actor previous = panels.peek();
+		final Panel previous = panels.peek();
 		previous.addAction(Actions.moveBy(-getDeltaX(), 0, SWITCH_TIME, Interpolation.sine));
 
 		// Add the new panel to the top of the stack
 		panels.push(next);
+		next.setPanelArea(this);
 
 		// Add new panel to the UI and set its size and position
 		this.addActor(next);
@@ -74,8 +76,8 @@ public class PanelArea extends WidgetGroup {
 		}
 
 		// Get references to the relevant panels
-		final Actor old = panels.pop();
-		final Actor next = panels.peek();
+		final Panel old = panels.pop();
+		final Panel next = panels.peek();
 
 		// Animate old panel off to the right
 		old.addAction(Actions.sequence(Actions.moveBy(getDeltaX(), 0, SWITCH_TIME, Interpolation.sine), new Action() {
@@ -107,5 +109,20 @@ public class PanelArea extends WidgetGroup {
 	private float getDeltaX() {
 		// Width of the panel plus a buffer to ensure panel is off screen
 		return getWidth() + 50.0f;
+	}
+
+	/**
+	 * Superclass of all panels that can be placed into the panel area.
+	 * 
+	 * @author Charlie
+	 */
+	static class Panel extends Table {
+		/** The panel area this panel is attached to. */
+		protected PanelArea panelArea;
+
+		/** Set the panel area this panel is attached to. */
+		public void setPanelArea(final PanelArea panelArea) {
+			this.panelArea = panelArea;
+		}
 	}
 }
