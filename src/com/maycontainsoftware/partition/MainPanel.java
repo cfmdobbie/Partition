@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.maycontainsoftware.partition.PanelArea.Panel;
+import com.maycontainsoftware.partition.CardStack.Card;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 
@@ -16,7 +16,7 @@ import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
  * 
  * @author Charlie
  */
-public class MainPanel extends Panel {
+public class MainPanel extends Card {
 
 	/**
 	 * Construct a new MainPanel.
@@ -53,7 +53,7 @@ public class MainPanel extends Panel {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				panelArea.push(new SelectBoardPanel(game, PlayerConfiguration.TWO_PLAYER));
+				cardStack.push(new SelectBoardPanel(game, PlayerConfiguration.TWO_PLAYER));
 			}
 		});
 
@@ -75,7 +75,7 @@ public class MainPanel extends Panel {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				panelArea.push(new InstructionsPanel(game));
+				cardStack.push(new InstructionsPanel(game));
 			}
 		});
 

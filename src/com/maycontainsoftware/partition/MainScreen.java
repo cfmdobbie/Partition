@@ -52,14 +52,14 @@ public class MainScreen extends CScreen<PartitionGame> {
 		final float panelAreaX = pad;
 		final float panelAreaY = pad;
 
-		// Create the panel area
-		final PanelArea panelArea = new PanelArea(new MainPanel(game));
+		// Create the card stack
+		final CardStack cardStack = new CardStack(new MainPanel(game));
 
-		// Set panel area position and size
-		panelArea.setPosition(panelAreaX, panelAreaY);
-		panelArea.setSize(panelAreaWidth, panelAreaHeight);
+		// Set card stack position and size
+		cardStack.setPosition(panelAreaX, panelAreaY);
+		cardStack.setSize(panelAreaWidth, panelAreaHeight);
 
 		// Add it to the root table
-		root.addActor(panelArea);
+		root.addActor(cardStack);
 	}
 }

@@ -8,11 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.maycontainsoftware.partition.PanelArea.Panel;
+import com.maycontainsoftware.partition.CardStack.Card;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 
-public class InstructionsPanel extends Panel {
+public class InstructionsPanel extends Card {
 
 	public InstructionsPanel(final PartitionGame game) {
 
