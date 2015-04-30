@@ -43,20 +43,14 @@ public class MainScreen extends CScreen<PartitionGame> {
 
 		// Area with interchangeable panels containing the actual screen content
 
-		// Width is screen width less padding on either side
-		final float panelAreaWidth = game.virtualWidth - pad * 2;
-		// Height is screen height less height of sound toggle button and three bits of padding
-		final float panelAreaHeight = game.virtualHeight - soundImageSize - pad * 3;
-
-		// Location is one set of padding away from the origin in each direction
-		final float panelAreaX = pad;
-		final float panelAreaY = pad;
-
 		// Create the card stack
 		final CardStack cardStack = new CardStack();
 
-		// Set card stack position and size
-		cardStack.setPosition(panelAreaX, panelAreaY);
+		// Set card stack size
+		// Width is screen width
+		final float panelAreaWidth = game.virtualWidth;
+		// Height is screen height less height of sound toggle button and two bits of padding
+		final float panelAreaHeight = game.virtualHeight - soundImageSize - pad * 2;
 		cardStack.setSize(panelAreaWidth, panelAreaHeight);
 
 		// Add it to the root table
