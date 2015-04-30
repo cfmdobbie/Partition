@@ -53,7 +53,7 @@ public class MainScreen extends CScreen<PartitionGame> {
 		final float panelAreaY = pad;
 
 		// Create the card stack
-		final CardStack cardStack = new CardStack(new MainPanel(game));
+		final CardStack cardStack = new CardStack();
 
 		// Set card stack position and size
 		cardStack.setPosition(panelAreaX, panelAreaY);
@@ -61,5 +61,8 @@ public class MainScreen extends CScreen<PartitionGame> {
 
 		// Add it to the root table
 		root.addActor(cardStack);
+
+		// Now the card stack is set up, set the initial card
+		cardStack.setInitialCard(new MainPanel(game, cardStack));
 	}
 }

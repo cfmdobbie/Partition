@@ -7,15 +7,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.maycontainsoftware.partition.CardStack.Card;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 
 /**
- * Board selection panel.
+ * Board selection card.
  * 
  * @author Charlie
  */
-public class SelectBoardPanel extends Card {
+public class SelectBoardPanel extends Table {
 
 	/**
 	 * Construct a new SelectBoardScreen object.
@@ -25,7 +24,8 @@ public class SelectBoardPanel extends Card {
 	 * @param playerConfiguration
 	 *            The PlayerConfiguration that has already been selected.
 	 */
-	public SelectBoardPanel(final PartitionGame game, final PlayerConfiguration playerConfiguration) {
+	public SelectBoardPanel(final PartitionGame game, final CardStack cardStack,
+			final PlayerConfiguration playerConfiguration) {
 
 		final TextureAtlas atlas = game.manager.get("atlas.atlas", TextureAtlas.class);
 

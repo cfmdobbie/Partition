@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.maycontainsoftware.partition.CardStack.Card;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 
@@ -16,7 +16,7 @@ import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
  * 
  * @author Charlie
  */
-public class MainPanel extends Card {
+public class MainPanel extends Table {
 
 	/**
 	 * Construct a new MainPanel.
@@ -24,7 +24,7 @@ public class MainPanel extends Card {
 	 * @param game
 	 *            The PartitionGame instance.
 	 */
-	public MainPanel(final PartitionGame game) {
+	public MainPanel(final PartitionGame game, final CardStack cardStack) {
 
 		final TextureAtlas atlas = game.manager.get("atlas.atlas", TextureAtlas.class);
 
@@ -53,7 +53,7 @@ public class MainPanel extends Card {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				cardStack.push(new SelectBoardPanel(game, PlayerConfiguration.TWO_PLAYER));
+				cardStack.push(new SelectBoardPanel(game, cardStack, PlayerConfiguration.TWO_PLAYER));
 			}
 		});
 
