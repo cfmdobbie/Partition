@@ -33,24 +33,33 @@ public class MainScreen extends CScreen<PartitionGame> {
 
 		// UI spacing
 		final float pad = 10.0f;
+		final float topBarButtonSize = 40.0f;
 
 		// Sound toggle button
-		final float soundImageSize = 40.0f;
 		final Actor soundToggle = new SoundToggleButton(game, atlas);
-		soundToggle.setX(game.virtualWidth - pad - soundImageSize);
-		soundToggle.setY(game.virtualHeight - pad - soundImageSize);
+		soundToggle.setX(game.virtualWidth - pad - topBarButtonSize);
+		soundToggle.setY(game.virtualHeight - pad - topBarButtonSize);
 		root.addActor(soundToggle);
+
+		// Back button
+		final BackButton back = new BackButton(game, atlas);
+		back.setX(pad);
+		back.setY(game.virtualHeight - pad - topBarButtonSize);
+		root.addActor(back);
 
 		// Area with interchangeable panels containing the actual screen content
 
 		// Create the card stack
 		final CardStack cardStack = new CardStack();
 
+		// Set the back button to listen for stack changed events
+		cardStack.addListener(back);
+
 		// Set card stack size
 		// Width is screen width
 		final float panelAreaWidth = game.virtualWidth;
 		// Height is screen height less height of sound toggle button and two bits of padding
-		final float panelAreaHeight = game.virtualHeight - soundImageSize - pad * 2;
+		final float panelAreaHeight = game.virtualHeight - topBarButtonSize - pad * 2;
 		cardStack.setSize(panelAreaWidth, panelAreaHeight);
 
 		// Add it to the root table
