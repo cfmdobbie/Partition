@@ -3,6 +3,8 @@ package com.maycontainsoftware.partition;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 
 /**
@@ -14,6 +16,9 @@ public class MainScreen extends CScreen<PartitionGame> {
 
 	/** Tag for logging purposes. */
 	private static final String LOG = MainScreen.class.getName();
+
+	/** The card stack. */
+	final CardStack cardStack;
 
 	/**
 	 * Construct a new MainScreen.
@@ -47,10 +52,19 @@ public class MainScreen extends CScreen<PartitionGame> {
 		back.setY(game.virtualHeight - pad - topBarButtonSize);
 		root.addActor(back);
 
+		// When the back button is pressed, go back one card in the stack
+		back.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				back();
+				return true;
+			}
+		});
+
 		// Area with interchangeable panels containing the actual screen content
 
 		// Create the card stack
-		final CardStack cardStack = new CardStack();
+		cardStack = new CardStack();
 
 		// Set the back button to listen for stack changed events
 		cardStack.addListener(back);
@@ -67,5 +81,10 @@ public class MainScreen extends CScreen<PartitionGame> {
 
 		// Now the card stack is set up, set the initial card
 		cardStack.setInitialCard(new MainPanel(game, cardStack));
+	}
+
+	/** Go back one card in the card stack. */
+	private void back() {
+		cardStack.pop();
 	}
 }
