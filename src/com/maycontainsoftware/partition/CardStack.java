@@ -23,7 +23,7 @@ public class CardStack extends WidgetGroup {
 	private final Stack<Actor> cards = new Stack<Actor>();
 
 	/** Time to animate between cards, in seconds. */
-	private final static float SWITCH_TIME = 0.5f;
+	private final static float SWITCH_TIME = 0.25f;
 
 	/** Set of listeners interested in changes to the stack of cards. */
 	private Set<IStackChangeListener> stackChangedListeners = new HashSet<IStackChangeListener>();
