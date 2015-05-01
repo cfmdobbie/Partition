@@ -60,22 +60,22 @@ public class InstructionsPanel extends Table {
 			add(body("The player left in the largest patch of squares wins.  Try it out!"));
 
 			row();
-			add(new GameBoard(game, atlas, 125.0f * 4, 125.0f, PlayerConfiguration.TWO_PLAYER,
-					BoardConfiguration.LOSE_DEMO, true));
+			add(new DemoGameBoard(game, atlas, 125.0f * 4, 125.0f, PlayerConfiguration.TWO_PLAYER,
+					BoardConfiguration.LOSE_DEMO));
 
 			row();
 			add(body("If the players end up in areas of equal size, the game is a draw:"));
 
 			row();
-			add(new GameBoard(game, atlas, 125.0f * 3, 125.0f, PlayerConfiguration.TWO_PLAYER,
-					BoardConfiguration.DRAW_DEMO, true));
+			add(new DemoGameBoard(game, atlas, 125.0f * 3, 125.0f, PlayerConfiguration.TWO_PLAYER,
+					BoardConfiguration.DRAW_DEMO));
 
 			row();
 			add(body("If the players are not isolated but a player cannot move, the game ends in a stalemate:"));
 
 			row();
-			add(new GameBoard(game, atlas, 125.0f * 3, 125.0f, PlayerConfiguration.TWO_PLAYER,
-					BoardConfiguration.STALEMATE_DEMO, true));
+			add(new DemoGameBoard(game, atlas, 125.0f * 3, 125.0f, PlayerConfiguration.TWO_PLAYER,
+					BoardConfiguration.STALEMATE_DEMO));
 		}
 
 		/** Utility method to make a new text label. */

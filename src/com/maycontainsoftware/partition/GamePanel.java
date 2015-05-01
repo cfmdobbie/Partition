@@ -32,8 +32,8 @@ public class GamePanel extends Table {
 		final TextureAtlas atlas = game.manager.get("atlas.atlas", TextureAtlas.class);
 
 		// GameBoard manages its own fixed-aspect behaviour, so just add the board to the screen at max available size
-		final GameBoard gameBoard = new GameBoard(game, atlas, cardStack.getWidth(), cardStack.getHeight(),
-				playerConfiguration, boardConfiguration, false);
+		final BaseGameBoard gameBoard = new GameBoard(game, atlas, cardStack.getWidth(), cardStack.getHeight(),
+				playerConfiguration, boardConfiguration, cardStack);
 		row();
 		add(gameBoard).expand().fill();
 	}
