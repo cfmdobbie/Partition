@@ -97,6 +97,39 @@ public class CardStack extends WidgetGroup {
 		next.addAction(Actions.moveTo(0, 0, SWITCH_TIME, Interpolation.sine));
 	}
 
+	/** Switch to the first card, discarding all other cards. */
+	public void first() {
+
+		if (cards.size() <= 1) {
+			throw new RuntimeException("CardStack::first;cards.size=" + cards.size());
+		}
+
+		// Get rid of current card
+		final Actor current = cards.pop();
+		// Animate card off to the right
+		current.addAction(Actions.sequence(Actions.moveBy(getDeltaX(), 0, SWITCH_TIME, Interpolation.sine),
+				new Action() {
+					@Override
+					public boolean act(float delta) {
+						CardStack.this.removeActor(current);
+						return true;
+					}
+				}));
+
+		// Silently drop any extra cards in the stack
+		while (cards.size() > 1) {
+			final Actor unwanted = cards.pop();
+			removeActor(unwanted);
+		}
+
+		// Animate first card in from the left
+		final Actor first = cards.peek();
+		first.setPosition(-getDeltaX(), 0);
+		first.addAction(Actions.moveTo(0, 0, SWITCH_TIME, Interpolation.sine));
+
+		notifyListeners();
+	}
+
 	/**
 	 * Add a listener to the set of listeners interested in stack changed events.
 	 * 
