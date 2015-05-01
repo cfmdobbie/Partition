@@ -54,6 +54,7 @@ public class MainPanel extends Table {
 			public void changed(ChangeEvent event, Actor actor) {
 				game.soundEngine.play(SoundEngine.SoundId.TONE);
 				cardStack.push(new SelectBoardPanel(game, cardStack, PlayerConfiguration.TWO_PLAYER));
+				// TODO: Once AI support is added: cardStack.push(new SelectPlayersPanel(game, cardStack));
 			}
 		});
 
