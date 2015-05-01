@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 
 /**
@@ -52,7 +53,7 @@ public class SelectBoardPanel extends Table {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				// XXX: new GameScreen(game, playerConfiguration, BoardConfiguration.HUB)
+				cardStack.push(new GamePanel(game, cardStack, PlayerConfiguration.TWO_PLAYER, BoardConfiguration.HUB));
 			}
 		});
 		// Board 2: OPEN
@@ -63,7 +64,7 @@ public class SelectBoardPanel extends Table {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				// TODO: new GameScreen(game, playerConfiguration, BoardConfiguration.OPEN)
+				cardStack.push(new GamePanel(game, cardStack, PlayerConfiguration.TWO_PLAYER, BoardConfiguration.OPEN));
 			}
 		});
 
@@ -76,7 +77,7 @@ public class SelectBoardPanel extends Table {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				// TODO: new GameScreen(game, playerConfiguration, BoardConfiguration.WALL)
+				cardStack.push(new GamePanel(game, cardStack, PlayerConfiguration.TWO_PLAYER, BoardConfiguration.WALL));
 			}
 		});
 		// Board 4: HOLES
@@ -87,7 +88,8 @@ public class SelectBoardPanel extends Table {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				// TODO: new GameScreen(game, playerConfiguration, BoardConfiguration.HOLES)
+				cardStack
+						.push(new GamePanel(game, cardStack, PlayerConfiguration.TWO_PLAYER, BoardConfiguration.HOLES));
 			}
 		});
 
