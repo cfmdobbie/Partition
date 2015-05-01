@@ -316,7 +316,7 @@ public class GameBoard extends FixedSizeWidgetGroup implements IBoard {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				game.setScreen(new MainMenuScreen(game));
+				game.setScreen(new MainMenuScreen(game)); // XXX
 			}
 		});
 
