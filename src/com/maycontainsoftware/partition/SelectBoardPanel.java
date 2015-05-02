@@ -28,7 +28,7 @@ public class SelectBoardPanel extends Table {
 	public SelectBoardPanel(final PartitionGame game, final CardStack cardStack,
 			final PlayerConfiguration playerConfiguration) {
 
-		final TextureAtlas atlas = game.manager.get("atlas.atlas", TextureAtlas.class);
+		final TextureAtlas atlas = game.textureAtlas;
 
 		// Spacer before heading
 		row().expand();

@@ -26,7 +26,7 @@ public class MainPanel extends Table {
 	 */
 	public MainPanel(final PartitionGame game, final CardStack cardStack) {
 
-		final TextureAtlas atlas = game.manager.get("atlas.atlas", TextureAtlas.class);
+		final TextureAtlas atlas = game.textureAtlas;
 
 		final TextureRegion playUp = atlas.findRegion("play_up");
 		final TextureRegion playDown = atlas.findRegion("play_down");

@@ -25,7 +25,7 @@ public class SelectPlayersPanel extends Table {
 	 */
 	public SelectPlayersPanel(final PartitionGame game, final CardStack cardStack) {
 
-		final TextureAtlas atlas = game.manager.get("atlas.atlas", TextureAtlas.class);
+		final TextureAtlas atlas = game.textureAtlas;
 
 		final TextureRegion onePlayerUp = atlas.findRegion("1p_up");
 		final TextureRegion onePlayerDown = atlas.findRegion("1p_down");

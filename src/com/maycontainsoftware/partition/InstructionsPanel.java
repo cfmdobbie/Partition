@@ -24,7 +24,7 @@ public class InstructionsPanel extends Table {
 
 		public InstructionsTable(final PartitionGame game) {
 
-			final TextureAtlas atlas = game.manager.get("atlas.atlas", TextureAtlas.class);
+			final TextureAtlas atlas = game.textureAtlas;
 
 			defaults().pad(10.0f).expandX().fillX();
 
