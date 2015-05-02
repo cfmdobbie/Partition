@@ -35,9 +35,6 @@ public class LoadingScreen extends CScreen<PartitionGame> {
 		developerLogo = game.manager.get("developer_logo.png", Texture.class);
 		loadingAtlas = game.manager.get("loading.atlas", TextureAtlas.class);
 
-		// TODO: Really want tiled background to fade in over about 0.5 secs
-		// root.setBackground(new TiledDrawable(loadingAtlas.findRegion("background")));
-
 		// Developer logo
 		root.row().padBottom(10.0f);
 		root.add(new Image(developerLogo));
