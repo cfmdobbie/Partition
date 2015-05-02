@@ -18,27 +18,27 @@ import java.util.TreeSet;
 public class GameState {
 
 	/** Whether a particular tile is enabled. */
-	boolean[][] tileEnabled;
+	public boolean[][] tileEnabled;
 
 	/** The current player index. */
-	byte currentPlayerIndex;
+	public byte currentPlayerIndex;
 
 	/** The current turn phase. */
-	byte turnPhase;
+	private byte turnPhase;
 
 	// Defined turn phases
 
 	/** Constant to represent the move phase. */
-	final static byte PHASE_MOVE = 0x1;
+	private static final byte PHASE_MOVE = 0x1;
 
 	/** Constant to represent the shoot phase. */
-	final static byte PHASE_SHOOT = 0x2;
+	private static final byte PHASE_SHOOT = 0x2;
 
 	/** The player board-coordinates, as playerCoords[#players][2]. */
-	byte[][] playerCoords;
+	public byte[][] playerCoords;
 
 	/** Deltas to apply to a coordinate to locate surrounding tiles. */
-	static final byte[][] COORDINATE_DELTAS = new byte[][] {
+	private static final byte[][] COORDINATE_DELTAS = new byte[][] {
 	/* SW */{ -1, -1 },
 	/* W */{ -1, 0 },
 	/* NW */{ -1, 1 },
