@@ -1,6 +1,7 @@
 package com.maycontainsoftware.partition;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.maycontainsoftware.general.CSoundEngine;
 
 /**
  * The sound engine used in Partition.

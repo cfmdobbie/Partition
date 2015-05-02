@@ -1,4 +1,4 @@
-package com.maycontainsoftware.partition;
+package com.maycontainsoftware.general;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;

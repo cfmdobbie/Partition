@@ -1,6 +1,8 @@
 package com.maycontainsoftware.partition;
 
 import com.badlogic.gdx.Screen;
+import com.maycontainsoftware.general.CGame;
+import com.maycontainsoftware.general.CSoundEngine;
 
 /**
  * The main Game instance.

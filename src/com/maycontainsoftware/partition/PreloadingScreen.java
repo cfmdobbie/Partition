@@ -3,6 +3,7 @@ package com.maycontainsoftware.partition;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.maycontainsoftware.general.CScreen;
 
 /**
  * Screen to asynchronously load any assets required for the loading screen.
