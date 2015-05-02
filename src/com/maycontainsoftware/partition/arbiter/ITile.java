@@ -1,4 +1,4 @@
-package com.maycontainsoftware.partition;
+package com.maycontainsoftware.partition.arbiter;
 
 public interface ITile {
 

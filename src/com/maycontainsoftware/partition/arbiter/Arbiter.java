@@ -1,4 +1,4 @@
-package com.maycontainsoftware.partition;
+package com.maycontainsoftware.partition.arbiter;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import com.maycontainsoftware.partition.GameState;
 
 /**
  * The Arbiter is the class that manages the logical flow of the game. It is responsible for remembering what turn state

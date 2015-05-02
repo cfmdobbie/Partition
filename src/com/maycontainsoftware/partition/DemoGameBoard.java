@@ -3,12 +3,15 @@ package com.maycontainsoftware.partition;
 import java.util.Map;
 import java.util.Set;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
+import com.maycontainsoftware.partition.arbiter.IPlayer;
+import com.maycontainsoftware.partition.arbiter.ITile;
 
 /**
  * A game board that works in demo mode - i.e. doesn't display any end-of-game message, but just silently resets the

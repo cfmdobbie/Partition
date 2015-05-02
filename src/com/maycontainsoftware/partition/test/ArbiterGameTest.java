@@ -6,11 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.maycontainsoftware.partition.Arbiter;
+
 import com.maycontainsoftware.partition.GameState;
-import com.maycontainsoftware.partition.IBoard;
-import com.maycontainsoftware.partition.IPlayer;
-import com.maycontainsoftware.partition.ITile;
+import com.maycontainsoftware.partition.arbiter.Arbiter;
+import com.maycontainsoftware.partition.arbiter.IBoard;
+import com.maycontainsoftware.partition.arbiter.IPlayer;
+import com.maycontainsoftware.partition.arbiter.ITile;
 
 /** Simple test of the Arbiter's ability to run a game. */
 public class ArbiterGameTest {

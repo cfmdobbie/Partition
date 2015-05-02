@@ -1,4 +1,4 @@
-package com.maycontainsoftware.partition;
+package com.maycontainsoftware.partition.arbiter;
 
 import java.util.Map;
 import java.util.Set;

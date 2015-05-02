@@ -3,6 +3,7 @@ package com.maycontainsoftware.partition;
 import java.util.Map;
 import java.util.Set;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -17,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
+import com.maycontainsoftware.partition.arbiter.IPlayer;
+import com.maycontainsoftware.partition.arbiter.ITile;
 
 /**
  * The main game board. This is a concrete implementation that displays a message on game end allowing the player to
