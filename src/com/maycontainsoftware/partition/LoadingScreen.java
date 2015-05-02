@@ -95,7 +95,12 @@ public class LoadingScreen extends CScreen<PartitionGame> {
 
 		// Continue loading of assets
 		if (game.manager.update()) {
+
 			// All assets loaded!
+
+			// Store reference to texture atlas
+			game.textureAtlas = game.manager.get("atlas.atlas", TextureAtlas.class);
+
 			// TODO: Want to fade screen out once all asset loading is complete
 			game.setScreen(new MainScreen(game));
 		}
