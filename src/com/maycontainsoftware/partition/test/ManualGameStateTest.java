@@ -1,6 +1,6 @@
 package com.maycontainsoftware.partition.test;
 
-import com.maycontainsoftware.partition.GameState;
+import com.maycontainsoftware.partition.gamestate.GameState;
 
 public class ManualGameStateTest {
 	public static void main(String[] args) {

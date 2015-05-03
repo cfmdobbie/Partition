@@ -7,11 +7,11 @@ import java.util.Map;
 import java.util.Set;
 
 
-import com.maycontainsoftware.partition.GameState;
 import com.maycontainsoftware.partition.arbiter.Arbiter;
 import com.maycontainsoftware.partition.arbiter.IBoard;
 import com.maycontainsoftware.partition.arbiter.IPlayer;
 import com.maycontainsoftware.partition.arbiter.ITile;
+import com.maycontainsoftware.partition.gamestate.GameState;
 
 /** Simple test of the Arbiter's ability to run a game. */
 public class ArbiterGameTest {

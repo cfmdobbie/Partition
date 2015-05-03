@@ -1,4 +1,4 @@
-package com.maycontainsoftware.partition;
+package com.maycontainsoftware.partition.gamestate;
 
 import java.util.Arrays;
 import java.util.Comparator;

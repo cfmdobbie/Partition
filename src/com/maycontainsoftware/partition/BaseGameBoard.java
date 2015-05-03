@@ -17,6 +17,7 @@ import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
 import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 import com.maycontainsoftware.partition.arbiter.Arbiter;
 import com.maycontainsoftware.partition.arbiter.IBoard;
+import com.maycontainsoftware.partition.gamestate.GameState;
 
 /**
  * A representation of a game board. This is a partial implementation that doesn't define any end-of-game functionality.
