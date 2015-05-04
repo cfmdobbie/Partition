@@ -140,81 +140,80 @@ public class Arbiter {
 
 	/** Receive notification that a move event has been completed by the application components. */
 	public void moveDone() {
+
 		// Check that we were moving
 		if (turnState == GameTurnState.MOVING) {
-
-			// Now waiting for a decision on which tile to shoot
-			turnState = GameTurnState.PENDING_SHOOT;
-
-			// Tell the player that it is now pending a shoot
-			players.get(activePlayerNumber).doPendingShoot();
-
-		} else {
-			throw new RuntimeException("Arbiter::moveDone;incorrect_turnState:" + turnState);
+			throw new IllegalStateException("Arbiter::moveDone;incorrect_turnState:" + turnState);
 		}
+
+		// Now waiting for a decision on which tile to shoot
+		turnState = GameTurnState.PENDING_SHOOT;
+
+		// Tell the player that it is now pending a shoot
+		players.get(activePlayerNumber).doPendingShoot();
 	}
 
 	/** Receive notification that a shoot event has been completed by the application components. */
 	public void shootDone() {
+
 		// Check that were were shooting
 		if (turnState == GameTurnState.SHOOTING) {
+			throw new IllegalStateException("Arbiter::shootDone;incorrect_turnState:" + turnState);
+		}
 
-			// Check for a win
-			turnState = GameTurnState.WIN_CHECK;
+		// Check for a win
+		turnState = GameTurnState.WIN_CHECK;
 
-			if (GameState.isGameOver(state)) {
+		if (GameState.isGameOver(state)) {
+			// Update the turn state
+			turnState = GameTurnState.WON;
+
+			// Determine which tiles are unreachable
+			final Set<ITile> unreachable = getUnreachableEnabledTiles();
+
+			// Calculate the player territories
+			final Map<IPlayer, Set<ITile>> playerTerritories = getPlayerTerritories();
+
+			// Need to determine whether there was an outright winner, or a draw between one or more players
+			// Determine the winners from the claimed territories
+			final Set<IPlayer> winners = getWinningPlayers(playerTerritories);
+
+			// Tell the board
+			if (winners.size() == 1) {
+				// One winner - it's an outright win
+				board.doWin(winners.toArray(new IPlayer[] {})[0], playerTerritories, unreachable);
+			} else {
+				// Multiple winners - it's a draw
+				board.doDraw(winners, playerTerritories, unreachable);
+			}
+		} else {
+			// Nobody has won, continue
+
+			// Now switching players
+			turnState = GameTurnState.SWITCHING_PLAYERS;
+
+			// Get the new player number from the game state
+			activePlayerNumber = state.currentPlayerIndex;
+
+			// Now need to check for a stalemate
+			turnState = GameTurnState.STALEMATE_CHECK;
+
+			if (GameState.isStalemate(state)) {
+
 				// Update the turn state
-				turnState = GameTurnState.WON;
+				turnState = GameTurnState.STALEMATE;
 
 				// Determine which tiles are unreachable
 				final Set<ITile> unreachable = getUnreachableEnabledTiles();
 
-				// Calculate the player territories
-				final Map<IPlayer, Set<ITile>> playerTerritories = getPlayerTerritories();
-
-				// Need to determine whether there was an outright winner, or a draw between one or more players
-				// Determine the winners from the claimed territories
-				final Set<IPlayer> winners = getWinningPlayers(playerTerritories);
-
 				// Tell the board
-				if (winners.size() == 1) {
-					// One winner - it's an outright win
-					board.doWin(winners.toArray(new IPlayer[] {})[0], playerTerritories, unreachable);
-				} else {
-					// Multiple winners - it's a draw
-					board.doDraw(winners, playerTerritories, unreachable);
-				}
+				board.doStalemate(unreachable);
 			} else {
-				// Nobody has won, continue
-
-				// Now switching players
-				turnState = GameTurnState.SWITCHING_PLAYERS;
-
-				// Get the new player number from the game state
-				activePlayerNumber = state.currentPlayerIndex;
-
-				// Now need to check for a stalemate
-				turnState = GameTurnState.STALEMATE_CHECK;
-
-				if (GameState.isStalemate(state)) {
-
-					// Update the turn state
-					turnState = GameTurnState.STALEMATE;
-
-					// Determine which tiles are unreachable
-					final Set<ITile> unreachable = getUnreachableEnabledTiles();
-
-					// Tell the board
-					board.doStalemate(unreachable);
-				} else {
-					// Continue to state of pending a decision on which tile to move to
-					turnState = GameTurnState.PENDING_MOVE;
-					// Tell the player it is now pending a move
-					players.get(activePlayerNumber).doPendingMove();
-				}
+				// Continue to state of pending a decision on which tile to move to
+				turnState = GameTurnState.PENDING_MOVE;
+				// Tell the player it is now pending a move
+				players.get(activePlayerNumber).doPendingMove();
 			}
-		} else {
-			throw new RuntimeException("Arbiter::shootDone;incorrect_turnState:" + turnState);
 		}
 	}
 
