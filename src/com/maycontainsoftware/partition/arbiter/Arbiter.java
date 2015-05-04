@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.maycontainsoftware.partition.PlayerConfiguration;
 import com.maycontainsoftware.partition.gamestate.GameState;
 
 /**
@@ -52,6 +53,9 @@ public class Arbiter {
 	/** The logical tile components. */
 	private final Set<? extends ITile> tiles;
 
+	/** The player configuration. */
+	final PlayerConfiguration playerConfiguration;
+
 	/** The currently active player. */
 	private int activePlayerNumber;
 
@@ -68,10 +72,13 @@ public class Arbiter {
 	 *            The logical tile components.
 	 */
 	public Arbiter(final GameState initialGameState, final IBoard board, final List<? extends IPlayer> players,
-			final Set<? extends ITile> tiles) {
+			final Set<? extends ITile> tiles, final PlayerConfiguration playerConfiguration) {
 
 		// Remember the initial game state - will need to use it to reset the game
 		this.initialGameState = initialGameState;
+
+		// Remember the player configuration
+		this.playerConfiguration = playerConfiguration;
 
 		if (DEBUG_LOG) {
 			System.out.println("<init>, initialGameState:");

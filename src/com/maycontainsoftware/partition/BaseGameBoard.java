@@ -85,7 +85,7 @@ public abstract class BaseGameBoard extends FixedSizeWidgetGroup implements IBoa
 		}
 
 		// Create the Arbiter
-		arbiter = new Arbiter(state, this, players, tiles);
+		arbiter = new Arbiter(state, this, players, tiles, playerConfiguration);
 
 		// Direct tile input events to the arbiter's input method
 		for (final TileActor tile : tiles) {
