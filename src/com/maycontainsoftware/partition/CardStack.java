@@ -131,6 +131,15 @@ public class CardStack extends WidgetGroup {
 	}
 
 	/**
+	 * The number of cards in the stack.
+	 * 
+	 * @return The size of the card stack.
+	 */
+	public int stackSize() {
+		return cards.size();
+	}
+
+	/**
 	 * Add a listener to the set of listeners interested in stack changed events.
 	 * 
 	 * @param listener
