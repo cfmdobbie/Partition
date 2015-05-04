@@ -29,10 +29,10 @@ public class GameState {
 	// Defined turn phases
 
 	/** Constant to represent the move phase. */
-	private static final byte PHASE_MOVE = 0x1;
+	public static final byte PHASE_MOVE = 0x1;
 
 	/** Constant to represent the shoot phase. */
-	private static final byte PHASE_SHOOT = 0x2;
+	public static final byte PHASE_SHOOT = 0x2;
 
 	/** The player board-coordinates, as playerCoords[#players][2]. */
 	public byte[][] playerCoords;
@@ -491,5 +491,16 @@ public class GameState {
 				}
 			});
 		}
+	}
+
+	/**
+	 * Returns the current turn phase.
+	 * 
+	 * @param state
+	 *            The game state.
+	 * @return Either PHASE_MOVE or PHASE_SHOOT.
+	 */
+	public static byte getTurnPhase(final GameState state) {
+		return state.turnPhase;
 	}
 }
