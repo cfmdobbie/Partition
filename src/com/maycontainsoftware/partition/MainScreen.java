@@ -57,7 +57,7 @@ public class MainScreen extends CScreen<PartitionGame> {
 		back.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				back();
+				doBack();
 				return true;
 			}
 		});
@@ -84,8 +84,18 @@ public class MainScreen extends CScreen<PartitionGame> {
 		cardStack.setInitialCard(new MainPanel(game, cardStack));
 	}
 
-	/** Go back one card in the card stack. */
-	private void back() {
-		cardStack.pop();
+	@Override
+	protected boolean handleBack() {
+		// Need to manually handle the back button on this screen.
+		return true;
+	}
+
+	@Override
+	protected void doBack() {
+		if (cardStack.stackSize() <= 1) {
+			Gdx.app.exit();
+		} else {
+			cardStack.pop();
+		}
 	}
 }
