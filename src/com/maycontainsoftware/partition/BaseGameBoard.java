@@ -12,8 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.maycontainsoftware.general.FixedSizeWidgetGroup;
-import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
-import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 import com.maycontainsoftware.partition.arbiter.Arbiter;
 import com.maycontainsoftware.partition.arbiter.IBoard;
 import com.maycontainsoftware.partition.gamestate.GameState;

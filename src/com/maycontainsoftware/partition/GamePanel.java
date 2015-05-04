@@ -2,8 +2,6 @@ package com.maycontainsoftware.partition;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
-import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 
 /**
  * The card on which the game is actually played.

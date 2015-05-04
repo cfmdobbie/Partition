@@ -7,8 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.maycontainsoftware.partition.PartitionGame.BoardConfiguration;
-import com.maycontainsoftware.partition.PartitionGame.PlayerConfiguration;
 
 /**
  * Board selection card.
