@@ -62,8 +62,8 @@ public class MainPanel extends Table {
 		// Know board is 5x1 in size, and know that main menu buttons are 180 width
 		final float boardWidth = 180.0f;
 		final float boardHeight = boardWidth / 5;
-		final BaseGameBoard gameBoard = new DemoGameBoard(game, atlas, boardWidth, boardHeight, null,
-				BoardConfiguration.MAIN_MENU_DEMO);
+		final BaseGameBoard gameBoard = new DemoGameBoard(game, atlas, boardWidth, boardHeight,
+				PlayerConfiguration.ONE_PLAYER, BoardConfiguration.MAIN_MENU_DEMO);
 		row();
 		add(gameBoard);
 
