@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
+import com.maycontainsoftware.partition.PlayerConfiguration;
 import com.maycontainsoftware.partition.arbiter.Arbiter;
 import com.maycontainsoftware.partition.arbiter.IBoard;
 import com.maycontainsoftware.partition.arbiter.IPlayer;
@@ -41,7 +41,7 @@ public class ArbiterGameTest {
 			}
 		}
 
-		Arbiter arbiter = new Arbiter(state, board, players, tiles);
+		Arbiter arbiter = new Arbiter(state, board, players, tiles, PlayerConfiguration.TWO_PLAYER);
 		arbiter.doReset();
 
 		// Move
