@@ -149,7 +149,7 @@ public class Arbiter {
 	public void moveDone() {
 
 		// Check that we were moving
-		if (turnState == GameTurnState.MOVING) {
+		if (turnState != GameTurnState.MOVING) {
 			throw new IllegalStateException("Arbiter::moveDone;incorrect_turnState:" + turnState);
 		}
 
@@ -164,7 +164,7 @@ public class Arbiter {
 	public void shootDone() {
 
 		// Check that were were shooting
-		if (turnState == GameTurnState.SHOOTING) {
+		if (turnState != GameTurnState.SHOOTING) {
 			throw new IllegalStateException("Arbiter::shootDone;incorrect_turnState:" + turnState);
 		}
 
