@@ -9,6 +9,7 @@ import java.util.Set;
 
 import com.maycontainsoftware.partition.PlayerConfiguration;
 import com.maycontainsoftware.partition.gamestate.GameState;
+import com.maycontainsoftware.partition.gamestate.IAI;
 import com.maycontainsoftware.partition.gamestate.RandomAI;
 
 /**
@@ -57,6 +58,9 @@ public class Arbiter {
 	/** The player configuration. */
 	final PlayerConfiguration playerConfiguration;
 
+	/** The computer AI players. */
+	private final Map<Integer, IAI> ai;
+
 	/** The currently active player. */
 	private int activePlayerNumber;
 
@@ -80,6 +84,14 @@ public class Arbiter {
 
 		// Remember the player configuration
 		this.playerConfiguration = playerConfiguration;
+
+		// Create computer AI players
+		ai = new HashMap<Integer, IAI>();
+		for (int i = 0; i < playerConfiguration.getNumberOfPlayers(); i++) {
+			if (playerConfiguration.isComputerPlayer(i)) {
+				ai.put(i, new RandomAI(i));
+			}
+		}
 
 		if (DEBUG_LOG) {
 			System.out.println("<init>, initialGameState:");
@@ -260,7 +272,14 @@ public class Arbiter {
 			throw new IllegalStateException("Arbiter::aiProceedWithMove;not_pending_move");
 		}
 
-		final byte[] coords = new RandomAI(activePlayerNumber).doMove(state);
+		// Locate AI player
+		final IAI ai = this.ai.get(activePlayerNumber);
+
+		if (ai == null) {
+			throw new IllegalStateException("Arbiter::aiProceedWithMove;no_ai_exists");
+		}
+
+		final byte[] coords = ai.doMove(state);
 		final ITile tile = findTileByCoords(coords);
 		doMove(tile);
 	}
@@ -275,7 +294,14 @@ public class Arbiter {
 			throw new IllegalStateException("Arbiter::aiProceedWithShoot;not_pending_shoot");
 		}
 
-		final byte[] coords = new RandomAI(activePlayerNumber).doShoot(state);
+		// Locate AI player
+		final IAI ai = this.ai.get(activePlayerNumber);
+
+		if (ai == null) {
+			throw new IllegalStateException("Arbiter::aiProceedWithShoot;no_ai_exists");
+		}
+
+		final byte[] coords = ai.doShoot(state);
 		final ITile tile = findTileByCoords(coords);
 		doShoot(tile);
 	}
