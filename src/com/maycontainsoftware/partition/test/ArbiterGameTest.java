@@ -114,6 +114,18 @@ public class ArbiterGameTest {
 		public void doReset(ITile startingTile) {
 			System.out.println("Player " + playerNumber + " reset");
 		}
+
+		@Override
+		public void doAiPendingMove(Arbiter arbiter) {
+			// AI not supported in this test application
+			throw new Error();
+		}
+
+		@Override
+		public void doAiPendingShoot(Arbiter arbiter) {
+			// AI not supported in this test application
+			throw new Error();
+		}
 	}
 
 	static class TestTile implements ITile {

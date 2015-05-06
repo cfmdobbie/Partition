@@ -1,6 +1,5 @@
 package com.maycontainsoftware.partition;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -159,5 +158,29 @@ class PlayerActor extends Group implements IPlayer {
 		target.clearActions();
 		target.setColor(Color.CLEAR);
 		target.setPosition(0.0f, 0.0f);
+	}
+
+	@Override
+	public void doAiPendingMove(final Arbiter arbiter) {
+		// Wait for a moment, then move
+		this.addAction(Actions.sequence(Actions.delay(0.5f), new Action() {
+			@Override
+			public boolean act(float delta) {
+				arbiter.aiProceedWithMove();
+				return true;
+			}
+		}));
+	}
+
+	@Override
+	public void doAiPendingShoot(final Arbiter arbiter) {
+		// Wait for a moment, then shoot
+		this.addAction(Actions.sequence(Actions.delay(0.5f), new Action() {
+			@Override
+			public boolean act(float delta) {
+				arbiter.aiProceedWithShoot();
+				return true;
+			}
+		}));
 	}
 }

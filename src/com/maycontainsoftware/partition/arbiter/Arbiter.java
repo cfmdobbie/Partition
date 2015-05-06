@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.maycontainsoftware.partition.PlayerConfiguration;
+import com.maycontainsoftware.partition.RandomAI;
 import com.maycontainsoftware.partition.gamestate.GameState;
 
 /**
@@ -95,42 +96,22 @@ public class Arbiter {
 
 	/** Accept a selection event on a tile. */
 	public void input(final ITile tile) {
+
+		if (playerConfiguration.isComputerPlayer(activePlayerNumber)) {
+			if (DEBUG_LOG) {
+				System.out.println("Arbiter::input;not_player_turn");
+			}
+			return;
+		}
+
 		switch (turnState) {
 		case PENDING_MOVE:
 			// We were waiting for a move
-			if (GameState.isValidMove(state, tile.getCoords())) {
-				// Move is valid
-				// Apply the action to get a new game state
-				state = GameState.apply(state, tile.getCoords());
-
-				// Update the current logical game turn phase
-				turnState = GameTurnState.MOVING;
-
-				// Tell the player that it should move
-				players.get(activePlayerNumber).doMove(tile, this);
-			} else {
-				// Not a valid action - tell ITile
-				tile.doError();
-			}
+			doMove(tile);
 			break;
 		case PENDING_SHOOT:
 			// We were waiting for a shoot
-			if (GameState.isValidMove(state, tile.getCoords())) {
-				// Apply the action to get a new game state
-				state = GameState.apply(state, tile.getCoords());
-
-				// Update the current logical game turn phase
-				turnState = GameTurnState.SHOOTING;
-
-				// Tell the player that it should shoot
-				players.get(activePlayerNumber).doShoot(tile, this);
-
-				// Tell the tile that it has been shot
-				tile.doShoot(this);
-			} else {
-				// Not a valid action - tell ITile
-				tile.doError();
-			}
+			doShoot(tile);
 			break;
 		case MOVING:
 		case SHOOTING:
@@ -145,6 +126,42 @@ public class Arbiter {
 		}
 	}
 
+	private void doMove(final ITile tile) {
+		if (GameState.isValidMove(state, tile.getCoords())) {
+			// Move is valid
+			// Apply the action to get a new game state
+			state = GameState.apply(state, tile.getCoords());
+
+			// Update the current logical game turn phase
+			turnState = GameTurnState.MOVING;
+
+			// Tell the player that it should move
+			players.get(activePlayerNumber).doMove(tile, this);
+		} else {
+			// Not a valid action - tell ITile
+			tile.doError();
+		}
+	}
+
+	private void doShoot(final ITile tile) {
+		if (GameState.isValidMove(state, tile.getCoords())) {
+			// Apply the action to get a new game state
+			state = GameState.apply(state, tile.getCoords());
+
+			// Update the current logical game turn phase
+			turnState = GameTurnState.SHOOTING;
+
+			// Tell the player that it should shoot
+			players.get(activePlayerNumber).doShoot(tile, this);
+
+			// Tell the tile that it has been shot
+			tile.doShoot(this);
+		} else {
+			// Not a valid action - tell ITile
+			tile.doError();
+		}
+	}
+
 	/** Receive notification that a move event has been completed by the application components. */
 	public void moveDone() {
 
@@ -156,8 +173,12 @@ public class Arbiter {
 		// Now waiting for a decision on which tile to shoot
 		turnState = GameTurnState.PENDING_SHOOT;
 
-		// Tell the player that it is now pending a shoot
-		players.get(activePlayerNumber).doPendingShoot();
+		if (playerConfiguration.isComputerPlayer(activePlayerNumber)) {
+			players.get(activePlayerNumber).doAiPendingShoot(this);
+		} else {
+			// Tell the player that it is now pending a shoot
+			players.get(activePlayerNumber).doPendingShoot();
+		}
 	}
 
 	/** Receive notification that a shoot event has been completed by the application components. */
@@ -218,10 +239,45 @@ public class Arbiter {
 			} else {
 				// Continue to state of pending a decision on which tile to move to
 				turnState = GameTurnState.PENDING_MOVE;
-				// Tell the player it is now pending a move
-				players.get(activePlayerNumber).doPendingMove();
+
+				if (playerConfiguration.isComputerPlayer(activePlayerNumber)) {
+					players.get(activePlayerNumber).doAiPendingMove(this);
+				} else {
+					// Tell the player it is now pending a move
+					players.get(activePlayerNumber).doPendingMove();
+				}
 			}
 		}
+	}
+
+	/** Receive notification that the AI player should proceed with its move. */
+	public void aiProceedWithMove() {
+		if (!playerConfiguration.isComputerPlayer(activePlayerNumber)) {
+			throw new IllegalStateException("Arbiter::aiProceedWithMove;not_computer_turn:" + activePlayerNumber);
+		}
+
+		if (turnState != GameTurnState.PENDING_MOVE) {
+			throw new IllegalStateException("Arbiter::aiProceedWithMove;not_pending_move");
+		}
+
+		final byte[] coords = new RandomAI(activePlayerNumber).doMove(state);
+		final ITile tile = findTileByCoords(coords);
+		doMove(tile);
+	}
+
+	/** Receive notification that the AI player should proceed with its shoot. */
+	public void aiProceedWithShoot() {
+		if (!playerConfiguration.isComputerPlayer(activePlayerNumber)) {
+			throw new IllegalStateException("Arbiter::aiProceedWithShoot;not_computer_turn:" + activePlayerNumber);
+		}
+
+		if (turnState != GameTurnState.PENDING_SHOOT) {
+			throw new IllegalStateException("Arbiter::aiProceedWithShoot;not_pending_shoot");
+		}
+
+		final byte[] coords = new RandomAI(activePlayerNumber).doShoot(state);
+		final ITile tile = findTileByCoords(coords);
+		doShoot(tile);
 	}
 
 	/** Reset the game to the original state. */
@@ -279,8 +335,12 @@ public class Arbiter {
 			players.get(i).doReset(tile);
 		}
 
-		// Notify active player that it is their turn
-		players.get(activePlayerNumber).doPendingMove();
+		if (playerConfiguration.isComputerPlayer(activePlayerNumber)) {
+			players.get(activePlayerNumber).doAiPendingMove(this);
+		} else {
+			// Notify active player that it is their turn
+			players.get(activePlayerNumber).doPendingMove();
+		}
 	}
 
 	/**
