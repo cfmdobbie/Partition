@@ -10,7 +10,7 @@ import java.util.Set;
 import com.maycontainsoftware.partition.PlayerConfiguration;
 import com.maycontainsoftware.partition.gamestate.GameState;
 import com.maycontainsoftware.partition.gamestate.IAI;
-import com.maycontainsoftware.partition.gamestate.SimpleAI2;
+import com.maycontainsoftware.partition.gamestate.SimpleAI3;
 
 /**
  * The Arbiter is the class that manages the logical flow of the game. It is responsible for remembering what turn state
@@ -89,7 +89,7 @@ public class Arbiter {
 		ai = new HashMap<Integer, IAI>();
 		for (int i = 0; i < playerConfiguration.getNumberOfPlayers(); i++) {
 			if (playerConfiguration.isComputerPlayer(i)) {
-				ai.put(i, new SimpleAI2(i));
+				ai.put(i, new SimpleAI3(i));
 			}
 		}
 
