@@ -3,7 +3,6 @@ package com.maycontainsoftware.partition;
 import java.util.Map;
 import java.util.Set;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Action;
