@@ -163,7 +163,7 @@ class PlayerActor extends Group implements IPlayer {
 	@Override
 	public void doAiPendingMove(final Arbiter arbiter) {
 		// Wait for a moment, then move
-		this.addAction(Actions.sequence(Actions.delay(0.5f), new Action() {
+		this.addAction(Actions.sequence(Actions.delay(0.25f), new Action() {
 			@Override
 			public boolean act(float delta) {
 				arbiter.aiProceedWithMove();
@@ -175,7 +175,7 @@ class PlayerActor extends Group implements IPlayer {
 	@Override
 	public void doAiPendingShoot(final Arbiter arbiter) {
 		// Wait for a moment, then shoot
-		this.addAction(Actions.sequence(Actions.delay(0.5f), new Action() {
+		this.addAction(Actions.sequence(Actions.delay(0.25f), new Action() {
 			@Override
 			public boolean act(float delta) {
 				arbiter.aiProceedWithShoot();
