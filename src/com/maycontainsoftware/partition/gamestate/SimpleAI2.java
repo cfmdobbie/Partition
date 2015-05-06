@@ -9,10 +9,10 @@ import java.util.Set;
  * 
  * @author Charlie
  */
-public class RandomAI2 implements IAI {
+public class SimpleAI2 implements IAI {
 
 	/** Tag for logging purposes. */
-	public static final String LOG = RandomAI2.class.getName();
+	public static final String TAG = SimpleAI2.class.getName();
 
 	/** This player's player number. */
 	private final int playerNumber;
@@ -25,7 +25,7 @@ public class RandomAI2 implements IAI {
 	 * 
 	 * @param playerNumber
 	 */
-	public RandomAI2(final int playerNumber) {
+	public SimpleAI2(final int playerNumber) {
 		this.playerNumber = playerNumber;
 	}
 
@@ -36,13 +36,13 @@ public class RandomAI2 implements IAI {
 
 		// Check that the game is waiting for a move instruction
 		if (GameState.getTurnPhase(state) != GameState.PHASE_MOVE) {
-			throw new IllegalStateException("RandomAI2[" + playerNumber + "]::doMove;state.turnPhase="
+			throw new IllegalStateException(TAG + "[" + playerNumber + "]::doMove;state.turnPhase="
 					+ GameState.getTurnPhase(state));
 		}
 
 		// Check that it's this player's turn
 		if (state.currentPlayerIndex != playerNumber) {
-			throw new IllegalStateException("RandomAI2[" + playerNumber + "]::doMove;state.currentPlayerIndex="
+			throw new IllegalStateException(TAG + "[" + playerNumber + "]::doMove;state.currentPlayerIndex="
 					+ state.currentPlayerIndex);
 		}
 

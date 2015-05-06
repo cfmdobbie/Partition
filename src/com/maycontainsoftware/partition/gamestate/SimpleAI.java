@@ -2,16 +2,15 @@ package com.maycontainsoftware.partition.gamestate;
 
 import java.util.Random;
 
-
 /**
  * A simple AI player. This player randomly picks moves.
  * 
  * @author Charlie
  */
-public class RandomAI implements IAI {
+public class SimpleAI implements IAI {
 
 	/** Tag for logging purposes. */
-	public static final String LOG = RandomAI.class.getName();
+	public static final String TAG = SimpleAI.class.getName();
 
 	/** This player's player number. */
 	private final int playerNumber;
@@ -21,7 +20,7 @@ public class RandomAI implements IAI {
 	 * 
 	 * @param playerNumber
 	 */
-	public RandomAI(final int playerNumber) {
+	public SimpleAI(final int playerNumber) {
 		this.playerNumber = playerNumber;
 	}
 
@@ -30,13 +29,13 @@ public class RandomAI implements IAI {
 
 		// Check that the game is waiting for a move instruction
 		if (GameState.getTurnPhase(state) != GameState.PHASE_MOVE) {
-			throw new IllegalStateException("RandomAI[" + playerNumber + "]::doMove;state.turnPhase="
+			throw new IllegalStateException(TAG + "[" + playerNumber + "]::doMove;state.turnPhase="
 					+ GameState.getTurnPhase(state));
 		}
 
 		// Check that it's this player's turn
 		if (state.currentPlayerIndex != playerNumber) {
-			throw new IllegalStateException("RandomAI[" + playerNumber + "]::doMove;state.currentPlayerIndex="
+			throw new IllegalStateException(TAG + "[" + playerNumber + "]::doMove;state.currentPlayerIndex="
 					+ state.currentPlayerIndex);
 		}
 
@@ -55,13 +54,13 @@ public class RandomAI implements IAI {
 
 		// Check that the game is waiting for a shoot instruction
 		if (GameState.getTurnPhase(state) != GameState.PHASE_SHOOT) {
-			throw new IllegalStateException("RandomAI[" + playerNumber + "]::doShoot;state.turnPhase="
+			throw new IllegalStateException(TAG + "[" + playerNumber + "]::doShoot;state.turnPhase="
 					+ GameState.getTurnPhase(state));
 		}
 
 		// Check that it's this player's turn
 		if (state.currentPlayerIndex != playerNumber) {
-			throw new IllegalStateException("RandomAI[" + playerNumber + "]::doShoot;state.currentPlayerIndex="
+			throw new IllegalStateException(TAG + "[" + playerNumber + "]::doShoot;state.currentPlayerIndex="
 					+ state.currentPlayerIndex);
 		}
 
