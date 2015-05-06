@@ -51,7 +51,7 @@ public class SelectBoardPanel extends Table {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				cardStack.push(new GamePanel(game, cardStack, PlayerConfiguration.TWO_PLAYER, BoardConfiguration.HUB));
+				cardStack.push(new GamePanel(game, cardStack, playerConfiguration, BoardConfiguration.HUB));
 			}
 		});
 		// Board 2: OPEN
@@ -62,7 +62,7 @@ public class SelectBoardPanel extends Table {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				cardStack.push(new GamePanel(game, cardStack, PlayerConfiguration.TWO_PLAYER, BoardConfiguration.OPEN));
+				cardStack.push(new GamePanel(game, cardStack, playerConfiguration, BoardConfiguration.OPEN));
 			}
 		});
 
@@ -75,7 +75,7 @@ public class SelectBoardPanel extends Table {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				cardStack.push(new GamePanel(game, cardStack, PlayerConfiguration.TWO_PLAYER, BoardConfiguration.WALL));
+				cardStack.push(new GamePanel(game, cardStack, playerConfiguration, BoardConfiguration.WALL));
 			}
 		});
 		// Board 4: HOLES
@@ -86,8 +86,7 @@ public class SelectBoardPanel extends Table {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				cardStack
-						.push(new GamePanel(game, cardStack, PlayerConfiguration.TWO_PLAYER, BoardConfiguration.HOLES));
+				cardStack.push(new GamePanel(game, cardStack, playerConfiguration, BoardConfiguration.HOLES));
 			}
 		});
 
