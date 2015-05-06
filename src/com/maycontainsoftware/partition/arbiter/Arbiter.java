@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.maycontainsoftware.partition.PlayerConfiguration;
-import com.maycontainsoftware.partition.RandomAI;
 import com.maycontainsoftware.partition.gamestate.GameState;
+import com.maycontainsoftware.partition.gamestate.RandomAI;
 
 /**
  * The Arbiter is the class that manages the logical flow of the game. It is responsible for remembering what turn state

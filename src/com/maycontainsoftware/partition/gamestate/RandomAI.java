@@ -1,15 +1,14 @@
-package com.maycontainsoftware.partition;
+package com.maycontainsoftware.partition.gamestate;
 
 import java.util.Random;
 
-import com.maycontainsoftware.partition.gamestate.GameState;
 
 /**
  * A simple AI player. This player randomly picks moves.
  * 
  * @author Charlie
  */
-public class RandomAI {
+public class RandomAI implements IAI {
 
 	/** Tag for logging purposes. */
 	public static final String LOG = RandomAI.class.getName();
@@ -26,15 +25,7 @@ public class RandomAI {
 		this.playerNumber = playerNumber;
 	}
 
-	/**
-	 * Pick the computer player's next move
-	 * 
-	 * @param state
-	 *            The current game state
-	 * @return A two-element byte array containing the desired move coordinates.
-	 * @throws IllegalStateException
-	 *             If game is not waiting for a move, or it is not this player's turn.
-	 */
+	@Override
 	public byte[] doMove(final GameState state) {
 
 		// Check that the game is waiting for a move instruction
@@ -59,15 +50,7 @@ public class RandomAI {
 		return validMoves[randomMove];
 	}
 
-	/**
-	 * Pick the computer player's next shoot
-	 * 
-	 * @param state
-	 *            The current game state
-	 * @return A two-element byte array containing the desired shoot coordinates.
-	 * @throws IllegalStateException
-	 *             If game is not waiting for a shoot, or it is not this player's turn.
-	 */
+	@Override
 	public byte[] doShoot(final GameState state) {
 
 		// Check that the game is waiting for a shoot instruction
