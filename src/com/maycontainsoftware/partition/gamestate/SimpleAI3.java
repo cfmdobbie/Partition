@@ -129,8 +129,8 @@ public class SimpleAI3 implements IAI {
 			chosenTurn = randomElement(draws);
 		} else if (!stalemates.isEmpty()) {
 			// Can't win, can't keep playing, can't draw - but can force a stalemate!
-			// System.out.println("Picking an other move");
-			chosenTurn = randomElement(other);
+			// System.out.println("Picking a STALEMATE");
+			chosenTurn = randomElement(stalemates);
 		} else if (!losses.isEmpty()) {
 			// Can't win, can't keep playing, can't draw, no stalemates - this is a loss! :-(
 			// System.out.println("Picking a LOSS");
