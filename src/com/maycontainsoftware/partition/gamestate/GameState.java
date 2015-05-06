@@ -458,6 +458,86 @@ public class GameState {
 	}
 
 	/**
+	 * Whether or not the game is a draw. The game is a draw if multiple players share the top score.
+	 * 
+	 * @param state
+	 *            The game state.
+	 * @return True if the game is a draw, false otherwise.
+	 * @throws IllegalStateException
+	 *             if the game is not over.
+	 */
+	public static boolean isDraw(final GameState state) {
+
+		if (!isGameOver(state)) {
+			// Not valid to call this method if the game isn't over!
+			throw new IllegalStateException("GameState::isDraw;!isGameOver");
+		}
+
+		boolean draw = false;
+		int mostReachable = 0;
+
+		for (int p = 0; p < getNumberOfPlayers(state); p++) {
+			int numberReachable = getReachableTiles(state, p).size();
+
+			if (numberReachable > mostReachable) {
+				// This is the new top score
+				mostReachable = numberReachable;
+				draw = false;
+			} else if (numberReachable == mostReachable) {
+				// Top score is now a draw
+				draw = true;
+			}
+		}
+
+		return draw;
+	}
+
+	/**
+	 * Whether or not the game is an outright win. The game is an outright win if the top score is not shared between
+	 * two or more players.
+	 * 
+	 * @param state
+	 *            The game state.
+	 * @return True if the game is an outright win, false otherwise.
+	 * @throws IllegalStateException
+	 *             if the game is not over.
+	 */
+	public static boolean isOutrightWin(final GameState state) {
+		return !isDraw(state);
+	}
+
+	/**
+	 * Get the winning player. This is only valid to call when the game is over, and did not end in a draw.
+	 * 
+	 * @param state
+	 *            The game state.
+	 * @return The winning player's player number.
+	 * @throws IllegalStateException
+	 *             if the game is not over or was not an outright win.
+	 */
+	public static int getWinningPlayer(final GameState state) {
+		if (!isOutrightWin(state)) {
+			// Not valid to call this method if there isn't an outright winner
+			throw new IllegalStateException("GameState::getWinningPlayer;!isOutrightWin");
+		}
+
+		int mostReachable = 0;
+		int winningPlayer = -1;
+
+		for (int p = 0; p < getNumberOfPlayers(state); p++) {
+			int numberReachable = getReachableTiles(state, p).size();
+
+			if (numberReachable > mostReachable) {
+				// This is the new top score
+				mostReachable = numberReachable;
+				winningPlayer = p;
+			}
+		}
+
+		return winningPlayer;
+	}
+
+	/**
 	 * Whether or not game has become a stalemate. The game is declared to be a stalemate if at any point no move can be
 	 * played. This will need to be reconsidered with >2 players, as one isolated player running out of space should not
 	 * cause other players to stalemate. Game over condition takes priority over stalemate - if a player has no valid
