@@ -1,6 +1,5 @@
 package com.maycontainsoftware.partition.gamestate;
 
-
 public interface IAI {
 
 	/**
