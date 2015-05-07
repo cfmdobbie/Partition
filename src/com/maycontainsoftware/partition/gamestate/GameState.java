@@ -186,7 +186,7 @@ public class GameState {
 	}
 
 	/**
-	 * All possible single moves from the current state. Note that the player to move is extracted from the game state.
+	 * All possible single moves from the current state, for the current player as per the game state.
 	 * 
 	 * @param state
 	 *            The game state.
@@ -194,9 +194,20 @@ public class GameState {
 	 *         be shot from the current player's position.
 	 */
 	public static Set<byte[]> getValidMoves(final GameState state) {
+		return getValidMoves(state, state.currentPlayerIndex);
+	}
 
+	/**
+	 * All possible single moves from the current state for the specified player.
+	 * 
+	 * @param state
+	 *            The game state.
+	 * @return A set of two-element byte arrays giving the coordinates of all tiles that either can be moved to or can
+	 *         be shot from the specified player's position.
+	 */
+	public static Set<byte[]> getValidMoves(final GameState state, final int playerNumber) {
 		// Coordinates of current player
-		final byte[] startingCoords = state.playerCoords[state.currentPlayerIndex];
+		final byte[] startingCoords = state.playerCoords[playerNumber];
 		final byte startingColumn = startingCoords[0];
 		final byte startingRow = startingCoords[1];
 
