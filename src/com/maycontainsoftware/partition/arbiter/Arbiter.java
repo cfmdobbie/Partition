@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.maycontainsoftware.partition.PlayerConfiguration;
-import com.maycontainsoftware.partition.gamestate.EvaluatingAI1;
+import com.maycontainsoftware.partition.gamestate.EvaluatingAI2;
 import com.maycontainsoftware.partition.gamestate.GameState;
 import com.maycontainsoftware.partition.gamestate.IAI;
 
@@ -89,7 +89,7 @@ public class Arbiter {
 		ai = new HashMap<Integer, IAI>();
 		for (int i = 0; i < playerConfiguration.getNumberOfPlayers(); i++) {
 			if (playerConfiguration.isComputerPlayer(i)) {
-				ai.put(i, new EvaluatingAI1(i));
+				ai.put(i, new EvaluatingAI2(i));
 			}
 		}
 
