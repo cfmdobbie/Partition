@@ -8,8 +8,8 @@ import java.util.Set;
 
 /**
  * An aggressive AI player. This player enumerates all possible moves, and picks a win if it is able to. Otherwise, it
- * tries to keep the game going by avoiding draws, stalemates and losses. When a choice is relevant, it aims to minimize
- * the opponent's movement options.
+ * tries to keep the game going by avoiding draws, stalemates and losses. When a choice is relevant, it aims to first
+ * minimize the opponent's movement options, then maximize its own options.
  * 
  * @author Charlie
  */
@@ -46,6 +46,7 @@ public class EvaluatingAI2 implements IAI {
 	 * Construct a new AI player.
 	 * 
 	 * @param playerNumber
+	 *            The AI player's number.
 	 */
 	public EvaluatingAI2(final int playerNumber) {
 		this.playerNumber = playerNumber;
@@ -160,8 +161,14 @@ public class EvaluatingAI2 implements IAI {
 	 * @param set
 	 *            The set containing move/shoot pairs to pick from.
 	 * @return The best move from the set.
+	 * @throws IllegalArgumentException
+	 *             if the specified set is empty.
 	 */
 	private Turn pickBest(final Set<Turn> set) {
+
+		if (set.isEmpty()) {
+			throw new IllegalArgumentException(TAG + "::pickBest;empty");
+		}
 
 		// Determine the turns most damaging to the other player
 		final Set<Turn> mostDamaging = pickMostDamaging(set);
@@ -182,7 +189,21 @@ public class EvaluatingAI2 implements IAI {
 		return randomElement(mostBeneficient);
 	}
 
+	/**
+	 * Pick the most move/shoot pairs most damaging to the next player.
+	 * 
+	 * @param set
+	 *            The set of available turns.
+	 * @return A subset of the most damaging turns.
+	 * @throws IllegalArgumentException
+	 *             if the specified set is empty.
+	 */
 	private final Set<Turn> pickMostDamaging(final Set<Turn> set) {
+
+		if (set.isEmpty()) {
+			throw new IllegalArgumentException(TAG + "::pickMostDamaging;empty");
+		}
+
 		// Map to contain (score) -> (turns with that score)
 		final Map<Integer, Set<Turn>> ranked = new HashMap<Integer, Set<Turn>>();
 
