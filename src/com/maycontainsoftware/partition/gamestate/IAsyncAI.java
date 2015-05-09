@@ -8,10 +8,13 @@ package com.maycontainsoftware.partition.gamestate;
 public interface IAsyncAI {
 
 	/**
-	 * Notification that the AI should start considering its next move.
+	 * Notification that the AI should start considering its next move. This method should return promptly, so
+	 * implementations should execute all logic in a separate thread.
 	 * 
 	 * @param state
 	 *            The current game state.
+	 * @param callback
+	 *            The callback to notify when thinking is complete.
 	 */
 	public void startThinking(final GameState state, final IThinkingCompleteCallback callback);
 
@@ -35,7 +38,10 @@ public interface IAsyncAI {
 	 * @author Charlie
 	 */
 	public static interface IThinkingCompleteCallback {
-		/** Notify the callback that thinking is complete. */
+		/**
+		 * Notify the callback that thinking is complete. Note that this method will be executed from a separate thread,
+		 * so implementations will need to take that into account before processing any results.
+		 */
 		public void thinkingComplete();
 	}
 }
