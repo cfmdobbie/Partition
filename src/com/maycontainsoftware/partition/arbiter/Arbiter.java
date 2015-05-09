@@ -9,10 +9,10 @@ import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.maycontainsoftware.partition.PlayerConfiguration;
+import com.maycontainsoftware.partition.gamestate.EvaluatingAsyncAI;
 import com.maycontainsoftware.partition.gamestate.GameState;
 import com.maycontainsoftware.partition.gamestate.IAsyncAI;
 import com.maycontainsoftware.partition.gamestate.IAsyncAI.IThinkingCompleteCallback;
-import com.maycontainsoftware.partition.gamestate.SimpleAsyncAI;
 
 /**
  * The Arbiter is the class that manages the logical flow of the game. It is responsible for remembering what turn state
@@ -91,7 +91,7 @@ public class Arbiter implements IThinkingCompleteCallback {
 		ai = new HashMap<Integer, IAsyncAI>();
 		for (int i = 0; i < playerConfiguration.getNumberOfPlayers(); i++) {
 			if (playerConfiguration.isComputerPlayer(i)) {
-				ai.put(i, new SimpleAsyncAI(i));
+				ai.put(i, new EvaluatingAsyncAI(i));
 			}
 		}
 
