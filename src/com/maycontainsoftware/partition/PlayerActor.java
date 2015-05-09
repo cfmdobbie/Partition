@@ -43,6 +43,9 @@ class PlayerActor extends Group implements IPlayer {
 	/** Actor to represent the target. */
 	private final Actor target;
 
+	/** Actor to represent the "thinking" notification. */
+	private final Actor thinking;
+
 	/**
 	 * Construct a new PlayerActor.
 	 * 
@@ -65,6 +68,8 @@ class PlayerActor extends Group implements IPlayer {
 		addActor(player);
 		target = new Image(atlas.findRegion("target"));
 		addActor(target);
+		thinking = new Image(atlas.findRegion("thinking"));
+		addActor(thinking);
 
 		this.setTouchable(Touchable.disabled);
 	}
@@ -158,16 +163,33 @@ class PlayerActor extends Group implements IPlayer {
 		target.clearActions();
 		target.setColor(Color.CLEAR);
 		target.setPosition(0.0f, 0.0f);
+
+		// Reset thinking notification
+		thinking.setSize(getWidth(), getHeight());
+		thinking.clearActions();
+		thinking.setColor(Color.CLEAR);
+		thinking.setPosition(0.0f, 0.0f);
 	}
 
 	@Override
 	public void doAiThinking() {
 		// TODO: Start an "AI thinking" animation
+		Gdx.app.debug(TAG, "doAiThinking()");
+
+		// Throbbing "thinking" notification
+		thinking.setColor(Color.CLEAR);
+		thinking.addAction(Actions.forever(Actions.sequence(Actions.color(Color.WHITE, 0.25f, Interpolation.sine),
+				Actions.color(Color.CLEAR, 0.25f, Interpolation.sine))));
 	}
 
 	@Override
 	public void doAiThinkingComplete() {
 		// TODO: Stop the "AI thinking" animation
+		Gdx.app.debug(TAG, "doAiThinkingComplete()");
+
+		// Stop throbbing notification
+		thinking.clearActions();
+		thinking.setColor(Color.CLEAR);
 	}
 
 	@Override
