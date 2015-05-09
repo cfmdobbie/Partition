@@ -116,13 +116,19 @@ public class ArbiterGameTest {
 		}
 
 		@Override
-		public void doAiPendingMove(Arbiter arbiter) {
+		public void doAiThinking() {
 			// AI not supported in this test application
 			throw new Error();
 		}
 
 		@Override
 		public void doAiPendingShoot(Arbiter arbiter) {
+			// AI not supported in this test application
+			throw new Error();
+		}
+
+		@Override
+		public void doAiThinkingComplete() {
 			// AI not supported in this test application
 			throw new Error();
 		}

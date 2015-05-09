@@ -161,15 +161,13 @@ class PlayerActor extends Group implements IPlayer {
 	}
 
 	@Override
-	public void doAiPendingMove(final Arbiter arbiter) {
-		// Wait for a moment, then move
-		this.addAction(Actions.sequence(Actions.delay(0.25f), new Action() {
-			@Override
-			public boolean act(float delta) {
-				arbiter.aiProceedWithMove();
-				return true;
-			}
-		}));
+	public void doAiThinking() {
+		// TODO: Start an "AI thinking" animation
+	}
+
+	@Override
+	public void doAiThinkingComplete() {
+		// TODO: Stop the "AI thinking" animation
 	}
 
 	@Override

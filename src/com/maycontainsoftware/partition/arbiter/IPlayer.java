@@ -45,12 +45,14 @@ public interface IPlayer {
 	public void doReset(ITile startingTile);
 
 	/**
-	 * Notification that the AI controlling this player needs to move.
-	 * 
-	 * @param arbiter
-	 *            The Arbiter that needs to be notified once the AI should proceed, by calling aiProceedWithMove()
+	 * Notification that the AI is considering its next move.
 	 */
-	public void doAiPendingMove(Arbiter arbiter);
+	public void doAiThinking();
+
+	/**
+	 * Notification that the AI has decided on its next move.
+	 */
+	public void doAiThinkingComplete();
 
 	/**
 	 * Notification that the AI controlling this player needs to shoot.

@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.badlogic.gdx.Gdx;
 import com.maycontainsoftware.partition.PlayerConfiguration;
-import com.maycontainsoftware.partition.gamestate.EvaluatingAI2;
 import com.maycontainsoftware.partition.gamestate.GameState;
-import com.maycontainsoftware.partition.gamestate.IAI;
+import com.maycontainsoftware.partition.gamestate.IAsyncAI;
+import com.maycontainsoftware.partition.gamestate.IAsyncAI.IThinkingCompleteCallback;
+import com.maycontainsoftware.partition.gamestate.SimpleAsyncAI;
 
 /**
  * The Arbiter is the class that manages the logical flow of the game. It is responsible for remembering what turn state
@@ -19,7 +21,7 @@ import com.maycontainsoftware.partition.gamestate.IAI;
  * 
  * @author Charlie
  */
-public class Arbiter {
+public class Arbiter implements IThinkingCompleteCallback {
 
 	/** Logging flag to control direct sysout logging. */
 	private static final boolean DEBUG_LOG = false;
@@ -59,7 +61,7 @@ public class Arbiter {
 	final PlayerConfiguration playerConfiguration;
 
 	/** The computer AI players. */
-	private final Map<Integer, IAI> ai;
+	private final Map<Integer, IAsyncAI> ai;
 
 	/** The currently active player. */
 	private int activePlayerNumber;
@@ -86,10 +88,10 @@ public class Arbiter {
 		this.playerConfiguration = playerConfiguration;
 
 		// Create computer AI players
-		ai = new HashMap<Integer, IAI>();
+		ai = new HashMap<Integer, IAsyncAI>();
 		for (int i = 0; i < playerConfiguration.getNumberOfPlayers(); i++) {
 			if (playerConfiguration.isComputerPlayer(i)) {
-				ai.put(i, new EvaluatingAI2(i));
+				ai.put(i, new SimpleAsyncAI(i));
 			}
 		}
 
@@ -253,7 +255,14 @@ public class Arbiter {
 				turnState = GameTurnState.PENDING_MOVE;
 
 				if (playerConfiguration.isComputerPlayer(activePlayerNumber)) {
-					players.get(activePlayerNumber).doAiPendingMove(this);
+					players.get(activePlayerNumber).doAiThinking();
+
+					// Start the AI thinking
+					final IAsyncAI ai = this.ai.get(activePlayerNumber);
+					if (ai == null) {
+						throw new IllegalStateException("Arbiter::?;no_ai_exists");
+					}
+					ai.startThinking(state, this);
 				} else {
 					// Tell the player it is now pending a move
 					players.get(activePlayerNumber).doPendingMove();
@@ -262,26 +271,40 @@ public class Arbiter {
 		}
 	}
 
-	/** Receive notification that the AI player should proceed with its move. */
-	public void aiProceedWithMove() {
-		if (!playerConfiguration.isComputerPlayer(activePlayerNumber)) {
-			throw new IllegalStateException("Arbiter::aiProceedWithMove;not_computer_turn:" + activePlayerNumber);
-		}
+	@Override
+	public void thinkingComplete() {
 
-		if (turnState != GameTurnState.PENDING_MOVE) {
-			throw new IllegalStateException("Arbiter::aiProceedWithMove;not_pending_move");
-		}
+		// TODO: The following ties the Arbiter implementation to libGDX. Is this avoidable?
+		Gdx.app.postRunnable(new Runnable() {
+			@Override
+			public void run() {
 
-		// Locate AI player
-		final IAI ai = this.ai.get(activePlayerNumber);
+				if (!playerConfiguration.isComputerPlayer(activePlayerNumber)) {
+					throw new IllegalStateException("Arbiter::?;not_computer_turn:" + activePlayerNumber);
+				}
 
-		if (ai == null) {
-			throw new IllegalStateException("Arbiter::aiProceedWithMove;no_ai_exists");
-		}
+				if (turnState != GameTurnState.PENDING_MOVE) {
+					throw new IllegalStateException("Arbiter::?;not_pending_move");
+				}
 
-		final byte[] coords = ai.doMove(state);
-		final ITile tile = findTileByCoords(coords);
-		doMove(tile);
+				// Locate AI player
+				final IAsyncAI ai = Arbiter.this.ai.get(activePlayerNumber);
+
+				if (ai == null) {
+					throw new IllegalStateException("Arbiter::?;no_ai_exists");
+				}
+
+				// Inform the player that the AI has finished thinking
+				players.get(activePlayerNumber).doAiThinkingComplete();
+
+				// Work out the AI's chosen move
+				final byte[] coords = ai.getMove();
+				final ITile tile = findTileByCoords(coords);
+
+				// Handle the move
+				doMove(tile);
+			}
+		});
 	}
 
 	/** Receive notification that the AI player should proceed with its shoot. */
@@ -295,13 +318,13 @@ public class Arbiter {
 		}
 
 		// Locate AI player
-		final IAI ai = this.ai.get(activePlayerNumber);
+		final IAsyncAI ai = this.ai.get(activePlayerNumber);
 
 		if (ai == null) {
 			throw new IllegalStateException("Arbiter::aiProceedWithShoot;no_ai_exists");
 		}
 
-		final byte[] coords = ai.doShoot(state);
+		final byte[] coords = ai.getShoot();
 		final ITile tile = findTileByCoords(coords);
 		doShoot(tile);
 	}
@@ -362,7 +385,14 @@ public class Arbiter {
 		}
 
 		if (playerConfiguration.isComputerPlayer(activePlayerNumber)) {
-			players.get(activePlayerNumber).doAiPendingMove(this);
+			players.get(activePlayerNumber).doAiThinking();
+
+			// Start the AI thinking
+			final IAsyncAI ai = this.ai.get(activePlayerNumber);
+			if (ai == null) {
+				throw new IllegalStateException("Arbiter::?;no_ai_exists");
+			}
+			ai.startThinking(state, this);
 		} else {
 			// Notify active player that it is their turn
 			players.get(activePlayerNumber).doPendingMove();
