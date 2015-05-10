@@ -81,6 +81,10 @@ public class EvaluatingAsyncAI extends AsyncAI {
 		// Determine available moves
 		final Set<byte[]> validMoves = GameState.getValidMoves(state);
 
+		if (DEBUG_LOG) {
+			System.out.println(TAG + "::doThinking;validMoves.size=" + validMoves.size());
+		}
+
 		// Iterate through all possible moves
 		for (final byte[] move : validMoves) {
 
@@ -90,6 +94,11 @@ public class EvaluatingAsyncAI extends AsyncAI {
 			// Determine available shoots
 			final Set<byte[]> validShoots = GameState.getValidMoves(stateAfterMove);
 
+			if (DEBUG_LOG) {
+				System.out.println(TAG + "::doThinking;move[" + move[0] + "," + move[1] + "],validShoots.size="
+						+ validShoots.size());
+			}
+
 			// Iterate through all possible shoots, given the current move
 			for (final byte[] shoot : validShoots) {
 
@@ -98,17 +107,33 @@ public class EvaluatingAsyncAI extends AsyncAI {
 
 				if (GameState.isStalemate(finalState)) {
 					// Stalemate
+					if (DEBUG_LOG) {
+						System.out.println(TAG + "::doThinking;move[" + move[0] + "," + move[1] + "],shoot[" + shoot[0]
+								+ "," + shoot[1] + "] is a stalemate");
+					}
 					stalemates.add(turn);
 				} else if (GameState.isGameOver(finalState)) {
 					// Win, loss or draw
 					if (GameState.isDraw(finalState)) {
 						// Draw
+						if (DEBUG_LOG) {
+							System.out.println(TAG + "::doThinking;move[" + move[0] + "," + move[1] + "],shoot["
+									+ shoot[0] + "," + shoot[1] + "] is a draw");
+						}
 						draws.add(turn);
 					} else if (GameState.getWinningPlayer(finalState) == playerNumber) {
 						// Win
+						if (DEBUG_LOG) {
+							System.out.println(TAG + "::doThinking;move[" + move[0] + "," + move[1] + "],shoot["
+									+ shoot[0] + "," + shoot[1] + "] is a win");
+						}
 						wins.add(turn);
 					} else {
 						// Loss
+						if (DEBUG_LOG) {
+							System.out.println(TAG + "::doThinking;move[" + move[0] + "," + move[1] + "],shoot["
+									+ shoot[0] + "," + shoot[1] + "] is a loss");
+						}
 						losses.add(turn);
 					}
 				} else {
@@ -205,6 +230,13 @@ public class EvaluatingAsyncAI extends AsyncAI {
 				final Set<Turn> newSet = new HashSet<Turn>();
 				newSet.add(turn);
 				ranked.put(nextPlayerMoves, newSet);
+			}
+		}
+
+		if (DEBUG_LOG) {
+			for (final Integer i : ranked.keySet()) {
+				System.out.println(TAG + "::pickMostDamaging;playerMoves=" + i + ",options=" + ranked.get(i).size());
+
 			}
 		}
 
