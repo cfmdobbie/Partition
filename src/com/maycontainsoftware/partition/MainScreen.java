@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.maycontainsoftware.general.CScreen;
 
@@ -62,6 +63,18 @@ public class MainScreen extends CScreen<PartitionGame> {
 			}
 		});
 
+		// Inscribed line separating top menu buttons from main content
+		final Image inscribed = new Image(atlas.findRegion("line"));
+		// Fill width
+		inscribed.setWidth(game.virtualWidth);
+		// Graphic is 4px high
+		inscribed.setHeight(4.0f);
+		// 50% transparency
+		inscribed.setColor(1.0f, 1.0f, 1.0f, 0.5f);
+		// Position is below padding, menu buttons, and another padding
+		inscribed.setY(game.virtualHeight - pad - topBarButtonSize - pad - inscribed.getHeight());
+		root.addActor(inscribed);
+
 		// Area with interchangeable panels containing the actual screen content
 
 		// Create the card stack
@@ -73,8 +86,8 @@ public class MainScreen extends CScreen<PartitionGame> {
 		// Set card stack size
 		// Width is screen width
 		final float panelAreaWidth = game.virtualWidth;
-		// Height is screen height less height of sound toggle button and two bits of padding
-		final float panelAreaHeight = game.virtualHeight - topBarButtonSize - pad * 2;
+		// Height is screen height less height of sound toggle button, inscribed line and three bits of padding
+		final float panelAreaHeight = game.virtualHeight - topBarButtonSize - inscribed.getHeight() - pad * 3;
 		cardStack.setSize(panelAreaWidth, panelAreaHeight);
 
 		// Add it to the root table
