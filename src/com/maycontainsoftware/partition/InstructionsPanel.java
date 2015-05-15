@@ -33,23 +33,31 @@ public class InstructionsPanel extends Table {
 			// Instructions
 
 			row();
-			add(title("How To Play"));
+			add(title("Introduction"));
 
 			row();
-			add(body("Partition is a game with very simple rules but one that requires careful thought to win.  The "
-					+ "aim of the game is to acquire more area than your opponent."));
+			add(body("Partition is a strategy game with very simple rules but one that requires careful thought to "
+					+ "win.  The aim of the game is to separate yourself from your opponent, ending up on a larger "
+					+ "patch of squares."));
 
 			row();
-			add(body("Players take it in turns first to move to a new square, then to remove a square from the board."));
+			add(title("Rules of the Game"));
 
 			row();
-			add(body("Movements can be made any number of squares in a straight line (including diagonally).  The "
-					+ "square that is removed must similarly be in a straight line from the player."));
+			add(body("A player moves in a straight line, in any direction: horizontally, vertically or diagonally.  "
+					+ "After moving to a new square they must pick one unoccupied square for removal (the chosen "
+					+ "square is also in a straight line, in any direction).  Then play moves to their opponent."));
 
 			row();
-			add(body("The game ends either when the players are separated, in which case the winner is the player on "
-					+ "the largest patch of squares, or in a stalemate when both players are on the same patch of "
-					+ "squares but a player cannot move."));
+			add(body("Players cannot jump over either their opponent or any removed squares, and the path to a square "
+					+ "chosen to be removed must equally be clear."));
+
+			row();
+			add(body("The game is over when the two players are on entirely separate patches of squares (the player "
+					+ "on the largest patch wins) or when the players are on the same patch but the current player "
+					+ "cannot move (the game ends in a stalemate)."));
+
+			// TODO: Explain control system?
 
 			row();
 			add(title("Examples"));
