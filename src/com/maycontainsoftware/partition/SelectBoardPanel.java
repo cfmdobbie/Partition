@@ -64,6 +64,14 @@ public class SelectBoardPanel extends Table {
 		boardSelections.add(makeBoardButton("board_wall_up", "board_wall_down", BoardConfiguration.WALL));
 		boardSelections.add(makeBoardButton("board_holes_up", "board_holes_down", BoardConfiguration.HOLES));
 
+		boardSelections.row();
+		boardSelections.add(makeBoardButton("black", "black", BoardConfiguration.SMALL));
+		boardSelections.add(makeBoardButton("black", "black", BoardConfiguration.CORE));
+
+		boardSelections.row();
+		boardSelections.add(makeBoardButton("black", "black", BoardConfiguration.CHEQUER));
+		boardSelections.add(makeBoardButton("black", "black", BoardConfiguration.STRATEGO));
+
 		// Spacer after
 		row().expand();
 		add();
