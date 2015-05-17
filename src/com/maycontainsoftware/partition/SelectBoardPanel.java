@@ -1,6 +1,5 @@
 package com.maycontainsoftware.partition;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -43,8 +42,6 @@ public class SelectBoardPanel extends Table {
 		this.cardStack = cardStack;
 		this.playerConfiguration = playerConfiguration;
 
-		final TextureAtlas atlas = game.textureAtlas;
-
 		// Spacer before heading
 		row().expand();
 		add();
@@ -60,55 +57,41 @@ public class SelectBoardPanel extends Table {
 		add(boardSelections);
 
 		boardSelections.row();
-		// Board 1: HUB
-		final Button boardHubButton = new Button(new TextureRegionDrawable(atlas.findRegion("board_hub_up")),
-				new TextureRegionDrawable(atlas.findRegion("board_hub_down")));
-		boardSelections.add(boardHubButton);
-		boardHubButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				cardStack.push(new GamePanel(game, cardStack, playerConfiguration, BoardConfiguration.HUB));
-			}
-		});
-		// Board 2: OPEN
-		final Button boardOpenButton = new Button(new TextureRegionDrawable(atlas.findRegion("board_open_up")),
-				new TextureRegionDrawable(atlas.findRegion("board_open_down")));
-		boardSelections.add(boardOpenButton);
-		boardOpenButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				cardStack.push(new GamePanel(game, cardStack, playerConfiguration, BoardConfiguration.OPEN));
-			}
-		});
+		boardSelections.add(makeBoardButton("board_hub_up", "board_hub_down", BoardConfiguration.HUB));
+		boardSelections.add(makeBoardButton("board_open_up", "board_open_down", BoardConfiguration.OPEN));
 
 		boardSelections.row();
-		// Board 3: WALL
-		final Button boardWallButton = new Button(new TextureRegionDrawable(atlas.findRegion("board_wall_up")),
-				new TextureRegionDrawable(atlas.findRegion("board_wall_down")));
-		boardSelections.add(boardWallButton);
-		boardWallButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				cardStack.push(new GamePanel(game, cardStack, playerConfiguration, BoardConfiguration.WALL));
-			}
-		});
-		// Board 4: HOLES
-		final Button boardHolesButton = new Button(new TextureRegionDrawable(atlas.findRegion("board_holes_up")),
-				new TextureRegionDrawable(atlas.findRegion("board_holes_down")));
-		boardSelections.add(boardHolesButton);
-		boardHolesButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.soundEngine.play(SoundEngine.SoundId.TONE);
-				cardStack.push(new GamePanel(game, cardStack, playerConfiguration, BoardConfiguration.HOLES));
-			}
-		});
+		boardSelections.add(makeBoardButton("board_wall_up", "board_wall_down", BoardConfiguration.WALL));
+		boardSelections.add(makeBoardButton("board_holes_up", "board_holes_down", BoardConfiguration.HOLES));
 
 		// Spacer after
 		row().expand();
 		add();
+	}
+
+	/**
+	 * Utility method to create buttons for selecting a board configuration.
+	 * 
+	 * @param textureOff
+	 *            The "off" texture name.
+	 * @param textureOn
+	 *            The "on" texture name.
+	 * @param boardConfiguration
+	 *            The board configuration.
+	 * @return The newly created button.
+	 */
+	private Button makeBoardButton(final String textureOff, final String textureOn,
+			final BoardConfiguration boardConfiguration) {
+		final Button button = new Button(new TextureRegionDrawable(game.textureAtlas.findRegion(textureOff)),
+				new TextureRegionDrawable(game.textureAtlas.findRegion(textureOn)));
+		button.addListener(new ChangeListener() {
+			@Override
+			public void changed(final ChangeEvent event, final Actor actor) {
+				game.soundEngine.play(SoundEngine.SoundId.TONE);
+				cardStack.push(new GamePanel(game, cardStack, playerConfiguration, boardConfiguration));
+			}
+		});
+
+		return button;
 	}
 }
