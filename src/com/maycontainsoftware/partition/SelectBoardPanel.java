@@ -15,6 +15,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
  */
 public class SelectBoardPanel extends Table {
 
+	/** The PartitionGame reference. */
+	private final PartitionGame game;
+
+	/** The card stack to push new cards onto. */
+	private final CardStack cardStack;
+
+	/**
+	 * The chosen player configuration. This has been chosen on the previous screen and must be passed to the GameScreen
+	 * instance when it is created.
+	 */
+	private final PlayerConfiguration playerConfiguration;
+
 	/**
 	 * Construct a new SelectBoardScreen object.
 	 * 
@@ -26,6 +38,11 @@ public class SelectBoardPanel extends Table {
 	public SelectBoardPanel(final PartitionGame game, final CardStack cardStack,
 			final PlayerConfiguration playerConfiguration) {
 
+		// Store constructor parameter references
+		this.game = game;
+		this.cardStack = cardStack;
+		this.playerConfiguration = playerConfiguration;
+
 		final TextureAtlas atlas = game.textureAtlas;
 
 		// Spacer before heading
@@ -34,7 +51,7 @@ public class SelectBoardPanel extends Table {
 
 		// Heading
 		row().padBottom(30.0f);
-		add(new Image(atlas.findRegion("select_board_heading")));
+		add(new Image(game.textureAtlas.findRegion("select_board_heading")));
 
 		// Table to lay out board selection buttons
 		final Table boardSelections = new Table();
