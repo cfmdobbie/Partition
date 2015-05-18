@@ -1,5 +1,6 @@
 package com.maycontainsoftware.partition;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -64,6 +65,9 @@ public class GameBoard extends BaseGameBoard {
 		notifyTilesOwned(playerTerritories);
 		notifyTilesUnreachable(unreachable);
 
+		// Determine player scores
+		final Map<IPlayer, Integer> playerScores = determinePlayerScores(playerTerritories);
+
 		// Display the end-of-game slate
 		this.addActor(makeEndSlate(winner.getPlayerNumber() == 0 ? SlateMessage.WIN_P0 : SlateMessage.WIN_P1));
 	}
@@ -76,6 +80,9 @@ public class GameBoard extends BaseGameBoard {
 		// Color owned tiles, remove unreachable tiles
 		notifyTilesOwned(playerTerritories);
 		notifyTilesUnreachable(unreachable);
+
+		// Determine player scores
+		final Map<IPlayer, Integer> playerScores = determinePlayerScores(playerTerritories);
 
 		// Display the end-of-game slate
 		this.addActor(makeEndSlate(SlateMessage.DRAW));
@@ -118,6 +125,22 @@ public class GameBoard extends BaseGameBoard {
 		for (final ITile tile : unreachable) {
 			((TileActor) tile).endUnreachable();
 		}
+	}
+
+	/**
+	 * Utility method to extract player scores out of the territory map. Each player's score is the number of tiles in
+	 * their territory, of course.
+	 * 
+	 * @param territories
+	 *            The map of player to set of tiles.
+	 * @return A new map of player to player score.
+	 */
+	private Map<IPlayer, Integer> determinePlayerScores(final Map<IPlayer, Set<ITile>> territories) {
+		final Map<IPlayer, Integer> scores = new HashMap<IPlayer, Integer>();
+		for (final IPlayer player : territories.keySet()) {
+			scores.put(player, territories.get(player).size());
+		}
+		return scores;
 	}
 
 	/**
